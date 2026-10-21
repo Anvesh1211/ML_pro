@@ -1,0 +1,279 @@
+transaction_date,transaction_details,amount,transaction_type,predicted_category,spending_cluster,anomaly,anomaly_status
+2026-08-02,Paid to Swiggy Ltd,112.0,DEBIT,Food & Dining,0,1,Normal
+2026-08-02,Paid to SHREE BALAJI SUPER MARKET,10.0,DEBIT,Grocery,0,1,Normal
+2026-08-02,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0,1,Normal
+2026-08-02,Paid to DALIM  SK,20.0,DEBIT,Grocery,0,1,Normal
+2026-08-02,Paid to DALIM  SK,35.0,DEBIT,Grocery,0,1,Normal
+2026-08-02,Paid to DALIM  SK,35.0,DEBIT,Grocery,0,1,Normal
+2026-08-02,Paid to JAYASHREE DATTATRAY BHADALE,80.0,DEBIT,Grocery,0,1,Normal
+2026-08-02,Paid to Hotel padmaraj bhuvan,80.0,DEBIT,Food & Dining,0,1,Normal
+2026-08-02,Paid to MEESHO TECHNOLOGIES PRIVATE LIMITED,86.0,DEBIT,Shopping,0,1,Normal
+2026-08-02,Paid to Sujal Aids A,10.0,DEBIT,Personal Transfer,0,1,Normal
+2026-08-02,Paid to Sujal Aids A,40.0,DEBIT,Personal Transfer,0,1,Normal
+2026-08-01,Paid to VARADRAJ SANJAY JADHAV,121.0,DEBIT,Grocery,0,1,Normal
+2026-08-01,Paid to Shabana Fruit ,30.0,DEBIT,Grocery,0,1,Normal
+2026-07-31,Paid to NEW BALAJI TRADERS,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-31,Paid to NEW BALAJI TRADERS,50.0,DEBIT,Grocery,0,1,Normal
+2026-07-31,Paid to THE KOHINOOR UNISEX SALON,150.0,DEBIT,Grocery,0,1,Normal
+2026-07-31,Paid to Sujal Aids A,400.0,DEBIT,Personal Transfer,1,-1,Unusual
+2026-07-31,Paid to Hotel padmaraj bhuvan,96.0,DEBIT,Food & Dining,0,1,Normal
+2026-07-31,Paid to Rohit Girdharilal Sirvi,5.0,DEBIT,Grocery,0,1,Normal
+2026-07-31,Paid to MAITRICHA CHAHA,40.0,DEBIT,Grocery,0,1,Normal
+2026-07-31,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-31,Paid to ESHA  FOODS,80.0,DEBIT,Grocery,0,1,Normal
+2026-07-30,Paid to NEW HOTEL SAWAJI,130.0,DEBIT,Food & Dining,0,1,Normal
+2026-07-30,Paid to Baramati agro chicken ,45.0,DEBIT,Grocery,0,1,Normal
+2026-07-30,Paid to SHITAL FRUITS AND VEGETABLES,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-30,Paid to NEW KALPANA GENERAL STORE AND STATIONERY VERIETY,5.0,DEBIT,Grocery,0,1,Normal
+2026-07-30,Paid to VILAS ANANT CHHATRE,80.0,DEBIT,Grocery,0,1,Normal
+2026-07-29,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-29,Paid to HOTEL JAYSHREE DINING ,100.0,DEBIT,Food & Dining,0,1,Normal
+2026-07-29,Paid to SHREE BALAJI SUPER MARKET,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-29,Paid to Firange Vijay Baban,85.0,DEBIT,Grocery,0,1,Normal
+2026-07-28,Paid to NEW HOTEL SAWAJI,120.0,DEBIT,Food & Dining,0,1,Normal
+2026-07-28,Paid to SINHGAD FRUIT CENTER,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-28,Paid to SHREE BALAJI SUPER MARKET,25.0,DEBIT,Grocery,0,1,Normal
+2026-07-28,Paid to VILAS ANANT CHHATRE,80.0,DEBIT,Grocery,0,1,Normal
+2026-07-27,Paid to NEW BALAJI TRADERS,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-27,Paid to KIRAN MAHADEV KANADE,35.0,DEBIT,Grocery,0,1,Normal
+2026-07-27,Paid to SHITAL FRUITS AND VEGETABLES,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-27,Paid to ESHA  FOODS,40.0,DEBIT,Grocery,0,1,Normal
+2026-07-26,Paid to HOTEL JAYSHREE DINING ,130.0,DEBIT,Food & Dining,0,1,Normal
+2026-07-26,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-26,Paid to 192 K K MARKET,50.0,DEBIT,Grocery,0,1,Normal
+2026-07-26,Paid to Shree sadguru krupa snacks and mess,60.0,DEBIT,Food & Dining,0,1,Normal
+2026-07-26,Paid to KAVITA VINOD PAWAR,45.0,DEBIT,Grocery,0,1,Normal
+2026-07-25,Paid to Mr RAMCHANDRA EKNATH,170.0,DEBIT,Grocery,1,1,Normal
+2026-07-25,Paid to BABAJI PETROL PUMP YOGESH ,300.0,DEBIT,Grocery,1,-1,Unusual
+2026-07-24,Paid to Rohit Girdharilal Sirvi,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-24,Paid to NEW BALAJI TRADERS,14.0,DEBIT,Grocery,0,1,Normal
+2026-07-24,Paid to RAM NAMDEO GHODKAE,30.0,DEBIT,Grocery,0,1,Normal
+2026-07-24,Paid to PASALKAR PUSHPA RUPESH,80.0,DEBIT,Grocery,0,1,Normal
+2026-07-23,Paid to NEW BALAJI TRADERS,20.0,DEBIT,Grocery,0,1,Normal
+2026-07-23,Paid to NEW BALAJI TRADERS,24.0,DEBIT,Grocery,0,1,Normal
+2026-07-23,Paid to VILAS ANANT CHHATRE,40.0,DEBIT,Grocery,0,1,Normal
+2026-07-22,Paid to Sprouts Aunti,20.0,DEBIT,Grocery,0,1,Normal
+2026-07-22,Paid to DALIM  SK,50.0,DEBIT,Grocery,0,1,Normal
+2026-07-22,Paid to Firange Vijay Baban,85.0,DEBIT,Grocery,0,1,Normal
+2026-07-22,Paid to SHREE BALAJI SUPER MARKET,25.0,DEBIT,Grocery,0,1,Normal
+2026-07-22,Paid to VILAS ANANT CHHATRE,30.0,DEBIT,Grocery,0,1,Normal
+2026-07-21,Paid to NEW HOTEL SAWAJI,120.0,DEBIT,Food & Dining,0,1,Normal
+2026-07-21,Paid to SINHGAD FRUIT CENTER,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-21,Paid to SHITAL FRUITS AND VEGETABLES,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-21,Paid to SHITAL FRUITS AND VEGETABLES,50.0,DEBIT,Grocery,0,1,Normal
+2026-07-20,Paid to Shree Balaji Super Market,20.0,DEBIT,Grocery,0,1,Normal
+2026-07-20,Paid to VILAS ANANT CHHATRE,40.0,DEBIT,Grocery,0,1,Normal
+2026-07-20,Paid to SHITAL FRUITS AND VEGETABLES,60.0,DEBIT,Grocery,0,1,Normal
+2026-07-20,Paid to SINHGAD FRUIT CENTER,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-19,Paid to Master SUJAL RAJENDRA PAYGUDE,70.0,DEBIT,Personal Transfer,0,1,Normal
+2026-07-19,Paid to HOTEL JAYSHREE DINING ,130.0,DEBIT,Food & Dining,0,1,Normal
+2026-07-18,Paid to NEW BALAJI TRADERS,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-18,Paid to NEW HOTEL SAWAJI,120.0,DEBIT,Food & Dining,0,1,Normal
+2026-07-18,Paid to ESHA  FOODS,220.0,DEBIT,Grocery,1,1,Normal
+2026-07-17,Paid to NEW BALAJI TRADERS,20.0,DEBIT,Grocery,0,1,Normal
+2026-07-17,Paid to Burger,357.0,DEBIT,Grocery,1,-1,Unusual
+2026-07-17,Paid to AMRAPALI SERVICE STATION,150.0,DEBIT,Grocery,0,1,Normal
+2026-07-16,Paid to NEW BALAJI TRADERS,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-16,Paid to NEW BALAJI TRADERS,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-16,Paid to HOTEL SANGOJ,110.0,DEBIT,Food & Dining,0,1,Normal
+2026-07-16,Paid to RAM NAMDEO GHODKAE,35.0,DEBIT,Grocery,0,1,Normal
+2026-07-16,Paid to SINHGAD FRUIT CENTER,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-16,Paid to SINHGAD FRUIT CENTER,25.0,DEBIT,Grocery,0,1,Normal
+2026-07-16,Paid to Sujal Aids A,55.0,DEBIT,Personal Transfer,0,1,Normal
+2026-07-15,Paid to Nitu Snacks Center,10.0,DEBIT,Food & Dining,0,1,Normal
+2026-07-15,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-15,Paid to Firange Vijay Baban,130.0,DEBIT,Grocery,0,1,Normal
+2026-07-15,Paid to NEW BALAJI TRADERS,24.0,DEBIT,Grocery,0,1,Normal
+2026-07-15,Paid to Baramati agro chicken ,95.0,DEBIT,Grocery,0,1,Normal
+2026-07-15,Paid to SHITAL FRUITS AND VEGETABLES,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-15,Paid to ESHA  FOODS,80.0,DEBIT,Grocery,0,1,Normal
+2026-07-14,Paid to NEW HOTEL SAWAJI,600.0,DEBIT,Food & Dining,2,-1,Unusual
+2026-07-14,Paid to NEW BALAJI TRADERS,24.0,DEBIT,Grocery,0,1,Normal
+2026-07-14,Paid to VILAS ANANT CHHATRE,80.0,DEBIT,Grocery,0,1,Normal
+2026-07-13,Paid to ESHA  FOODS,40.0,DEBIT,Grocery,0,1,Normal
+2026-07-13,Paid to SHREE BALAJI SUPER MARKET,30.0,DEBIT,Grocery,0,1,Normal
+2026-07-13,Paid to Arun Sopan Dolare,20.0,DEBIT,Grocery,0,1,Normal
+2026-07-13,Paid to Hotel padmaraj bhuvan,20.0,DEBIT,Food & Dining,0,1,Normal
+2026-07-13,Mobile recharged 9881700871,353.0,DEBIT,Grocery,1,1,Normal
+2026-07-13,Paid to SHITAL FRUITS AND VEGETABLES,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-13,Paid to ESHA  FOODS,80.0,DEBIT,Grocery,0,1,Normal
+2026-07-12,Paid to 192 K K MARKET,48.0,DEBIT,Grocery,0,1,Normal
+2026-07-12,Paid to Shree sadguru krupa snacks and mess,20.0,DEBIT,Food & Dining,0,1,Normal
+2026-07-12,Paid to Vinod Vishwanath Sakhare,60.0,DEBIT,Grocery,0,1,Normal
+2026-07-12,Paid to Ronak Gift And Stationery,70.0,DEBIT,Grocery,0,1,Normal
+2026-07-12,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-12,Paid to HOTEL JAYSHREE DINING ,120.0,DEBIT,Food & Dining,0,1,Normal
+2026-07-11,Paid to TOLARAM BHUNDARAMJI DEWASI,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-11,Paid to Mumbai juice and Chinese spot ,100.0,DEBIT,Grocery,0,1,Normal
+2026-07-11,Paid to PUKHARAJ A CHAUDHARI,20.0,DEBIT,Grocery,0,1,Normal
+2026-07-11,Paid to NEW BALAJI TRADERS,20.0,DEBIT,Grocery,0,1,Normal
+2026-07-11,Paid to ESHA  FOODS,80.0,DEBIT,Grocery,0,1,Normal
+2026-07-10,Paid to NEW HOTEL SAWAJI,120.0,DEBIT,Food & Dining,0,1,Normal
+2026-07-10,Paid to Firange Vijay Baban,80.0,DEBIT,Grocery,0,1,Normal
+2026-07-09,Paid to VILAS ANANT CHHATRE,40.0,DEBIT,Grocery,0,1,Normal
+2026-07-09,Paid to SHREE BALAJI SUPER MARKET,20.0,DEBIT,Grocery,0,1,Normal
+2026-07-09,Paid to SHREE BALAJI SUPER MARKET,64.0,DEBIT,Grocery,0,1,Normal
+2026-07-09,Paid to Sprouts Aunti,20.0,DEBIT,Grocery,0,1,Normal
+2026-07-09,Paid to 192 K K MARKET,48.0,DEBIT,Grocery,0,1,Normal
+2026-07-09,Paid to BHORDE MAHESH MUKUND,650.0,DEBIT,Grocery,2,-1,Unusual
+2026-07-09,Paid to Shree Balaji Super Market,15.0,DEBIT,Grocery,0,1,Normal
+2026-07-09,Paid to RAM NAMDEO GHODKAE,30.0,DEBIT,Grocery,0,1,Normal
+2026-07-09,Paid to NEW BALAJI TRADERS,20.0,DEBIT,Grocery,0,1,Normal
+2026-07-08,Paid to Mumbai juice and Chinese spot ,200.0,DEBIT,Grocery,1,1,Normal
+2026-07-08,Paid to NEW HOTEL SAWAJI,120.0,DEBIT,Food & Dining,0,1,Normal
+2026-07-08,Paid to ESHA  FOODS,80.0,DEBIT,Grocery,0,1,Normal
+2026-07-07,Paid to VILAS ANANT CHHATRE,130.0,DEBIT,Grocery,0,1,Normal
+2026-07-06,Paid to SHREE BALAJI SUPER MARKET,25.0,DEBIT,Grocery,0,1,Normal
+2026-07-06,Paid to Firange Vijay Baban,100.0,DEBIT,Grocery,0,1,Normal
+2026-07-06,Paid to ESHA  FOODS,100.0,DEBIT,Grocery,0,1,Normal
+2026-07-05,Paid to Mr Prashanth Vonteddu,154.0,DEBIT,Grocery,0,1,Normal
+2026-07-05,Paid to Shree Balaji Super Market,40.0,DEBIT,Grocery,0,1,Normal
+2026-07-05,Paid to VILAS ANANT CHHATRE,80.0,DEBIT,Grocery,0,1,Normal
+2026-07-04,Paid to NEW BALAJI TRADERS,10.0,DEBIT,Grocery,0,1,Normal
+2026-07-04,Paid to Mr. KARAN AMBADAS DHAVRE,258.0,DEBIT,Grocery,1,1,Normal
+2026-07-04,Paid to NEW BALAJI TRADERS,45.0,DEBIT,Grocery,0,1,Normal
+2026-07-04,Paid to THE KOHINOOR UNISEX SALON,150.0,DEBIT,Grocery,0,1,Normal
+2026-07-03,Paid to NEW HOTEL SAWAJI,120.0,DEBIT,Food & Dining,0,1,Normal
+2026-07-03,Paid to RAM NAMDEO GHODKAE,25.0,DEBIT,Grocery,0,1,Normal
+2026-07-03,Paid to PASALKAR PUSHPA RUPESH,80.0,DEBIT,Grocery,0,1,Normal
+2026-07-02,Paid to Krishna foods,30.0,DEBIT,Grocery,0,1,Normal
+2026-07-02,Paid to Firange Vijay Baban,85.0,DEBIT,Grocery,0,1,Normal
+2026-07-02,Paid to NEW BALAJI TRADERS,30.0,DEBIT,Grocery,0,1,Normal
+2026-07-02,Paid to ESHA  FOODS,80.0,DEBIT,Grocery,0,1,Normal
+2026-07-02,Paid to PMPML,20.0,DEBIT,Transport,0,1,Normal
+2026-07-01,Paid to  IRCTC Rail APP,267.25,DEBIT,Transport,1,-1,Unusual
+2026-06-30,Paid to Shri Sai Pani Puri Centre 1,20.0,DEBIT,Food & Dining,0,1,Normal
+2026-06-30,Paid to Namdev Kisanrao Thakre,120.0,DEBIT,Grocery,0,1,Normal
+2026-06-28,Paid to Rajput traders,15.0,DEBIT,Grocery,0,1,Normal
+2026-06-27,Paid to Shri Sai Pani Puri Centre 1,40.0,DEBIT,Food & Dining,0,1,Normal
+2026-06-25,Paid to Shri Sai Pani Puri Centre 1,40.0,DEBIT,Food & Dining,0,1,Normal
+2026-06-24,Paid to Rajput traders,10.0,DEBIT,Grocery,0,1,Normal
+2026-06-24,Paid to RANJEET DINKARRAO GH,20.0,DEBIT,Grocery,0,1,Normal
+2026-06-23,Paid to Rajput traders,10.0,DEBIT,Grocery,0,1,Normal
+2026-06-22,Paid to Rajput traders,10.0,DEBIT,Grocery,0,1,Normal
+2026-06-22,Paid to Shri Sai Pani Puri Centre 1,20.0,DEBIT,Food & Dining,0,1,Normal
+2026-06-22,Paid to MOHAMMAD AJAZ MOHAMMAD ISRAIL,20.0,DEBIT,Grocery,0,1,Normal
+2026-06-21,Paid to CHETAN SURESHRAO BIHAR,50.0,DEBIT,Grocery,0,1,Normal
+2026-06-17,Paid to BISHNOI SUNIL BHAGIRATH,980.0,DEBIT,Grocery,2,-1,Unusual
+2026-06-16,Paid to Shri Sai Pani Puri Centre 1,55.0,DEBIT,Food & Dining,0,1,Normal
+2026-06-15,Mobile recharged 9881700871,353.0,DEBIT,Grocery,1,1,Normal
+2026-06-12,Paid to KRISHNA SUPER BAZAR,10.0,DEBIT,Grocery,0,1,Normal
+2026-06-11,Paid to Rajput traders,10.0,DEBIT,Grocery,0,1,Normal
+2026-06-10,Paid to New AL Hayat Biryani,60.0,DEBIT,Food & Dining,0,1,Normal
+2026-06-10,Paid to Rajput traders,5.0,DEBIT,Grocery,0,1,Normal
+2026-06-10,Paid to Rajput traders,10.0,DEBIT,Grocery,0,1,Normal
+2026-06-08,Paid to Shri Sai Pani Puri Centre 1,20.0,DEBIT,Food & Dining,0,1,Normal
+2026-06-08,Paid to CHETAN GAJANAN DHANORKAR,100.0,DEBIT,Grocery,0,1,Normal
+2026-06-07,Paid to MOHAMMAD AJAZ BHAODDIN,50.0,DEBIT,Grocery,0,1,Normal
+2026-06-05,Paid to Pari Shrungar And General ,125.0,DEBIT,Grocery,0,1,Normal
+2026-06-04,Paid to DINESH PUNDLIKRAO YAWLE,200.0,DEBIT,Grocery,1,1,Normal
+2026-06-04,Paid to Rajput traders,196.0,DEBIT,Grocery,1,1,Normal
+2026-06-04,Paid to Shri Sai Pani Puri Centre 1,30.0,DEBIT,Food & Dining,0,1,Normal
+2026-06-03,Paid to MEESHO TECHNOLOGIES PRIVATE LIMITED,335.0,DEBIT,Shopping,1,-1,Unusual
+2026-06-03,Paid to Flipkart Payments,239.0,DEBIT,Shopping,1,1,Normal
+2026-05-31,Paid to Gajanan Provision,5.0,DEBIT,Grocery,0,1,Normal
+2026-05-31,Paid to Shri Sai Pani Puri Centre 1,20.0,DEBIT,Food & Dining,0,1,Normal
+2026-05-31,Paid to Mr UZAIR KHAN  ZUBAIR KHAN,450.0,DEBIT,Grocery,1,-1,Unusual
+2026-05-26,Paid to Hotel mahindra ,40.0,DEBIT,Food & Dining,0,1,Normal
+2026-05-25,Paid to jay ganesh general store,25.0,DEBIT,Grocery,0,1,Normal
+2026-05-25,Paid to SINHGAD FRUIT CENTER,20.0,DEBIT,Grocery,0,1,Normal
+2026-05-25,Paid to SINHGAD FRUIT CENTER,60.0,DEBIT,Grocery,0,1,Normal
+2026-05-25,Paid to Redbus India Private Limited,534.19,DEBIT,Shopping,2,-1,Unusual
+2026-05-24,Paid to Swiggy Ltd,429.0,DEBIT,Food & Dining,1,-1,Unusual
+2026-05-24,Paid to DIPAK VISHWANATH KATAKE,15.0,DEBIT,Grocery,0,1,Normal
+2026-05-24,Paid to JAI SHREE DINING HALL,120.0,DEBIT,Food & Dining,0,1,Normal
+2026-05-23,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0,1,Normal
+2026-05-23,Paid to HOTEL SANGOJ,100.0,DEBIT,Food & Dining,0,1,Normal
+2026-05-23,Paid to NEW HOTEL SAWAJI,120.0,DEBIT,Food & Dining,0,1,Normal
+2026-05-22,Paid to VILAS ANANT CHHATRE,40.0,DEBIT,Grocery,0,1,Normal
+2026-05-22,Paid to SHREE BALAJI SUPER MARKET,10.0,DEBIT,Grocery,0,1,Normal
+2026-05-22,Paid to ESHA  FOODS,80.0,DEBIT,Grocery,0,1,Normal
+2026-05-22,Paid to Baramati agro chicken ,39.0,DEBIT,Grocery,0,1,Normal
+2026-05-22,Paid to EW ALPANA GENERAL STORE AND STATIONERY VERIETY,5.0,DEBIT,Grocery,0,1,Normal
+2026-05-22,Paid to LUKDE AND BROTHER S,30.0,DEBIT,Grocery,0,1,Normal
+2026-05-22,Paid to SAMBAR.CONNAR,30.0,DEBIT,Grocery,0,1,Normal
+2026-05-21,Paid to Mrs. VIDHYA PRAVIN SITAPURE,40.0,DEBIT,Grocery,0,1,Normal
+2026-05-21,Paid to Priyas South Indian dosa centre ,60.0,DEBIT,Food & Dining,0,1,Normal
+2026-05-20,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0,1,Normal
+2026-05-20,Paid to NEW HOTEL SAWAJI,120.0,DEBIT,Food & Dining,0,1,Normal
+2026-05-20,Paid to Amazon India,203.6,DEBIT,Shopping,1,1,Normal
+2026-05-20,Paid to ESHA  FOODS,70.0,DEBIT,Grocery,0,1,Normal
+2026-05-20,Paid to V I T FRUIT CANTEEN,15.0,DEBIT,Grocery,0,1,Normal
+2026-05-20,Paid to NEW BALAJI TRADERS,24.0,DEBIT,Grocery,0,1,Normal
+2026-05-19,Paid to PASALKAR PUSHPA RUPESH,210.0,DEBIT,Grocery,1,1,Normal
+2026-05-19,Paid to PASALKAR PUSHPA RUPESH,80.0,DEBIT,Grocery,0,1,Normal
+2026-05-19,Paid to SANJOG,100.0,DEBIT,Grocery,0,1,Normal
+2026-05-19,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0,1,Normal
+2026-05-19,Paid to LUKDE AND BROTHER S,20.0,DEBIT,Grocery,0,1,Normal
+2026-05-18,Mobile recharged 9881700871,353.0,DEBIT,Grocery,1,1,Normal
+2026-05-18,Paid to VILAS ANANT CHHATRE,40.0,DEBIT,Grocery,0,1,Normal
+2026-05-18,Paid to SHREE BALAJI SUPER MARKET,30.0,DEBIT,Grocery,0,1,Normal
+2026-05-18,Paid to Baramati agro chicken ,39.0,DEBIT,Grocery,0,1,Normal
+2026-05-18,Paid to FRUIT CANTEEN,100.0,DEBIT,Grocery,0,1,Normal
+2026-05-18,Paid to FRUIT CANTEEN,10.0,DEBIT,Grocery,0,1,Normal
+2026-05-18,Paid to NEW BALAJI TRADERS,20.0,DEBIT,Grocery,0,1,Normal
+2026-05-17,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0,1,Normal
+2026-05-17,Paid to Master SUJAL RAJENDRA PAYGUDE,70.0,DEBIT,Personal Transfer,0,1,Normal
+2026-05-17,Paid to NAVANATH RASWANTI ,20.0,DEBIT,Grocery,0,1,Normal
+2026-05-17,Paid to JAI SHREE DINING HALL,120.0,DEBIT,Food & Dining,0,1,Normal
+2026-05-16,Paid to Mr VIJAY BABAN FIRANGE,85.0,DEBIT,Grocery,0,1,Normal
+2026-05-16,Paid to Kanifnath Rasvanti Gruh,20.0,DEBIT,Grocery,0,1,Normal
+2026-05-16,Paid to COINAGE HOSPITALITY,50.0,DEBIT,Grocery,0,1,Normal
+2026-05-16,Paid to Shreeram Govind Ujlambkar,302.0,DEBIT,Grocery,1,-1,Unusual
+2026-05-16,Paid to VIKAS ATMARAM PARKALE,185.0,DEBIT,Grocery,1,1,Normal
+2026-05-16,Paid to SHREE BALAJI SUPER MARKET,24.0,DEBIT,Grocery,0,1,Normal
+2026-05-16,Paid to LUKDE AND BROTHER S,30.0,DEBIT,Grocery,0,1,Normal
+2026-05-15,Paid to NEW BALAJI TRADERS,5.0,DEBIT,Grocery,0,1,Normal
+2026-05-15,Paid to SHREE BALAJI SUPER MARKET,10.0,DEBIT,Grocery,0,1,Normal
+2026-05-15,Paid to HOTEL SANGOJ,100.0,DEBIT,Food & Dining,0,1,Normal
+2026-05-15,Paid to NEW HOTEL SAWAJI,240.0,DEBIT,Food & Dining,1,1,Normal
+2026-05-15,Paid to ESHA  FOODS,80.0,DEBIT,Grocery,0,1,Normal
+2026-05-15,Paid to FRUIT CANTEEN,10.0,DEBIT,Grocery,0,1,Normal
+2026-05-14,Paid to DIPAK VISHWANATH KATAKE,15.0,DEBIT,Grocery,0,1,Normal
+2026-05-14,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0,1,Normal
+2026-05-14,Paid to VILAS ANANT CHHATRE,40.0,DEBIT,Grocery,0,1,Normal
+2026-05-14,Paid to V I T FRUIT CANTEEN,10.0,DEBIT,Grocery,0,1,Normal
+2026-05-13,Paid to PASALKAR PUSHPA RUPESH,80.0,DEBIT,Grocery,0,1,Normal
+2026-05-13,Paid to ESHA  FOODS,80.0,DEBIT,Grocery,0,1,Normal
+2026-05-13,Paid to Baramati agro chicken ,39.0,DEBIT,Grocery,0,1,Normal
+2026-05-12,Paid to NEW HOTEL SAWAJI,120.0,DEBIT,Food & Dining,0,1,Normal
+2026-05-12,Paid to Bondya,120.0,DEBIT,Grocery,0,1,Normal
+2026-05-12,Paid to RAM AWADH YADAV,80.0,DEBIT,Grocery,0,1,Normal
+2026-05-12,Paid to LUKDE AND BROTHER S,30.0,DEBIT,Grocery,0,1,Normal
+2026-05-12,Paid to SAMBAR.CONNAR,30.0,DEBIT,Grocery,0,1,Normal
+2026-05-11,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0,1,Normal
+2026-05-11,Paid to THE KOHINOOR UNISEX SALON,150.0,DEBIT,Grocery,0,1,Normal
+2026-05-11,Paid to NEW BALAJI TRADERS,10.0,DEBIT,Grocery,0,1,Normal
+2026-05-10,Paid to VINAYAK MEDICAL,5.0,DEBIT,Grocery,0,1,Normal
+2026-05-10,Paid to SHREE BALAJI SUPER MARKET,40.0,DEBIT,Grocery,0,1,Normal
+2026-05-10,Paid to NAVNATH RASHVANTI GRUH ,10.0,DEBIT,Grocery,0,1,Normal
+2026-05-10,Paid to JAI SHREE DINING HALL,120.0,DEBIT,Food & Dining,0,1,Normal
+2026-05-10,Paid to NEW BALAJI TRADERS,10.0,DEBIT,Grocery,0,1,Normal
+2026-05-09,Paid to New Medico Point,20.0,DEBIT,Food & Dining,0,1,Normal
+2026-05-09,Paid to Amazon Pay Groceries,180.0,DEBIT,Grocery,1,1,Normal
+2026-05-09,Paid to VILAS ANANT CHHATRE,40.0,DEBIT,Grocery,0,1,Normal
+2026-05-09,Paid to SHREE BALAJI SUPER MARKET,30.0,DEBIT,Grocery,0,1,Normal
+2026-05-08,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0,1,Normal
+2026-05-08,Paid to Shree Balaji Super Market,28.0,DEBIT,Grocery,0,1,Normal
+2026-05-08,Paid to SHREE BALAJI SUPER MARKET,35.0,DEBIT,Grocery,0,1,Normal
+2026-05-08,Paid to Gurudatta Dairy,10.0,DEBIT,Grocery,0,1,Normal
+2026-05-08,Paid to Kukudku chicken,65.0,DEBIT,Grocery,0,1,Normal
+2026-05-07,Paid to NEW HOTEL SAWAJI,120.0,DEBIT,Food & Dining,0,1,Normal
+2026-05-07,Paid to Baramati agro chicken ,39.0,DEBIT,Grocery,0,1,Normal
+2026-05-07,Paid to FRUIT CANTEEN,10.0,DEBIT,Grocery,0,1,Normal
+2026-05-07,Paid to Paresh Gautamchand Lodha,2.0,DEBIT,Grocery,0,1,Normal
+2026-05-07,Paid to ESHA  FOODS,70.0,DEBIT,Grocery,0,1,Normal
+2026-05-06,Paid to JOGESHWARI  MISAL  AND  BHEL,121.0,DEBIT,Grocery,0,1,Normal
+2026-05-06,Paid to ESHA  FOODS,80.0,DEBIT,Grocery,0,1,Normal
+2026-05-05,Paid to VILAS ANANT CHHATRE,50.0,DEBIT,Grocery,0,1,Normal
+2026-05-05,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0,1,Normal
+2026-05-05,Paid to MEESHO TECHNOLOGIES PRIVATE LIMITED,66.0,DEBIT,Shopping,0,1,Normal
+2026-05-05,Paid to MEESHO TECHNOLOGIES PRIVATE LIMITED,95.0,DEBIT,Shopping,0,1,Normal
+2026-05-05,Paid to Meesho,96.0,DEBIT,Shopping,0,1,Normal
+2026-05-05,Paid to Meesho,102.0,DEBIT,Shopping,0,1,Normal
+2026-05-05,Paid to Baramati agro chicken ,39.0,DEBIT,Grocery,0,1,Normal
+2026-05-05,Paid to V I T FRUIT CANTEEN,10.0,DEBIT,Grocery,0,1,Normal
+2026-05-05,Paid to VALMIK BHOSALE,50.0,DEBIT,Grocery,0,1,Normal
+2026-05-05,Paid to SAKSHI KRISHNA ASOLKAR,2.0,DEBIT,Grocery,0,1,Normal
+2026-05-05,Paid to Paresh Gautamchand Lodha,2.0,DEBIT,Grocery,0,1,Normal
+2026-05-05,Paid to ESHA  FOODS,70.0,DEBIT,Grocery,0,1,Normal
