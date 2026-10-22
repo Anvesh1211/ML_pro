@@ -1,9 +1,10 @@
-merchant,final_category
-Sujal Aids A,Personal Transfer
-THE KOHINOOR UNISEX SALON,Personal Care
-PUKHARAJ A CHAUDHARI,Personal Transfer
-Mr UZAIR KHAN  ZUBAIR KHAN,Personal Transfer
-jay ganesh general store,Grocery
-LUKDE AND BROTHER S,Grocery
-Priyas South Indian dosa centre,Food & Dining
-SANJOG,Food & Dining
+merchant,final_category,scope,transaction_id
+Sujal Aids A,Personal Transfer,merchant,
+THE KOHINOOR UNISEX SALON,Personal Care,merchant,
+PUKHARAJ A CHAUDHARI,Personal Transfer,merchant,
+Mr UZAIR KHAN  ZUBAIR KHAN,Personal Transfer,merchant,
+jay ganesh general store,Grocery,merchant,
+LUKDE AND BROTHER S,Grocery,merchant,
+Priyas South Indian dosa centre,Food & Dining,merchant,
+SANJOG,Food & Dining,merchant,
+Swiggy Ltd,Bills & Utilities,merchant,

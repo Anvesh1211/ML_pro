@@ -1,26 +1,26 @@
-import pandas as pd
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler
+from __future__ import annotations
 
-df = pd.read_csv("data/final_phonepe_results.csv")
+import argparse
 
-expenses = df[df["transaction_type"] == "DEBIT"].copy()
+from src.common import DATA_DIR, atomic_write_csv
+from src.financial_intelligence import cluster_spending
 
-features = expenses[["amount"]].copy()
 
-scaler = StandardScaler()
-X = scaler.fit_transform(features)
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Cluster observed transaction spending.")
+    parser.add_argument(
+        "--input", default=str(DATA_DIR / "final_phonepe_results.csv")
+    )
+    args = parser.parse_args()
+    import pandas as pd
 
-kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
-expenses["spending_cluster"] = kmeans.fit_predict(X)
+    frame = pd.read_csv(args.input, low_memory=False)
+    clusters, metrics = cluster_spending(frame)
+    output = DATA_DIR / "spending_behavior.csv"
+    atomic_write_csv(clusters, output)
+    print(f"Saved {len(clusters)} observed debit transactions to {output}")
+    print(f"Silhouette score: {metrics['silhouette_score']}")
 
-cluster_summary = expenses.groupby("spending_cluster")["amount"].agg(
-    ["count", "mean", "min", "max"]
-).sort_values("mean")
 
-print("===== SPENDING BEHAVIOUR CLUSTERS =====")
-print(cluster_summary)
-
-expenses.to_csv("data/spending_behavior.csv", index=False)
-
-print("\nSpending behaviour analysis saved.")
+if __name__ == "__main__":
+    main()

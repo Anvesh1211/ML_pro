@@ -1,111 +1,256 @@
-import pandas as pd
+from __future__ import annotations
+
+import argparse
 import re
+from pathlib import Path
 
-df = pd.read_csv("data/testing.csv", skiprows=2)
-df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
-df = df.dropna(subset=["Date"])
-df["transaction_date"] = df["Date"].dt.strftime("%Y-%m-%d")
-df["transaction_time"] = df["Time"]
-df["transaction_id"] = df["Transaction ID"]
-df["utr"] = df["UTR"]
-df["transaction_type"] = df["Transaction Type"]
-df["amount"] = pd.to_numeric(df["Amount"], errors="coerce")
-df["currency"] = "INR"
-df["transaction_details"] = df["Transaction Details"]
+import pandas as pd
 
-df["merchant"] = df["Transaction Details"].str.replace(
-    r"^(Paid to|Received from)\s+", "", regex=True
-).str.strip()
+from src.common import DATA_DIR, atomic_write_csv
 
-df["cashflow_type"] = df["transaction_type"]
-df["is_expense"] = (df["transaction_type"] == "DEBIT").astype(int)
 
-df["day_of_week"] = pd.to_datetime(df["Date"]).dt.day_name()
-df["month"] = pd.to_datetime(df["Date"]).dt.month
-df["year"] = pd.to_datetime(df["Date"]).dt.year
+RAW_PATH = DATA_DIR / "testing.csv"
+OUTPUT_PATH = DATA_DIR / "phonepe_processed.csv"
+AUDIT_PATH = DATA_DIR / "preprocessing_audit.csv"
+RAW_COLUMNS = {
+    "Date",
+    "Time",
+    "Transaction Details",
+    "Transaction ID",
+    "UTR",
+    "Transaction Type",
+    "Credit/debit instrument",
+    "Amount",
+}
 
-df["payment_method"] = "UPI"
+CATEGORY_RULES: tuple[tuple[str, tuple[str, ...]], ...] = (
+    ("Salary/Income", ("salary", "stipend", "payroll")),
+    ("Personal Transfer", ("received from", "family transfer", "friend transfer")),
+    (
+        "Food & Dining",
+        ("swiggy", "zomato", "restaurant", "dining", "food", "biryani", "cafe"),
+    ),
+    (
+        "Grocery",
+        ("super market", "supermarket", "grocery", "kirana", "fruit", "vegetable"),
+    ),
+    ("Mobile Recharge", ("mobile recharge", "recharge", "prepaid", "postpaid")),
+    ("Shopping", ("meesho", "amazon", "flipkart", "myntra", "shopping")),
+    (
+        "Transport",
+        ("uber", "ola", "rapido", "irctc", "railway", "metro", "petrol", "fuel"),
+    ),
+    (
+        "Bills & Utilities",
+        ("electricity", "water bill", "gas bill", "broadband", "internet bill"),
+    ),
+    ("Health", ("hospital", "medical", "medicine", "pharmacy", "clinic")),
+    ("Personal Care", ("salon", "parlour", "barber", "haircut")),
+    ("Education", ("college fees", "school fees", "tuition", "education")),
+    ("Entertainment", ("cinema", "movie", "netflix", "spotify", "bookmyshow")),
+    ("Rent", ("house rent", "room rent", "rent payment")),
+)
 
-df["transaction_status"] = "SUCCESS"
-df["city"] = "Pune"
-df["notes"] = ""
-
-def classify(text):
-    text = str(text).lower()
-
-    if any(x in text for x in ["swiggy", "zomato", "hotel", "restaurant", "dining", "pani puri", "food"]):
-        return "Food & Dining"
-    if any(x in text for x in ["super market", "traders", "fruit", "vegetable", "agro"]):
-        return "Grocery"
-    if "recharge" in text:
-        return "Mobile Recharge"
-    if any(x in text for x in ["meesho", "amazon", "flipkart"]):
-        return "Shopping"
-    if any(x in text for x in ["uber", "ola", "rapido", "auto", "bus", "train"]):
-        return "Transport"
-    if any(x in text for x in ["salary", "stipend"]):
-        return "Salary/Income"
-    if "received from" in text:
-        return "Personal Transfer"
-    return "Personal Transfer"
-
-df["category"] = df["Transaction Details"].apply(classify)
-
-df["subcategory"] = df["category"].map({
+CATEGORY_SUBCATEGORY = {
     "Food & Dining": "Restaurant",
     "Grocery": "Groceries",
-    "Mobile Recharge": "Prepaid Recharge",
-    "Shopping": "Online Shopping",
-    "Transport": "Auto",
-    "Salary/Income": "Received Transfer",
-    "Personal Transfer": "Friend/Family"
-}).fillna("Friend/Family")
+    "Mobile Recharge": "Mobile Recharge",
+    "Shopping": "Shopping",
+    "Transport": "Transport",
+    "Salary/Income": "Income",
+    "Personal Transfer": "Transfer",
+    "Bills & Utilities": "Utilities",
+    "Health": "Healthcare",
+    "Personal Care": "Personal Care",
+    "Education": "Education",
+    "Entertainment": "Entertainment",
+    "Rent": "Rent",
+}
+ESSENTIAL_CATEGORIES = {
+    "Grocery",
+    "Bills & Utilities",
+    "Health",
+    "Transport",
+    "Rent",
+    "Education",
+    "Mobile Recharge",
+}
+DISCRETIONARY_CATEGORIES = {
+    "Food & Dining",
+    "Shopping",
+    "Personal Care",
+    "Entertainment",
+}
 
-df["expense_nature"] = df.apply(
-    lambda x: "Income" if x["transaction_type"] == "CREDIT"
-    else "Essential" if x["category"] in ["Grocery", "Mobile Recharge", "Transport"]
-    else "Discretionary" if x["category"] in ["Food & Dining", "Shopping"]
-    else "Transfer",
-    axis=1
-)
 
-df["flexibility_level"] = df["expense_nature"].map({
-    "Essential": "Low",
-    "Discretionary": "High",
-    "Transfer": "Not Applicable",
-    "Income": "Not Applicable"
-})
+def classify_description(
+    description: object, transaction_type: object | None = None
+) -> str:
+    normalized = "" if pd.isna(description) else str(description).casefold()
+    kind = "" if pd.isna(transaction_type) else str(transaction_type).upper()
+    for category, phrases in CATEGORY_RULES:
+        if any(
+            re.search(rf"(?<!\w){re.escape(phrase)}(?!\w)", normalized)
+            for phrase in phrases
+        ):
+            if category == "Salary/Income" and kind == "DEBIT":
+                continue
+            return category
+    return "Needs Review"
 
-df["flexibility_score"] = df["flexibility_level"].map({
-    "Low": 0.3,
-    "Medium": 0.5,
-    "High": 0.8,
-    "Not Applicable": 0
-})
 
-df["amount_band"] = pd.cut(
-    df["amount"],
-    bins=[-1, 100, 500, 1000, 5000, float("inf")],
-    labels=["Very Low", "Low", "Medium", "High", "Very High"]
-)
+def load_phonepe_statement(path=RAW_PATH) -> tuple[pd.DataFrame, pd.DataFrame]:
+    if not path.exists():
+        raise FileNotFoundError(f"PhonePe statement not found: {path}")
+    raw = pd.read_csv(
+        path,
+        skiprows=2,
+        dtype={"Transaction ID": "string", "UTR": "string"},
+        keep_default_na=False,
+        low_memory=False,
+    )
+    missing = sorted(RAW_COLUMNS.difference(raw.columns))
+    if missing:
+        raise ValueError(
+            f"PhonePe statement is missing required columns: {', '.join(missing)}"
+        )
 
-df["monthly_budget"] = 30000
-df["remaining_budget"] = 30000
-df["savings_goal"] = 100000
+    dates = pd.to_datetime(raw["Date"], errors="coerce")
+    amounts = pd.to_numeric(raw["Amount"], errors="coerce")
+    transaction_types = raw["Transaction Type"].str.strip().str.upper()
+    has_identifier = raw["Transaction ID"].astype(str).str.strip().ne("")
+    has_description = raw["Transaction Details"].astype(str).str.strip().ne("")
+    valid_types = transaction_types.isin({"DEBIT", "CREDIT"})
+    valid = (
+        dates.notna()
+        & amounts.notna()
+        & valid_types
+        & has_identifier
+        & has_description
+    )
 
-output_columns = [
-    "transaction_id", "transaction_date", "transaction_time",
-    "transaction_details", "utr", "transaction_type",
-    "payment_method", "amount", "currency", "merchant",
-    "subcategory", "category", "cashflow_type", "expense_nature",
-    "flexibility_level", "flexibility_score", "transaction_status",
-    "notes", "city", "is_expense", "amount_band", "day_of_week",
-    "month", "year", "monthly_budget", "remaining_budget",
-    "savings_goal"
-]
+    audit_rows = []
+    for row_index in raw.index[~valid]:
+        reasons = []
+        if pd.isna(dates.loc[row_index]):
+            reasons.append("invalid_date_or_statement_footer")
+        if pd.isna(amounts.loc[row_index]):
+            reasons.append("invalid_amount_or_statement_footer")
+        if not valid_types.loc[row_index]:
+            reasons.append("invalid_transaction_type_or_statement_footer")
+        if not has_identifier.loc[row_index]:
+            reasons.append("missing_transaction_id")
+        if not has_description.loc[row_index]:
+            reasons.append("missing_transaction_details")
+        audit_rows.append(
+            {
+                "source_file": path.name,
+                "source_line": int(row_index) + 5,
+                "disposition": "excluded",
+                "reason": ";".join(reasons),
+            }
+        )
 
-df[output_columns].to_csv("data/phonepe_processed.csv", index=False)
+    clean = raw.loc[valid].copy()
+    clean_dates = dates.loc[valid]
+    clean_amounts = amounts.loc[valid]
+    clean_types = transaction_types.loc[valid]
+    details = clean["Transaction Details"].astype(str).str.strip()
+    merchants = details.str.replace(
+        r"^(Paid to|Received from)\s+", "", regex=True, flags=re.IGNORECASE
+    ).str.strip()
+    categories = pd.Series(
+        [
+            classify_description(description, tx_type)
+            for description, tx_type in zip(details, clean_types, strict=True)
+        ],
+        index=details.index,
+        dtype="string",
+    )
+    expense_nature = []
+    flexibility = []
+    for tx_type, category in zip(clean_types, categories, strict=True):
+        if tx_type == "CREDIT":
+            nature, level = (
+                ("Income", "Not Applicable")
+                if category == "Salary/Income"
+                else ("Transfer", "Not Applicable")
+            )
+        elif category == "Personal Transfer":
+            nature, level = "Transfer", "Not Applicable"
+        elif category in ESSENTIAL_CATEGORIES:
+            nature, level = "Essential", "Low"
+        elif category in DISCRETIONARY_CATEGORIES:
+            nature, level = "Discretionary", "High"
+        else:
+            nature, level = "Unknown", "Unknown"
+        expense_nature.append(nature)
+        flexibility.append(level)
 
-print("Processed PhonePe dataset created successfully.")
-print("Rows:", len(df))
-print("Columns:", len(output_columns))
+    processed = pd.DataFrame(
+        {
+            "transaction_id": clean["Transaction ID"].astype("string").str.strip(),
+            "transaction_date": clean_dates.dt.strftime("%Y-%m-%d"),
+            "transaction_time": clean["Time"].astype(str).str.strip(),
+            "transaction_details": details,
+            "utr": clean["UTR"].astype("string").str.strip(),
+            "transaction_type": clean_types,
+            "payment_method": clean["Credit/debit instrument"].astype(str).str.strip(),
+            "amount": clean_amounts.astype(float),
+            "currency": "INR",
+            "merchant": merchants,
+            "subcategory": categories.map(CATEGORY_SUBCATEGORY).fillna("Unknown"),
+            "category": categories,
+            "cashflow_type": clean_types,
+            "expense_nature": expense_nature,
+            "flexibility_level": flexibility,
+            "flexibility_score": [
+                0.3 if level == "Low" else 0.8 if level == "High" else pd.NA
+                for level in flexibility
+            ],
+            "transaction_status": "Unknown",
+            "notes": "",
+            "city": pd.NA,
+            "is_expense": (clean_types == "DEBIT").astype(int),
+            "amount_band": pd.cut(
+                clean_amounts,
+                bins=[-1, 100, 500, 1000, 5000, float("inf")],
+                labels=["Very Low", "Low", "Medium", "High", "Very High"],
+            ).astype("string"),
+            "day_of_week": clean_dates.dt.day_name(),
+            "month": clean_dates.dt.month,
+            "year": clean_dates.dt.year,
+            "monthly_budget": pd.NA,
+            "remaining_budget": pd.NA,
+            "savings_goal": pd.NA,
+            "source_line": clean.index.astype(int) + 5,
+        },
+        index=clean.index,
+    ).reset_index(drop=True)
+    return processed, pd.DataFrame(
+        audit_rows, columns=["source_file", "source_line", "disposition", "reason"]
+    )
+
+
+def preprocess_phonepe(
+    raw_path=RAW_PATH,
+    output_path=OUTPUT_PATH,
+    audit_path=AUDIT_PATH,
+) -> pd.DataFrame:
+    processed, audit = load_phonepe_statement(raw_path)
+    atomic_write_csv(processed, output_path)
+    atomic_write_csv(audit, audit_path)
+    return processed
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Normalize the existing PhonePe statement.")
+    parser.add_argument("--input", type=Path, default=RAW_PATH)
+    args = parser.parse_args()
+    result = preprocess_phonepe(raw_path=args.input)
+    print(f"Processed {len(result)} transactions -> {OUTPUT_PATH}")
+    print(f"Excluded rows and reasons -> {AUDIT_PATH}")
+
+
+if __name__ == "__main__":
+    main()

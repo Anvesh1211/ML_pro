@@ -1,0 +1,599 @@
+{
+  "generated_at_utc": "2026-10-22T10:12:16.267120+00:00",
+  "classification": {
+    "model_version": "1.0",
+    "dataset": "training.csv",
+    "dataset_sha256": "a45c74d5e2cf785a81944f8a238b3397d4957e840afd64be1a9296a42e5817da",
+    "rows_used": 900,
+    "categories": [
+      "Bills & Utilities",
+      "Education",
+      "Entertainment",
+      "Food & Dining",
+      "Grocery",
+      "Health",
+      "Mobile Recharge",
+      "Personal Care",
+      "Personal Transfer",
+      "Rent",
+      "Salary/Income",
+      "Shopping",
+      "Transport"
+    ],
+    "random_state": 42,
+    "split": "GroupShuffleSplit(test_size=0.20, groups=normalized merchant)",
+    "train_rows": 723,
+    "test_rows": 177,
+    "train_merchants": 86,
+    "test_merchants": 22,
+    "merchant_overlap": 0,
+    "categories_absent_from_test": [
+      "Personal Care",
+      "Shopping"
+    ],
+    "accuracy": 0.943502824858757,
+    "macro_f1": 0.9196969696969696,
+    "weighted_f1": 0.9417137476459511,
+    "mean_inference_ms_per_transaction": 0.22604180790785183,
+    "per_category": {
+      "Bills & Utilities": {
+        "precision": 0.6,
+        "recall": 1.0,
+        "f1-score": 0.75,
+        "support": 15.0
+      },
+      "Education": {
+        "precision": 1.0,
+        "recall": 0.5384615384615384,
+        "f1-score": 0.7,
+        "support": 13.0
+      },
+      "Entertainment": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 10.0
+      },
+      "Food & Dining": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 45.0
+      },
+      "Grocery": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 7.0
+      },
+      "Health": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 14.0
+      },
+      "Mobile Recharge": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 19.0
+      },
+      "Personal Care": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 0.0
+      },
+      "Personal Transfer": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 30.0
+      },
+      "Rent": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 12.0
+      },
+      "Salary/Income": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 4.0
+      },
+      "Shopping": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 0.0
+      },
+      "Transport": {
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1-score": 0.6666666666666666,
+        "support": 8.0
+      }
+    },
+    "confusion_matrix_labels": [
+      "Bills & Utilities",
+      "Education",
+      "Entertainment",
+      "Food & Dining",
+      "Grocery",
+      "Health",
+      "Mobile Recharge",
+      "Personal Care",
+      "Personal Transfer",
+      "Rent",
+      "Salary/Income",
+      "Shopping",
+      "Transport"
+    ],
+    "confusion_matrix": [
+      [
+        15,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        6,
+        7,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        10,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        45,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        7,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        14,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        19,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        30,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        12,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        4
+      ]
+    ]
+  },
+  "personalization": {
+    "available": true,
+    "experiment": "offline merchant-memory simulation on labeled training data",
+    "training_sha256": "a45c74d5e2cf785a81944f8a238b3397d4957e840afd64be1a9296a42e5817da",
+    "support_policy": "Deterministically hold out 20% of repeated merchants (seed 42); use the earliest labeled row per held-out merchant as feedback.",
+    "evaluation_policy": "Evaluate only later rows from those merchants. Exclude all corrected merchants from the classifier fit, so the support label is not used to train the model.",
+    "training_rows": 730,
+    "support_corrections": 22,
+    "evaluation_rows": 148,
+    "evaluation_merchants": 22,
+    "merchants_with_mixed_ground_truth_labels": 0,
+    "categories_absent_from_evaluation": [
+      "Salary/Income"
+    ],
+    "baseline": {
+      "accuracy": 0.9797297297297297,
+      "macro_f1": 0.9415584415584415,
+      "weighted_f1": 0.9813092313092313
+    },
+    "merchant_memory": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "weighted_f1": 1.0
+    },
+    "delta_macro_f1": 0.05844155844155852,
+    "personalized_per_category": {
+      "Bills & Utilities": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 11.0
+      },
+      "Education": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 17.0
+      },
+      "Entertainment": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 2.0
+      },
+      "Food & Dining": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 8.0
+      },
+      "Grocery": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 30.0
+      },
+      "Health": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 14.0
+      },
+      "Mobile Recharge": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 3.0
+      },
+      "Personal Care": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 11.0
+      },
+      "Personal Transfer": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 16.0
+      },
+      "Rent": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 6.0
+      },
+      "Shopping": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 23.0
+      },
+      "Transport": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 7.0
+      }
+    },
+    "baseline_per_category": {
+      "Bills & Utilities": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 11.0
+      },
+      "Education": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 17.0
+      },
+      "Entertainment": {
+        "precision": 0.4,
+        "recall": 1.0,
+        "f1-score": 0.5714285714285714,
+        "support": 2.0
+      },
+      "Food & Dining": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 8.0
+      },
+      "Grocery": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 30.0
+      },
+      "Health": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 14.0
+      },
+      "Mobile Recharge": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 3.0
+      },
+      "Personal Care": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 11.0
+      },
+      "Personal Transfer": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 16.0
+      },
+      "Rent": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 6.0
+      },
+      "Shopping": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 23.0
+      },
+      "Transport": {
+        "precision": 1.0,
+        "recall": 0.5714285714285714,
+        "f1-score": 0.7272727272727273,
+        "support": 7.0
+      }
+    },
+    "limitations": [
+      "This is an offline simulation using existing labeled training examples, not the user's actual feedback outcomes.",
+      "The merchant-memory policy can misclassify mixed-use merchants; such merchants are counted and exposed.",
+      "The chosen support row and later evaluation rows are disjoint, but only one deterministic support row per merchant is evaluated.",
+      "PhonePe predictions have no independently verified ground-truth labels."
+    ]
+  },
+  "flexibility_comparison": {
+    "assumption": "10% reduction; hypothetical, not an observed saving.",
+    "observed_months": 4,
+    "eligible_observations": 24,
+    "flexibility_adjusted_estimated_monthly_difference": 86.34,
+    "no_flexibility_layer_estimated_monthly_difference": 163.77125,
+    "estimated_difference_from_layer": -77.43125,
+    "average_all_consumption_expenses_per_observed_month": 1637.7125,
+    "interpretation": "The flexibility layer limits the hypothetical reduction base to categories marked potentially adjustable; results remain category proxies."
+  },
+  "expense_forecast": {
+    "available": true,
+    "forecast_month": "2026-09",
+    "last_observed_month": "2026-08",
+    "as_of_month": "2026-10",
+    "data_age_months": 2,
+    "is_current_forecast": false,
+    "forecast_basis": "Month immediately after last observed month; may be a historical period.",
+    "forecast_expense_historical_mean": 1637.7125,
+    "forecast_expense_moving_average_3_month": 1211.4166666666667,
+    "history_months": 4,
+    "observed_months": [
+      "2026-05",
+      "2026-06",
+      "2026-07",
+      "2026-08"
+    ],
+    "chronological_validation_origins": 2,
+    "historical_mean_mae": 1150.2000000000003,
+    "moving_average_mae": 1150.2000000000003,
+    "limitation": "Calendar months are based on statement coverage, which is incomplete at its first and last month. One-step historical errors are not a guarantee of future accuracy; seasonality is not estimated."
+  },
+  "spending_cluster_comparison": {
+    "method": "KMeans on log amount, category, and weekday; one-hot/scaled features",
+    "random_state": 42,
+    "silhouette_score": 0.21289452611581142,
+    "amount_only_baseline": {
+      "method": "KMeans on standardized raw transaction amount only",
+      "random_state": 42,
+      "silhouette_score": 0.7630571135012877
+    },
+    "summary": [
+      {
+        "spending_cluster": 0,
+        "transaction_count": 30,
+        "mean_amount": 174.32833333333335,
+        "median_amount": 130.0,
+        "category_mix": "Food & Dining"
+      },
+      {
+        "spending_cluster": 1,
+        "transaction_count": 37,
+        "mean_amount": 10.675675675675675,
+        "median_amount": 10.0,
+        "category_mix": "Grocery"
+      },
+      {
+        "spending_cluster": 2,
+        "transaction_count": 25,
+        "mean_amount": 37.04,
+        "median_amount": 30.0,
+        "category_mix": "Grocery"
+      }
+    ]
+  },
+  "stress_test_arithmetic": {
+    "baseline_monthly_cash_flow": 15000.0,
+    "scenario_monthly_cash_flow": 3000.0,
+    "monthly_change": -12000.0,
+    "one_time_emergency_expense": 6000.0,
+    "first_month_cash_flow_after_emergency": -3000.0,
+    "income_after_reduction": 40000.0,
+    "essential_expenses_after_increase": 22000.0,
+    "flexible_expenses_after_reduction": 8000.0,
+    "assumptions": {
+      "monthly_income": 50000,
+      "essential_expenses": 20000,
+      "flexible_expenses": 10000,
+      "other_expenses": 5000,
+      "income_reduction_rate": 0.2,
+      "essential_increase_rate": 0.1,
+      "one_time_emergency_expense": 6000,
+      "new_monthly_emi": 2000,
+      "flexible_spending_reduction_rate": 0.2
+    },
+    "disclaimer": "Hypothetical deterministic estimate; not an observed outcome or guarantee."
+  },
+  "data_boundary": "Existing data/training.csv and current predictions derived from existing data/testing.csv only."
+}

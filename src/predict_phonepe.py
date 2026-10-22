@@ -1,206 +1,216 @@
-import pandas as pd
+from __future__ import annotations
+
+import argparse
+import time
+from pathlib import Path
+
 import joblib
-import re
+import pandas as pd
 
-model = joblib.load("src/category_model.pkl")
-df = pd.read_csv("data/phonepe_processed.csv")
-
-df["text"] = (
-    df["transaction_details"].fillna("") + " " +
-    df["merchant"].fillna("")
+from src.common import (
+    BASE_CATEGORIES,
+    DATA_DIR,
+    LEGACY_MODEL_PATH,
+    MODEL_PATH,
+    REQUIRED_PROCESSED_COLUMNS,
+    atomic_write_csv,
+    build_model_text,
+    normalize_merchant,
+    require_columns,
 )
+from src.preprocess_phonepe import classify_description
 
-df["ml_category"] = model.predict(df["text"])
 
-probabilities = model.predict_proba(df["text"])
-df["ml_confidence"] = probabilities.max(axis=1)
+PROCESSED_PATH = DATA_DIR / "phonepe_processed.csv"
+PREDICTIONS_PATH = DATA_DIR / "phonepe_predictions.csv"
+FINAL_RESULTS_PATH = DATA_DIR / "final_phonepe_results.csv"
+FEEDBACK_PATH = DATA_DIR / "user_feedback.csv"
+LOW_CONFIDENCE_THRESHOLD = 0.30
 
-df["final_category"] = df["ml_category"]
-df["category_source"] = "ML"
 
-text = df["text"].str.lower()
-merchant = df["merchant"].fillna("").str.lower().str.strip()
-
-rules = {
-    "Transport": [
-        "petrol", "fuel", "petrol pump", "diesel",
-        "irctc", "railway", "redbus", "uber", "ola",
-        "rapido", "metro", "taxi", "service station"
-    ],
-
-    "Food & Dining": [
-        "swiggy", "zomato", "dominos", "pizza",
-        "burger", "restaurant", "hotel", "cafe",
-        "coffee", "dining", "food", "biryani",
-        "mess", "canteen", "bakery", "juice",
-        "snack", "pani puri", "vada pav"
-    ],
-
-    "Grocery": [
-        "grocery", "super market", "supermarket",
-        "mart", "market", "kirana", "fruit",
-        "vegetable", "vegetables", "traders",
-        "grocer", "daily essentials", "blinkit", "zepto"
-    ],
-
-    "Shopping": [
-        "meesho", "amazon", "flipkart", "myntra",
-        "ajio", "shopping", "electronics",
-        "clothing", "fashion"
-    ],
-
-    "Mobile Recharge": [
-        "recharge", "mobile recharge", "prepaid",
-        "postpaid"
-    ],
-
-    "Bills & Utilities": [
-        "electricity", "electric", "gas bill",
-        "water bill", "internet", "wifi",
-        "broadband", "dth", "utility",
-        "bill payment"
-    ],
-
-    "Health": [
-        "hospital", "medical", "medicine",
-        "pharmacy", "chemist", "clinic",
-        "doctor", "apollo", "health"
-    ],
-
-    "Personal Care": [
-        "salon", "unisex salon", "parlour", "beauty",
-        "spa", "barber", "haircut"
-    ],
-
-    "Education": [
-        "college", "school", "education",
-        "course", "exam", "tuition", "fees"
-    ],
-
-    "Entertainment": [
-        "movie", "cinema", "bookmyshow",
-        "netflix", "spotify", "entertainment",
-        "game", "gaming"
-    ],
-
-    "Rent": [
-        "rent", "house rent", "room rent"
-    ],
-
-    "Salary/Income": [
-        "salary", "stipend"
-    ],
-
-    "Personal Transfer": [
-        "friend transfer",
-        "family transfer",
-        "received from"
-    ]
-}
-
-rule_applied = pd.Series(False, index=df.index)
-
-for category, keywords in rules.items():
-    pattern = "|".join(
-        keyword.replace(" ", r"\s+")
-        for keyword in keywords
+def load_feedback(path: Path = FEEDBACK_PATH) -> pd.DataFrame:
+    if not path.exists():
+        return pd.DataFrame(
+            columns=["merchant", "final_category", "scope", "transaction_id"]
+        )
+    feedback = pd.read_csv(path, dtype="string", keep_default_na=False)
+    required = {"merchant", "final_category"}
+    missing = sorted(required.difference(feedback.columns))
+    if missing:
+        raise ValueError(
+            f"Feedback file is missing required columns: {', '.join(missing)}"
+        )
+    for column, default in (
+        ("scope", "merchant"),
+        ("transaction_id", ""),
+    ):
+        if column not in feedback:
+            feedback[column] = default
+    feedback["merchant"] = feedback["merchant"].fillna("").str.strip()
+    feedback["final_category"] = feedback["final_category"].fillna("").str.strip()
+    feedback["scope"] = feedback["scope"].fillna("merchant").str.strip().str.casefold()
+    feedback["transaction_id"] = (
+        feedback["transaction_id"].fillna("").str.strip()
     )
-
-    mask = (
-        text.str.contains(pattern, regex=True, na=False)
-        & ~rule_applied
+    allowed_categories = set(BASE_CATEGORIES)
+    if MODEL_PATH.exists():
+        artifact = joblib.load(MODEL_PATH)
+        if isinstance(artifact, dict):
+            allowed_categories = set(artifact.get("categories", BASE_CATEGORIES))
+    invalid = sorted(set(feedback["final_category"]) - allowed_categories)
+    if invalid:
+        raise ValueError(
+            "Feedback contains categories not present in the training labels: "
+            + ", ".join(invalid)
+        )
+    invalid_scope = sorted(
+        set(feedback["scope"]).difference({"merchant", "transaction"})
     )
-
-    df.loc[mask, "final_category"] = category
-    df.loc[mask, "category_source"] = "Indian Rule"
-
-    rule_applied = rule_applied | mask
-
-
-business_words = [
-    "market", "mart", "store", "shop", "supermarket",
-    "grocery", "traders", "foods", "food", "hotel",
-    "restaurant", "cafe", "bakery", "hospital",
-    "medical", "pharmacy", "clinic", "salon",
-    "service", "station", "petrol", "pump", "fuel",
-    "rail", "railway", "irctc", "bus", "travel",
-    "travels", "recharge", "internet", "school",
-    "college", "university", "electronics", "meesho",
-    "amazon", "flipkart", "zepto", "blinkit",
-    "swiggy", "zomato"
-]
-
-def looks_like_person(name):
-    words = re.findall(r"[a-z]+", name.lower())
-
-    if len(words) < 2 or len(words) > 4:
-        return False
-
-    if any(word in business_words for word in words):
-        return False
-
-    return all(len(word) >= 2 for word in words)
+    if invalid_scope:
+        raise ValueError("Feedback scope must be merchant or transaction.")
+    if ((feedback["scope"] == "merchant") & feedback["merchant"].eq("")).any():
+        raise ValueError("Merchant-scoped feedback requires a merchant value.")
+    if (
+        (feedback["scope"] == "transaction")
+        & feedback["transaction_id"].eq("")
+    ).any():
+        raise ValueError("Transaction-scoped feedback requires a transaction_id.")
+    return feedback
 
 
-person_mask = (
-    (df["transaction_type"] == "DEBIT") &
-    (df["category_source"] == "ML") &
-    merchant.apply(looks_like_person)
-)
+def _extract_model(artifact):
+    return artifact["model"] if isinstance(artifact, dict) else artifact
 
-df.loc[person_mask, "final_category"] = "Personal Transfer"
-df.loc[person_mask, "category_source"] = "Person Name Rule"
 
-low_confidence = (
-    (df["ml_confidence"] < 0.30) &
-    (df["category_source"] == "ML")
-)
+def _load_model(path: Path | None = None):
+    model_path = path or (MODEL_PATH if MODEL_PATH.exists() else LEGACY_MODEL_PATH)
+    if not model_path.exists():
+        raise FileNotFoundError(
+            "No trained classifier found. Run `python -m src.train_model` first."
+        )
+    artifact = joblib.load(model_path)
+    return _extract_model(artifact)
 
-df.loc[low_confidence, "final_category"] = "Needs Review"
-df.loc[low_confidence, "category_source"] = "Low ML Confidence"
 
-manual_rules = {
-    "THE KOHINOOR UNISEX SALON": "Personal Care",
-    "Priyas South Indian dosa centre": "Food & Dining",
-    "jay ganesh general store": "Grocery",
-    "LUKDE AND BROTHER S": "Grocery"
-}
+def _apply_feedback(
+    frame: pd.DataFrame, feedback: pd.DataFrame
+) -> tuple[pd.DataFrame, pd.Series]:
+    corrected = frame["final_category"].copy()
+    source = frame["category_source"].copy()
+    seen: dict[tuple[str, str], str] = {}
+    for scope in ("merchant", "transaction"):
+        for _, row in feedback.loc[feedback["scope"].eq(scope)].iterrows():
+            value = row["final_category"]
+            if scope == "transaction":
+                key = ("transaction", str(row["transaction_id"]))
+                mask = frame["transaction_id"].astype(str).eq(key[1])
+            else:
+                merchant_key = normalize_merchant(row["merchant"])
+                key = ("merchant", merchant_key)
+                mask = frame["merchant"].map(normalize_merchant).eq(merchant_key)
+            if not mask.any():
+                continue
+            if key in seen and seen[key] != value:
+                raise ValueError(
+                    f"Conflicting saved feedback for {scope} key {key[1]!r}."
+                )
+            seen[key] = value
+            corrected.loc[mask] = value
+            source.loc[mask] = (
+                "User transaction correction"
+                if scope == "transaction"
+                else "User merchant feedback"
+            )
+    return corrected, source
 
-for merchant_name, category in manual_rules.items():
-    mask = merchant.str.lower() == merchant_name.lower()
-    df.loc[mask, "final_category"] = category
-    df.loc[mask, "category_source"] = "Merchant Rule"
 
-person_transactions = [
-    "PUKHARAJ A CHAUDHARI",
-    "Mr UZAIR KHAN  ZUBAIR KHAN",
-    "SANJOG",
-    "Bondya"
-]
+def predict_transactions(
+    processed: pd.DataFrame,
+    model=None,
+    feedback: pd.DataFrame | None = None,
+    confidence_threshold: float = LOW_CONFIDENCE_THRESHOLD,
+) -> pd.DataFrame:
+    require_columns(processed, REQUIRED_PROCESSED_COLUMNS, "Processed transactions")
+    if processed.empty:
+        raise ValueError("There are no processed transactions to classify.")
+    classifier = model or _load_model()
+    result = processed.copy()
+    texts = build_model_text(result)
+    result["text"] = texts
+    result["ml_category"] = classifier.predict(texts)
+    if not hasattr(classifier, "predict_proba"):
+        raise TypeError("The configured classifier must provide predict_proba().")
+    probabilities = classifier.predict_proba(texts)
+    result["ml_confidence"] = probabilities.max(axis=1)
+    result["final_category"] = result["ml_category"].astype(str)
+    result["category_source"] = "ML"
 
-for merchant_name in person_transactions:
-    mask = merchant.str.lower() == merchant_name.lower()
-    df.loc[mask, "final_category"] = "Personal Transfer"
-    df.loc[mask, "category_source"] = "Merchant Rule"
-    
-print("\n========================================")
-print("       FIN TWIN CLASSIFICATION")
-print("========================================")
+    for index, row in result.iterrows():
+        rule_category = classify_description(
+            row["transaction_details"], row["transaction_type"]
+        )
+        if row["transaction_type"] == "CREDIT" and rule_category == "Needs Review":
+            description = str(row["transaction_details"]).casefold()
+            if "received from" in description:
+                rule_category = "Personal Transfer"
+        if rule_category != "Needs Review":
+            result.at[index, "final_category"] = rule_category
+            result.at[index, "category_source"] = "Deterministic rule"
+        elif result.at[index, "ml_confidence"] < confidence_threshold:
+            result.at[index, "final_category"] = "Needs Review"
+            result.at[index, "category_source"] = "Low ML confidence"
+        if (
+            row["transaction_type"] == "DEBIT"
+            and result.at[index, "final_category"] == "Salary/Income"
+        ):
+            result.at[index, "final_category"] = "Needs Review"
+            result.at[index, "category_source"] = "Direction/category conflict"
 
-print("\nTotal transactions:", len(df))
+    if feedback is not None:
+        result["final_category"], result["category_source"] = _apply_feedback(
+            result, feedback
+        )
+    return result
 
-print("\nClassification sources:")
-print(df["category_source"].value_counts())
 
-print("\nFinal Categories:")
-print(df["final_category"].value_counts())
+def run_prediction(
+    processed_path: Path = PROCESSED_PATH,
+    output_paths: tuple[Path, ...] = (PREDICTIONS_PATH, FINAL_RESULTS_PATH),
+    feedback_path: Path = FEEDBACK_PATH,
+    model_path: Path | None = None,
+) -> pd.DataFrame:
+    if not processed_path.exists():
+        raise FileNotFoundError(f"Processed transactions not found: {processed_path}")
+    processed = pd.read_csv(
+        processed_path,
+        dtype={"transaction_id": "string", "utr": "string"},
+        low_memory=False,
+    )
+    feedback = load_feedback(feedback_path)
+    model = _load_model(model_path)
+    result = predict_transactions(processed, model=model, feedback=feedback)
+    required_result = {"final_category", "category_source", "ml_category"}
+    if not required_result.issubset(result.columns):
+        raise RuntimeError("Prediction did not produce the required result fields.")
+    for output_path in output_paths:
+        atomic_write_csv(result, output_path)
+        check = pd.read_csv(output_path, low_memory=False)
+        if len(check) != len(processed) or not required_result.issubset(check.columns):
+            raise IOError(f"Prediction output failed read-back validation: {output_path}")
+    return result
 
-print("\n===== SAMPLE CLASSIFICATIONS =====")
-print(
-    df[
-        ["merchant", "amount", "transaction_type",
-         "final_category", "category_source", "ml_confidence"]
-    ].head(20).to_string(index=False)
-)
 
-print("\nFiles saved successfully.")
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Classify processed PhonePe transactions.")
+    parser.add_argument("--processed", type=Path, default=PROCESSED_PATH)
+    args = parser.parse_args()
+    started = time.perf_counter()
+    result = run_prediction(processed_path=args.processed)
+    print(f"Classified {len(result)} transactions in {time.perf_counter() - started:.3f}s.")
+    print(result["category_source"].value_counts().to_string())
+    print(f"Saved and validated: {PREDICTIONS_PATH}")
+    print(f"Saved and validated: {FINAL_RESULTS_PATH}")
+
+
+if __name__ == "__main__":
+    main()

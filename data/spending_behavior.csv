@@ -1,279 +1,93 @@
-transaction_date,transaction_details,amount,transaction_type,predicted_category,spending_cluster
-2026-08-02,Paid to Swiggy Ltd,112.0,DEBIT,Food & Dining,0
-2026-08-02,Paid to SHREE BALAJI SUPER MARKET,10.0,DEBIT,Grocery,0
-2026-08-02,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0
-2026-08-02,Paid to DALIM  SK,20.0,DEBIT,Grocery,0
-2026-08-02,Paid to DALIM  SK,35.0,DEBIT,Grocery,0
-2026-08-02,Paid to DALIM  SK,35.0,DEBIT,Grocery,0
-2026-08-02,Paid to JAYASHREE DATTATRAY BHADALE,80.0,DEBIT,Grocery,0
-2026-08-02,Paid to Hotel padmaraj bhuvan,80.0,DEBIT,Food & Dining,0
-2026-08-02,Paid to MEESHO TECHNOLOGIES PRIVATE LIMITED,86.0,DEBIT,Shopping,0
-2026-08-02,Paid to Sujal Aids A,10.0,DEBIT,Personal Transfer,0
-2026-08-02,Paid to Sujal Aids A,40.0,DEBIT,Personal Transfer,0
-2026-08-01,Paid to VARADRAJ SANJAY JADHAV,121.0,DEBIT,Grocery,0
-2026-08-01,Paid to Shabana Fruit ,30.0,DEBIT,Grocery,0
-2026-07-31,Paid to NEW BALAJI TRADERS,10.0,DEBIT,Grocery,0
-2026-07-31,Paid to NEW BALAJI TRADERS,50.0,DEBIT,Grocery,0
-2026-07-31,Paid to THE KOHINOOR UNISEX SALON,150.0,DEBIT,Grocery,0
-2026-07-31,Paid to Sujal Aids A,400.0,DEBIT,Personal Transfer,1
-2026-07-31,Paid to Hotel padmaraj bhuvan,96.0,DEBIT,Food & Dining,0
-2026-07-31,Paid to Rohit Girdharilal Sirvi,5.0,DEBIT,Grocery,0
-2026-07-31,Paid to MAITRICHA CHAHA,40.0,DEBIT,Grocery,0
-2026-07-31,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0
-2026-07-31,Paid to ESHA  FOODS,80.0,DEBIT,Grocery,0
-2026-07-30,Paid to NEW HOTEL SAWAJI,130.0,DEBIT,Food & Dining,0
-2026-07-30,Paid to Baramati agro chicken ,45.0,DEBIT,Grocery,0
-2026-07-30,Paid to SHITAL FRUITS AND VEGETABLES,10.0,DEBIT,Grocery,0
-2026-07-30,Paid to NEW KALPANA GENERAL STORE AND STATIONERY VERIETY,5.0,DEBIT,Grocery,0
-2026-07-30,Paid to VILAS ANANT CHHATRE,80.0,DEBIT,Grocery,0
-2026-07-29,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0
-2026-07-29,Paid to HOTEL JAYSHREE DINING ,100.0,DEBIT,Food & Dining,0
-2026-07-29,Paid to SHREE BALAJI SUPER MARKET,10.0,DEBIT,Grocery,0
-2026-07-29,Paid to Firange Vijay Baban,85.0,DEBIT,Grocery,0
-2026-07-28,Paid to NEW HOTEL SAWAJI,120.0,DEBIT,Food & Dining,0
-2026-07-28,Paid to SINHGAD FRUIT CENTER,10.0,DEBIT,Grocery,0
-2026-07-28,Paid to SHREE BALAJI SUPER MARKET,25.0,DEBIT,Grocery,0
-2026-07-28,Paid to VILAS ANANT CHHATRE,80.0,DEBIT,Grocery,0
-2026-07-27,Paid to NEW BALAJI TRADERS,10.0,DEBIT,Grocery,0
-2026-07-27,Paid to KIRAN MAHADEV KANADE,35.0,DEBIT,Grocery,0
-2026-07-27,Paid to SHITAL FRUITS AND VEGETABLES,10.0,DEBIT,Grocery,0
-2026-07-27,Paid to ESHA  FOODS,40.0,DEBIT,Grocery,0
-2026-07-26,Paid to HOTEL JAYSHREE DINING ,130.0,DEBIT,Food & Dining,0
-2026-07-26,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0
-2026-07-26,Paid to 192 K K MARKET,50.0,DEBIT,Grocery,0
-2026-07-26,Paid to Shree sadguru krupa snacks and mess,60.0,DEBIT,Food & Dining,0
-2026-07-26,Paid to KAVITA VINOD PAWAR,45.0,DEBIT,Grocery,0
-2026-07-25,Paid to Mr RAMCHANDRA EKNATH,170.0,DEBIT,Grocery,1
-2026-07-25,Paid to BABAJI PETROL PUMP YOGESH ,300.0,DEBIT,Grocery,1
-2026-07-24,Paid to Rohit Girdharilal Sirvi,10.0,DEBIT,Grocery,0
-2026-07-24,Paid to NEW BALAJI TRADERS,14.0,DEBIT,Grocery,0
-2026-07-24,Paid to RAM NAMDEO GHODKAE,30.0,DEBIT,Grocery,0
-2026-07-24,Paid to PASALKAR PUSHPA RUPESH,80.0,DEBIT,Grocery,0
-2026-07-23,Paid to NEW BALAJI TRADERS,20.0,DEBIT,Grocery,0
-2026-07-23,Paid to NEW BALAJI TRADERS,24.0,DEBIT,Grocery,0
-2026-07-23,Paid to VILAS ANANT CHHATRE,40.0,DEBIT,Grocery,0
-2026-07-22,Paid to Sprouts Aunti,20.0,DEBIT,Grocery,0
-2026-07-22,Paid to DALIM  SK,50.0,DEBIT,Grocery,0
-2026-07-22,Paid to Firange Vijay Baban,85.0,DEBIT,Grocery,0
-2026-07-22,Paid to SHREE BALAJI SUPER MARKET,25.0,DEBIT,Grocery,0
-2026-07-22,Paid to VILAS ANANT CHHATRE,30.0,DEBIT,Grocery,0
-2026-07-21,Paid to NEW HOTEL SAWAJI,120.0,DEBIT,Food & Dining,0
-2026-07-21,Paid to SINHGAD FRUIT CENTER,10.0,DEBIT,Grocery,0
-2026-07-21,Paid to SHITAL FRUITS AND VEGETABLES,10.0,DEBIT,Grocery,0
-2026-07-21,Paid to SHITAL FRUITS AND VEGETABLES,50.0,DEBIT,Grocery,0
-2026-07-20,Paid to Shree Balaji Super Market,20.0,DEBIT,Grocery,0
-2026-07-20,Paid to VILAS ANANT CHHATRE,40.0,DEBIT,Grocery,0
-2026-07-20,Paid to SHITAL FRUITS AND VEGETABLES,60.0,DEBIT,Grocery,0
-2026-07-20,Paid to SINHGAD FRUIT CENTER,10.0,DEBIT,Grocery,0
-2026-07-19,Paid to Master SUJAL RAJENDRA PAYGUDE,70.0,DEBIT,Personal Transfer,0
-2026-07-19,Paid to HOTEL JAYSHREE DINING ,130.0,DEBIT,Food & Dining,0
-2026-07-18,Paid to NEW BALAJI TRADERS,10.0,DEBIT,Grocery,0
-2026-07-18,Paid to NEW HOTEL SAWAJI,120.0,DEBIT,Food & Dining,0
-2026-07-18,Paid to ESHA  FOODS,220.0,DEBIT,Grocery,1
-2026-07-17,Paid to NEW BALAJI TRADERS,20.0,DEBIT,Grocery,0
-2026-07-17,Paid to Burger,357.0,DEBIT,Grocery,1
-2026-07-17,Paid to AMRAPALI SERVICE STATION,150.0,DEBIT,Grocery,0
-2026-07-16,Paid to NEW BALAJI TRADERS,10.0,DEBIT,Grocery,0
-2026-07-16,Paid to NEW BALAJI TRADERS,10.0,DEBIT,Grocery,0
-2026-07-16,Paid to HOTEL SANGOJ,110.0,DEBIT,Food & Dining,0
-2026-07-16,Paid to RAM NAMDEO GHODKAE,35.0,DEBIT,Grocery,0
-2026-07-16,Paid to SINHGAD FRUIT CENTER,10.0,DEBIT,Grocery,0
-2026-07-16,Paid to SINHGAD FRUIT CENTER,25.0,DEBIT,Grocery,0
-2026-07-16,Paid to Sujal Aids A,55.0,DEBIT,Personal Transfer,0
-2026-07-15,Paid to Nitu Snacks Center,10.0,DEBIT,Food & Dining,0
-2026-07-15,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0
-2026-07-15,Paid to Firange Vijay Baban,130.0,DEBIT,Grocery,0
-2026-07-15,Paid to NEW BALAJI TRADERS,24.0,DEBIT,Grocery,0
-2026-07-15,Paid to Baramati agro chicken ,95.0,DEBIT,Grocery,0
-2026-07-15,Paid to SHITAL FRUITS AND VEGETABLES,10.0,DEBIT,Grocery,0
-2026-07-15,Paid to ESHA  FOODS,80.0,DEBIT,Grocery,0
-2026-07-14,Paid to NEW HOTEL SAWAJI,600.0,DEBIT,Food & Dining,2
-2026-07-14,Paid to NEW BALAJI TRADERS,24.0,DEBIT,Grocery,0
-2026-07-14,Paid to VILAS ANANT CHHATRE,80.0,DEBIT,Grocery,0
-2026-07-13,Paid to ESHA  FOODS,40.0,DEBIT,Grocery,0
-2026-07-13,Paid to SHREE BALAJI SUPER MARKET,30.0,DEBIT,Grocery,0
-2026-07-13,Paid to Arun Sopan Dolare,20.0,DEBIT,Grocery,0
-2026-07-13,Paid to Hotel padmaraj bhuvan,20.0,DEBIT,Food & Dining,0
-2026-07-13,Mobile recharged 9881700871,353.0,DEBIT,Grocery,1
-2026-07-13,Paid to SHITAL FRUITS AND VEGETABLES,10.0,DEBIT,Grocery,0
-2026-07-13,Paid to ESHA  FOODS,80.0,DEBIT,Grocery,0
-2026-07-12,Paid to 192 K K MARKET,48.0,DEBIT,Grocery,0
-2026-07-12,Paid to Shree sadguru krupa snacks and mess,20.0,DEBIT,Food & Dining,0
-2026-07-12,Paid to Vinod Vishwanath Sakhare,60.0,DEBIT,Grocery,0
-2026-07-12,Paid to Ronak Gift And Stationery,70.0,DEBIT,Grocery,0
-2026-07-12,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0
-2026-07-12,Paid to HOTEL JAYSHREE DINING ,120.0,DEBIT,Food & Dining,0
-2026-07-11,Paid to TOLARAM BHUNDARAMJI DEWASI,10.0,DEBIT,Grocery,0
-2026-07-11,Paid to Mumbai juice and Chinese spot ,100.0,DEBIT,Grocery,0
-2026-07-11,Paid to PUKHARAJ A CHAUDHARI,20.0,DEBIT,Grocery,0
-2026-07-11,Paid to NEW BALAJI TRADERS,20.0,DEBIT,Grocery,0
-2026-07-11,Paid to ESHA  FOODS,80.0,DEBIT,Grocery,0
-2026-07-10,Paid to NEW HOTEL SAWAJI,120.0,DEBIT,Food & Dining,0
-2026-07-10,Paid to Firange Vijay Baban,80.0,DEBIT,Grocery,0
-2026-07-09,Paid to VILAS ANANT CHHATRE,40.0,DEBIT,Grocery,0
-2026-07-09,Paid to SHREE BALAJI SUPER MARKET,20.0,DEBIT,Grocery,0
-2026-07-09,Paid to SHREE BALAJI SUPER MARKET,64.0,DEBIT,Grocery,0
-2026-07-09,Paid to Sprouts Aunti,20.0,DEBIT,Grocery,0
-2026-07-09,Paid to 192 K K MARKET,48.0,DEBIT,Grocery,0
-2026-07-09,Paid to BHORDE MAHESH MUKUND,650.0,DEBIT,Grocery,2
-2026-07-09,Paid to Shree Balaji Super Market,15.0,DEBIT,Grocery,0
-2026-07-09,Paid to RAM NAMDEO GHODKAE,30.0,DEBIT,Grocery,0
-2026-07-09,Paid to NEW BALAJI TRADERS,20.0,DEBIT,Grocery,0
-2026-07-08,Paid to Mumbai juice and Chinese spot ,200.0,DEBIT,Grocery,1
-2026-07-08,Paid to NEW HOTEL SAWAJI,120.0,DEBIT,Food & Dining,0
-2026-07-08,Paid to ESHA  FOODS,80.0,DEBIT,Grocery,0
-2026-07-07,Paid to VILAS ANANT CHHATRE,130.0,DEBIT,Grocery,0
-2026-07-06,Paid to SHREE BALAJI SUPER MARKET,25.0,DEBIT,Grocery,0
-2026-07-06,Paid to Firange Vijay Baban,100.0,DEBIT,Grocery,0
-2026-07-06,Paid to ESHA  FOODS,100.0,DEBIT,Grocery,0
-2026-07-05,Paid to Mr Prashanth Vonteddu,154.0,DEBIT,Grocery,0
-2026-07-05,Paid to Shree Balaji Super Market,40.0,DEBIT,Grocery,0
-2026-07-05,Paid to VILAS ANANT CHHATRE,80.0,DEBIT,Grocery,0
-2026-07-04,Paid to NEW BALAJI TRADERS,10.0,DEBIT,Grocery,0
-2026-07-04,Paid to Mr. KARAN AMBADAS DHAVRE,258.0,DEBIT,Grocery,1
-2026-07-04,Paid to NEW BALAJI TRADERS,45.0,DEBIT,Grocery,0
-2026-07-04,Paid to THE KOHINOOR UNISEX SALON,150.0,DEBIT,Grocery,0
-2026-07-03,Paid to NEW HOTEL SAWAJI,120.0,DEBIT,Food & Dining,0
-2026-07-03,Paid to RAM NAMDEO GHODKAE,25.0,DEBIT,Grocery,0
-2026-07-03,Paid to PASALKAR PUSHPA RUPESH,80.0,DEBIT,Grocery,0
-2026-07-02,Paid to Krishna foods,30.0,DEBIT,Grocery,0
-2026-07-02,Paid to Firange Vijay Baban,85.0,DEBIT,Grocery,0
-2026-07-02,Paid to NEW BALAJI TRADERS,30.0,DEBIT,Grocery,0
-2026-07-02,Paid to ESHA  FOODS,80.0,DEBIT,Grocery,0
-2026-07-02,Paid to PMPML,20.0,DEBIT,Transport,0
-2026-07-01,Paid to  IRCTC Rail APP,267.25,DEBIT,Transport,1
-2026-06-30,Paid to Shri Sai Pani Puri Centre 1,20.0,DEBIT,Food & Dining,0
-2026-06-30,Paid to Namdev Kisanrao Thakre,120.0,DEBIT,Grocery,0
-2026-06-28,Paid to Rajput traders,15.0,DEBIT,Grocery,0
-2026-06-27,Paid to Shri Sai Pani Puri Centre 1,40.0,DEBIT,Food & Dining,0
-2026-06-25,Paid to Shri Sai Pani Puri Centre 1,40.0,DEBIT,Food & Dining,0
-2026-06-24,Paid to Rajput traders,10.0,DEBIT,Grocery,0
-2026-06-24,Paid to RANJEET DINKARRAO GH,20.0,DEBIT,Grocery,0
-2026-06-23,Paid to Rajput traders,10.0,DEBIT,Grocery,0
-2026-06-22,Paid to Rajput traders,10.0,DEBIT,Grocery,0
-2026-06-22,Paid to Shri Sai Pani Puri Centre 1,20.0,DEBIT,Food & Dining,0
-2026-06-22,Paid to MOHAMMAD AJAZ MOHAMMAD ISRAIL,20.0,DEBIT,Grocery,0
-2026-06-21,Paid to CHETAN SURESHRAO BIHAR,50.0,DEBIT,Grocery,0
-2026-06-17,Paid to BISHNOI SUNIL BHAGIRATH,980.0,DEBIT,Grocery,2
-2026-06-16,Paid to Shri Sai Pani Puri Centre 1,55.0,DEBIT,Food & Dining,0
-2026-06-15,Mobile recharged 9881700871,353.0,DEBIT,Grocery,1
-2026-06-12,Paid to KRISHNA SUPER BAZAR,10.0,DEBIT,Grocery,0
-2026-06-11,Paid to Rajput traders,10.0,DEBIT,Grocery,0
-2026-06-10,Paid to New AL Hayat Biryani,60.0,DEBIT,Food & Dining,0
-2026-06-10,Paid to Rajput traders,5.0,DEBIT,Grocery,0
-2026-06-10,Paid to Rajput traders,10.0,DEBIT,Grocery,0
-2026-06-08,Paid to Shri Sai Pani Puri Centre 1,20.0,DEBIT,Food & Dining,0
-2026-06-08,Paid to CHETAN GAJANAN DHANORKAR,100.0,DEBIT,Grocery,0
-2026-06-07,Paid to MOHAMMAD AJAZ BHAODDIN,50.0,DEBIT,Grocery,0
-2026-06-05,Paid to Pari Shrungar And General ,125.0,DEBIT,Grocery,0
-2026-06-04,Paid to DINESH PUNDLIKRAO YAWLE,200.0,DEBIT,Grocery,1
-2026-06-04,Paid to Rajput traders,196.0,DEBIT,Grocery,1
-2026-06-04,Paid to Shri Sai Pani Puri Centre 1,30.0,DEBIT,Food & Dining,0
-2026-06-03,Paid to MEESHO TECHNOLOGIES PRIVATE LIMITED,335.0,DEBIT,Shopping,1
-2026-06-03,Paid to Flipkart Payments,239.0,DEBIT,Shopping,1
-2026-05-31,Paid to Gajanan Provision,5.0,DEBIT,Grocery,0
-2026-05-31,Paid to Shri Sai Pani Puri Centre 1,20.0,DEBIT,Food & Dining,0
-2026-05-31,Paid to Mr UZAIR KHAN  ZUBAIR KHAN,450.0,DEBIT,Grocery,1
-2026-05-26,Paid to Hotel mahindra ,40.0,DEBIT,Food & Dining,0
-2026-05-25,Paid to jay ganesh general store,25.0,DEBIT,Grocery,0
-2026-05-25,Paid to SINHGAD FRUIT CENTER,20.0,DEBIT,Grocery,0
-2026-05-25,Paid to SINHGAD FRUIT CENTER,60.0,DEBIT,Grocery,0
-2026-05-25,Paid to Redbus India Private Limited,534.19,DEBIT,Shopping,2
-2026-05-24,Paid to Swiggy Ltd,429.0,DEBIT,Food & Dining,1
-2026-05-24,Paid to DIPAK VISHWANATH KATAKE,15.0,DEBIT,Grocery,0
-2026-05-24,Paid to JAI SHREE DINING HALL,120.0,DEBIT,Food & Dining,0
-2026-05-23,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0
-2026-05-23,Paid to HOTEL SANGOJ,100.0,DEBIT,Food & Dining,0
-2026-05-23,Paid to NEW HOTEL SAWAJI,120.0,DEBIT,Food & Dining,0
-2026-05-22,Paid to VILAS ANANT CHHATRE,40.0,DEBIT,Grocery,0
-2026-05-22,Paid to SHREE BALAJI SUPER MARKET,10.0,DEBIT,Grocery,0
-2026-05-22,Paid to ESHA  FOODS,80.0,DEBIT,Grocery,0
-2026-05-22,Paid to Baramati agro chicken ,39.0,DEBIT,Grocery,0
-2026-05-22,Paid to EW ALPANA GENERAL STORE AND STATIONERY VERIETY,5.0,DEBIT,Grocery,0
-2026-05-22,Paid to LUKDE AND BROTHER S,30.0,DEBIT,Grocery,0
-2026-05-22,Paid to SAMBAR.CONNAR,30.0,DEBIT,Grocery,0
-2026-05-21,Paid to Mrs. VIDHYA PRAVIN SITAPURE,40.0,DEBIT,Grocery,0
-2026-05-21,Paid to Priyas South Indian dosa centre ,60.0,DEBIT,Food & Dining,0
-2026-05-20,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0
-2026-05-20,Paid to NEW HOTEL SAWAJI,120.0,DEBIT,Food & Dining,0
-2026-05-20,Paid to Amazon India,203.6,DEBIT,Shopping,1
-2026-05-20,Paid to ESHA  FOODS,70.0,DEBIT,Grocery,0
-2026-05-20,Paid to V I T FRUIT CANTEEN,15.0,DEBIT,Grocery,0
-2026-05-20,Paid to NEW BALAJI TRADERS,24.0,DEBIT,Grocery,0
-2026-05-19,Paid to PASALKAR PUSHPA RUPESH,210.0,DEBIT,Grocery,1
-2026-05-19,Paid to PASALKAR PUSHPA RUPESH,80.0,DEBIT,Grocery,0
-2026-05-19,Paid to SANJOG,100.0,DEBIT,Grocery,0
-2026-05-19,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0
-2026-05-19,Paid to LUKDE AND BROTHER S,20.0,DEBIT,Grocery,0
-2026-05-18,Mobile recharged 9881700871,353.0,DEBIT,Grocery,1
-2026-05-18,Paid to VILAS ANANT CHHATRE,40.0,DEBIT,Grocery,0
-2026-05-18,Paid to SHREE BALAJI SUPER MARKET,30.0,DEBIT,Grocery,0
-2026-05-18,Paid to Baramati agro chicken ,39.0,DEBIT,Grocery,0
-2026-05-18,Paid to FRUIT CANTEEN,100.0,DEBIT,Grocery,0
-2026-05-18,Paid to FRUIT CANTEEN,10.0,DEBIT,Grocery,0
-2026-05-18,Paid to NEW BALAJI TRADERS,20.0,DEBIT,Grocery,0
-2026-05-17,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0
-2026-05-17,Paid to Master SUJAL RAJENDRA PAYGUDE,70.0,DEBIT,Personal Transfer,0
-2026-05-17,Paid to NAVANATH RASWANTI ,20.0,DEBIT,Grocery,0
-2026-05-17,Paid to JAI SHREE DINING HALL,120.0,DEBIT,Food & Dining,0
-2026-05-16,Paid to Mr VIJAY BABAN FIRANGE,85.0,DEBIT,Grocery,0
-2026-05-16,Paid to Kanifnath Rasvanti Gruh,20.0,DEBIT,Grocery,0
-2026-05-16,Paid to COINAGE HOSPITALITY,50.0,DEBIT,Grocery,0
-2026-05-16,Paid to Shreeram Govind Ujlambkar,302.0,DEBIT,Grocery,1
-2026-05-16,Paid to VIKAS ATMARAM PARKALE,185.0,DEBIT,Grocery,1
-2026-05-16,Paid to SHREE BALAJI SUPER MARKET,24.0,DEBIT,Grocery,0
-2026-05-16,Paid to LUKDE AND BROTHER S,30.0,DEBIT,Grocery,0
-2026-05-15,Paid to NEW BALAJI TRADERS,5.0,DEBIT,Grocery,0
-2026-05-15,Paid to SHREE BALAJI SUPER MARKET,10.0,DEBIT,Grocery,0
-2026-05-15,Paid to HOTEL SANGOJ,100.0,DEBIT,Food & Dining,0
-2026-05-15,Paid to NEW HOTEL SAWAJI,240.0,DEBIT,Food & Dining,1
-2026-05-15,Paid to ESHA  FOODS,80.0,DEBIT,Grocery,0
-2026-05-15,Paid to FRUIT CANTEEN,10.0,DEBIT,Grocery,0
-2026-05-14,Paid to DIPAK VISHWANATH KATAKE,15.0,DEBIT,Grocery,0
-2026-05-14,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0
-2026-05-14,Paid to VILAS ANANT CHHATRE,40.0,DEBIT,Grocery,0
-2026-05-14,Paid to V I T FRUIT CANTEEN,10.0,DEBIT,Grocery,0
-2026-05-13,Paid to PASALKAR PUSHPA RUPESH,80.0,DEBIT,Grocery,0
-2026-05-13,Paid to ESHA  FOODS,80.0,DEBIT,Grocery,0
-2026-05-13,Paid to Baramati agro chicken ,39.0,DEBIT,Grocery,0
-2026-05-12,Paid to NEW HOTEL SAWAJI,120.0,DEBIT,Food & Dining,0
-2026-05-12,Paid to Bondya,120.0,DEBIT,Grocery,0
-2026-05-12,Paid to RAM AWADH YADAV,80.0,DEBIT,Grocery,0
-2026-05-12,Paid to LUKDE AND BROTHER S,30.0,DEBIT,Grocery,0
-2026-05-12,Paid to SAMBAR.CONNAR,30.0,DEBIT,Grocery,0
-2026-05-11,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0
-2026-05-11,Paid to THE KOHINOOR UNISEX SALON,150.0,DEBIT,Grocery,0
-2026-05-11,Paid to NEW BALAJI TRADERS,10.0,DEBIT,Grocery,0
-2026-05-10,Paid to VINAYAK MEDICAL,5.0,DEBIT,Grocery,0
-2026-05-10,Paid to SHREE BALAJI SUPER MARKET,40.0,DEBIT,Grocery,0
-2026-05-10,Paid to NAVNATH RASHVANTI GRUH ,10.0,DEBIT,Grocery,0
-2026-05-10,Paid to JAI SHREE DINING HALL,120.0,DEBIT,Food & Dining,0
-2026-05-10,Paid to NEW BALAJI TRADERS,10.0,DEBIT,Grocery,0
-2026-05-09,Paid to New Medico Point,20.0,DEBIT,Food & Dining,0
-2026-05-09,Paid to Amazon Pay Groceries,180.0,DEBIT,Grocery,1
-2026-05-09,Paid to VILAS ANANT CHHATRE,40.0,DEBIT,Grocery,0
-2026-05-09,Paid to SHREE BALAJI SUPER MARKET,30.0,DEBIT,Grocery,0
-2026-05-08,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0
-2026-05-08,Paid to Shree Balaji Super Market,28.0,DEBIT,Grocery,0
-2026-05-08,Paid to SHREE BALAJI SUPER MARKET,35.0,DEBIT,Grocery,0
-2026-05-08,Paid to Gurudatta Dairy,10.0,DEBIT,Grocery,0
-2026-05-08,Paid to Kukudku chicken,65.0,DEBIT,Grocery,0
-2026-05-07,Paid to NEW HOTEL SAWAJI,120.0,DEBIT,Food & Dining,0
-2026-05-07,Paid to Baramati agro chicken ,39.0,DEBIT,Grocery,0
-2026-05-07,Paid to FRUIT CANTEEN,10.0,DEBIT,Grocery,0
-2026-05-07,Paid to Paresh Gautamchand Lodha,2.0,DEBIT,Grocery,0
-2026-05-07,Paid to ESHA  FOODS,70.0,DEBIT,Grocery,0
-2026-05-06,Paid to JOGESHWARI  MISAL  AND  BHEL,121.0,DEBIT,Grocery,0
-2026-05-06,Paid to ESHA  FOODS,80.0,DEBIT,Grocery,0
-2026-05-05,Paid to VILAS ANANT CHHATRE,50.0,DEBIT,Grocery,0
-2026-05-05,Paid to Shree Balaji Super Market,10.0,DEBIT,Grocery,0
-2026-05-05,Paid to MEESHO TECHNOLOGIES PRIVATE LIMITED,66.0,DEBIT,Shopping,0
-2026-05-05,Paid to MEESHO TECHNOLOGIES PRIVATE LIMITED,95.0,DEBIT,Shopping,0
-2026-05-05,Paid to Meesho,96.0,DEBIT,Shopping,0
-2026-05-05,Paid to Meesho,102.0,DEBIT,Shopping,0
-2026-05-05,Paid to Baramati agro chicken ,39.0,DEBIT,Grocery,0
-2026-05-05,Paid to V I T FRUIT CANTEEN,10.0,DEBIT,Grocery,0
-2026-05-05,Paid to VALMIK BHOSALE,50.0,DEBIT,Grocery,0
-2026-05-05,Paid to SAKSHI KRISHNA ASOLKAR,2.0,DEBIT,Grocery,0
-2026-05-05,Paid to Paresh Gautamchand Lodha,2.0,DEBIT,Grocery,0
-2026-05-05,Paid to ESHA  FOODS,70.0,DEBIT,Grocery,0
+transaction_id,transaction_date,transaction_time,transaction_details,utr,transaction_type,payment_method,amount,currency,merchant,subcategory,category,cashflow_type,expense_nature,flexibility_level,flexibility_score,transaction_status,notes,city,is_expense,amount_band,day_of_week,month,year,monthly_budget,remaining_budget,savings_goal,source_line,text,ml_category,ml_confidence,final_category,category_source,merchant_key,month_period,signed_cash_flow,is_transfer,is_salary_income,is_consumption_expense,is_unclassified_debit,log_amount,weekday,category_feature,spending_cluster
+T2608022337305532851017,2026-08-02,11:37 pm,Paid to Swiggy Ltd,441148769945,DEBIT,Paid by XXXXXX9948,112.0,INR,Swiggy Ltd,Restaurant,Food & Dining,DEBIT,Discretionary,High,0.8,Unknown,,,1,Low,Sunday,8,2026,,,,5,Paid to Swiggy Ltd Swiggy Ltd Restaurant,Food & Dining,0.46886776953498793,Bills & Utilities,User merchant feedback,swiggy ltd,2026-08,-112.0,False,False,True,False,4.727387818712341,6,Bills & Utilities,0
+T2608022232142723689144,2026-08-02,10:32 pm,Paid to SHREE BALAJI SUPER MARKET,296352863117,DEBIT,Paid by XXXXXX9948,10.0,INR,SHREE BALAJI SUPER MARKET,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Sunday,8,2026,,,,6,Paid to SHREE BALAJI SUPER MARKET SHREE BALAJI SUPER MARKET Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-08,-10.0,False,False,True,False,2.3978952727983707,6,Grocery,1
+T2608022048380286702454,2026-08-02,08:48 pm,Paid to Shree Balaji Super Market,091112867216,DEBIT,Paid by XXXXXX9948,10.0,INR,Shree Balaji Super Market,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Sunday,8,2026,,,,7,Paid to Shree Balaji Super Market Shree Balaji Super Market Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-08,-10.0,False,False,True,False,2.3978952727983707,6,Grocery,1
+T2608021925599447411467,2026-08-02,07:26 pm,Paid to MEESHO TECHNOLOGIES PRIVATE LIMITED,223321074692,DEBIT,Paid by XXXXXX9948,86.0,INR,MEESHO TECHNOLOGIES PRIVATE LIMITED,Shopping,Shopping,DEBIT,Discretionary,High,0.8,Unknown,,,1,Very Low,Sunday,8,2026,,,,14,Paid to MEESHO TECHNOLOGIES PRIVATE LIMITED MEESHO TECHNOLOGIES PRIVATE LIMITED Shopping,Shopping,0.3838527571736527,Shopping,Deterministic rule,meesho technologies private limited,2026-08,-86.0,False,False,True,False,4.465908118654584,6,Shopping,0
+T2608011510452983767862,2026-08-01,03:10 pm,Paid to Shabana Fruit,984669774137,DEBIT,Paid by XXXXXX9948,30.0,INR,Shabana Fruit,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Saturday,8,2026,,,,18,Paid to Shabana Fruit Shabana Fruit Groceries,Grocery,0.43496609590440566,Grocery,Deterministic rule,shabana fruit,2026-08,-30.0,False,False,True,False,3.4339872044851463,5,Grocery,2
+T2607312050570157442839,2026-07-31,08:50 pm,Paid to THE KOHINOOR UNISEX SALON,154009114696,DEBIT,Paid by XXXXXX9948,150.0,INR,THE KOHINOOR UNISEX SALON,Personal Care,Personal Care,DEBIT,Discretionary,High,0.8,Unknown,,,1,Low,Friday,7,2026,,,,21,Paid to THE KOHINOOR UNISEX SALON THE KOHINOOR UNISEX SALON Personal Care,Personal Care,0.4033180046154813,Personal Care,User merchant feedback,the kohinoor unisex salon,2026-07,-150.0,False,False,True,False,5.017279836814924,4,Personal Care,0
+T2607311357193135025763,2026-07-31,01:57 pm,Paid to Shree Balaji Super Market,277319552453,DEBIT,Paid by XXXXXX9948,10.0,INR,Shree Balaji Super Market,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Friday,7,2026,,,,27,Paid to Shree Balaji Super Market Shree Balaji Super Market Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-07,-10.0,False,False,True,False,2.3978952727983707,4,Grocery,1
+T2607301711333933972685,2026-07-30,05:11 pm,Paid to SHITAL FRUITS AND VEGETABLES,768552713339,DEBIT,Paid by XXXXXX9948,10.0,INR,SHITAL FRUITS AND VEGETABLES,Unknown,Needs Review,DEBIT,Unknown,Unknown,,Unknown,,,1,Very Low,Thursday,7,2026,,,,31,Paid to SHITAL FRUITS AND VEGETABLES SHITAL FRUITS AND VEGETABLES Unknown,Grocery,0.6361249216724034,Grocery,ML,shital fruits and vegetables,2026-07,-10.0,False,False,True,False,2.3978952727983707,3,Grocery,1
+T2607292051514347162327,2026-07-29,08:51 pm,Paid to Shree Balaji Super Market,650213135967,DEBIT,Paid by XXXXXX9948,10.0,INR,Shree Balaji Super Market,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Wednesday,7,2026,,,,35,Paid to Shree Balaji Super Market Shree Balaji Super Market Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-07,-10.0,False,False,True,False,2.3978952727983707,2,Grocery,1
+T2607292042066944015993,2026-07-29,08:42 pm,Paid to HOTEL JAYSHREE DINING,154898095274,DEBIT,Paid by XXXXXX9948,100.0,INR,HOTEL JAYSHREE DINING,Restaurant,Food & Dining,DEBIT,Discretionary,High,0.8,Unknown,,,1,Very Low,Wednesday,7,2026,,,,36,Paid to HOTEL JAYSHREE DINING HOTEL JAYSHREE DINING Restaurant,Food & Dining,0.3229638755048298,Food & Dining,Deterministic rule,hotel jayshree dining,2026-07,-100.0,False,False,True,False,4.61512051684126,2,Food & Dining,0
+T2607291316555863495657,2026-07-29,01:16 pm,Paid to SHREE BALAJI SUPER MARKET,343575466353,DEBIT,Paid by XXXXXX9948,10.0,INR,SHREE BALAJI SUPER MARKET,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Wednesday,7,2026,,,,37,Paid to SHREE BALAJI SUPER MARKET SHREE BALAJI SUPER MARKET Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-07,-10.0,False,False,True,False,2.3978952727983707,2,Grocery,1
+T2607281625204839441612,2026-07-28,04:25 pm,Paid to SINHGAD FRUIT CENTER,249613210248,DEBIT,Paid by XXXXXX9948,10.0,INR,SINHGAD FRUIT CENTER,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Tuesday,7,2026,,,,40,Paid to SINHGAD FRUIT CENTER SINHGAD FRUIT CENTER Groceries,Grocery,0.3741303915826696,Grocery,Deterministic rule,sinhgad fruit center,2026-07,-10.0,False,False,True,False,2.3978952727983707,1,Grocery,1
+T2607281315588533076752,2026-07-28,01:16 pm,Paid to SHREE BALAJI SUPER MARKET,548511072254,DEBIT,Paid by XXXXXX9948,25.0,INR,SHREE BALAJI SUPER MARKET,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Tuesday,7,2026,,,,41,Paid to SHREE BALAJI SUPER MARKET SHREE BALAJI SUPER MARKET Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-07,-25.0,False,False,True,False,3.258096538021482,1,Grocery,2
+T2607271625065973241390,2026-07-27,04:25 pm,Paid to SHITAL FRUITS AND VEGETABLES,994748376025,DEBIT,Paid by XXXXXX9948,10.0,INR,SHITAL FRUITS AND VEGETABLES,Unknown,Needs Review,DEBIT,Unknown,Unknown,,Unknown,,,1,Very Low,Monday,7,2026,,,,45,Paid to SHITAL FRUITS AND VEGETABLES SHITAL FRUITS AND VEGETABLES Unknown,Grocery,0.6361249216724034,Grocery,ML,shital fruits and vegetables,2026-07,-10.0,False,False,True,False,2.3978952727983707,0,Grocery,1
+T2607262134266369919254,2026-07-26,09:34 pm,Paid to HOTEL JAYSHREE DINING,597248824703,DEBIT,Paid by XXXXXX9948,130.0,INR,HOTEL JAYSHREE DINING,Restaurant,Food & Dining,DEBIT,Discretionary,High,0.8,Unknown,,,1,Low,Sunday,7,2026,,,,47,Paid to HOTEL JAYSHREE DINING HOTEL JAYSHREE DINING Restaurant,Food & Dining,0.3229638755048298,Food & Dining,Deterministic rule,hotel jayshree dining,2026-07,-130.0,False,False,True,False,4.875197323201151,6,Food & Dining,0
+T2607261537547697358118,2026-07-26,03:37 pm,Paid to Shree Balaji Super Market,149092692048,DEBIT,Paid by XXXXXX9948,10.0,INR,Shree Balaji Super Market,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Sunday,7,2026,,,,48,Paid to Shree Balaji Super Market Shree Balaji Super Market Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-07,-10.0,False,False,True,False,2.3978952727983707,6,Grocery,1
+T2607250609340046860522,2026-07-25,06:09 am,Paid to BABAJI PETROL PUMP YOGESH,884909122553,DEBIT,Paid by XXXXXX9948,300.0,INR,BABAJI PETROL PUMP YOGESH,Transport,Transport,DEBIT,Essential,Low,0.3,Unknown,,,1,Low,Saturday,7,2026,,,,53,Paid to BABAJI PETROL PUMP YOGESH BABAJI PETROL PUMP YOGESH Transport,Transport,0.19693201198402396,Transport,Deterministic rule,babaji petrol pump yogesh,2026-07,-300.0,False,False,True,False,5.707110264748875,5,Transport,0
+T2607221728119960614452,2026-07-22,05:28 pm,Paid to SHREE BALAJI SUPER MARKET,144055643732,DEBIT,Paid by XXXXXX9948,25.0,INR,SHREE BALAJI SUPER MARKET,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Wednesday,7,2026,,,,64,Paid to SHREE BALAJI SUPER MARKET SHREE BALAJI SUPER MARKET Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-07,-25.0,False,False,True,False,3.258096538021482,2,Grocery,2
+T2607211650456667648745,2026-07-21,04:50 pm,Paid to SINHGAD FRUIT CENTER,288742927607,DEBIT,Paid by XXXXXX9948,10.0,INR,SINHGAD FRUIT CENTER,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Tuesday,7,2026,,,,67,Paid to SINHGAD FRUIT CENTER SINHGAD FRUIT CENTER Groceries,Grocery,0.3741303915826696,Grocery,Deterministic rule,sinhgad fruit center,2026-07,-10.0,False,False,True,False,2.3978952727983707,1,Grocery,1
+T2607211134110324932402,2026-07-21,11:34 am,Paid to SHITAL FRUITS AND VEGETABLES,995956894936,DEBIT,Paid by XXXXXX9948,10.0,INR,SHITAL FRUITS AND VEGETABLES,Unknown,Needs Review,DEBIT,Unknown,Unknown,,Unknown,,,1,Very Low,Tuesday,7,2026,,,,68,Paid to SHITAL FRUITS AND VEGETABLES SHITAL FRUITS AND VEGETABLES Unknown,Grocery,0.6361249216724034,Grocery,ML,shital fruits and vegetables,2026-07,-10.0,False,False,True,False,2.3978952727983707,1,Grocery,1
+T2607211109465067070088,2026-07-21,11:09 am,Paid to SHITAL FRUITS AND VEGETABLES,347528883378,DEBIT,Paid by XXXXXX9948,50.0,INR,SHITAL FRUITS AND VEGETABLES,Unknown,Needs Review,DEBIT,Unknown,Unknown,,Unknown,,,1,Very Low,Tuesday,7,2026,,,,69,Paid to SHITAL FRUITS AND VEGETABLES SHITAL FRUITS AND VEGETABLES Unknown,Grocery,0.6361249216724034,Grocery,ML,shital fruits and vegetables,2026-07,-50.0,False,False,True,False,3.9318256327243257,1,Grocery,2
+T2607201947046406064630,2026-07-20,07:47 pm,Paid to Shree Balaji Super Market,941083300892,DEBIT,Paid by XXXXXX9948,20.0,INR,Shree Balaji Super Market,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Monday,7,2026,,,,70,Paid to Shree Balaji Super Market Shree Balaji Super Market Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-07,-20.0,False,False,True,False,3.044522437723423,0,Grocery,2
+T2607201510469667813485,2026-07-20,03:10 pm,Paid to SHITAL FRUITS AND VEGETABLES,638247364709,DEBIT,Paid by XXXXXX9948,60.0,INR,SHITAL FRUITS AND VEGETABLES,Unknown,Needs Review,DEBIT,Unknown,Unknown,,Unknown,,,1,Very Low,Monday,7,2026,,,,72,Paid to SHITAL FRUITS AND VEGETABLES SHITAL FRUITS AND VEGETABLES Unknown,Grocery,0.6361249216724034,Grocery,ML,shital fruits and vegetables,2026-07,-60.0,False,False,True,False,4.110873864173311,0,Grocery,2
+T2607201330368346166245,2026-07-20,01:30 pm,Paid to SINHGAD FRUIT CENTER,071001631082,DEBIT,Paid by XXXXXX9948,10.0,INR,SINHGAD FRUIT CENTER,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Monday,7,2026,,,,73,Paid to SINHGAD FRUIT CENTER SINHGAD FRUIT CENTER Groceries,Grocery,0.3741303915826696,Grocery,Deterministic rule,sinhgad fruit center,2026-07,-10.0,False,False,True,False,2.3978952727983707,0,Grocery,1
+T2607191426100705086680,2026-07-19,02:26 pm,Paid to HOTEL JAYSHREE DINING,853183641628,DEBIT,Paid by XXXXXX9948,130.0,INR,HOTEL JAYSHREE DINING,Restaurant,Food & Dining,DEBIT,Discretionary,High,0.8,Unknown,,,1,Low,Sunday,7,2026,,,,77,Paid to HOTEL JAYSHREE DINING HOTEL JAYSHREE DINING Restaurant,Food & Dining,0.3229638755048298,Food & Dining,Deterministic rule,hotel jayshree dining,2026-07,-130.0,False,False,True,False,4.875197323201151,6,Food & Dining,0
+T2607171156346461324878,2026-07-17,11:56 am,Paid to AMRAPALI SERVICE STATION,835132807283,DEBIT,Paid by XXXXXX9948,150.0,INR,AMRAPALI SERVICE STATION,Unknown,Needs Review,DEBIT,Unknown,Unknown,,Unknown,,,1,Low,Friday,7,2026,,,,84,Paid to AMRAPALI SERVICE STATION AMRAPALI SERVICE STATION Unknown,Transport,0.3998594931478841,Transport,ML,amrapali service station,2026-07,-150.0,False,False,True,False,5.017279836814924,4,Transport,0
+T2607161558167616943974,2026-07-16,03:58 pm,Paid to SINHGAD FRUIT CENTER,379587854829,DEBIT,Paid by XXXXXX9948,10.0,INR,SINHGAD FRUIT CENTER,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Thursday,7,2026,,,,89,Paid to SINHGAD FRUIT CENTER SINHGAD FRUIT CENTER Groceries,Grocery,0.3741303915826696,Grocery,Deterministic rule,sinhgad fruit center,2026-07,-10.0,False,False,True,False,2.3978952727983707,3,Grocery,1
+T2607161558071125901980,2026-07-16,03:58 pm,Paid to SINHGAD FRUIT CENTER,922329044956,DEBIT,Paid by XXXXXX9948,25.0,INR,SINHGAD FRUIT CENTER,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Thursday,7,2026,,,,90,Paid to SINHGAD FRUIT CENTER SINHGAD FRUIT CENTER Groceries,Grocery,0.3741303915826696,Grocery,Deterministic rule,sinhgad fruit center,2026-07,-25.0,False,False,True,False,3.258096538021482,3,Grocery,2
+T2607152118442735029147,2026-07-15,09:18 pm,Paid to Shree Balaji Super Market,229765226840,DEBIT,Paid by XXXXXX9948,10.0,INR,Shree Balaji Super Market,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Wednesday,7,2026,,,,93,Paid to Shree Balaji Super Market Shree Balaji Super Market Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-07,-10.0,False,False,True,False,2.3978952727983707,2,Grocery,1
+T2607151611202033900952,2026-07-15,04:11 pm,Paid to SHITAL FRUITS AND VEGETABLES,321043352514,DEBIT,Paid by XXXXXX9948,10.0,INR,SHITAL FRUITS AND VEGETABLES,Unknown,Needs Review,DEBIT,Unknown,Unknown,,Unknown,,,1,Very Low,Wednesday,7,2026,,,,97,Paid to SHITAL FRUITS AND VEGETABLES SHITAL FRUITS AND VEGETABLES Unknown,Grocery,0.6361249216724034,Grocery,ML,shital fruits and vegetables,2026-07,-10.0,False,False,True,False,2.3978952727983707,2,Grocery,1
+T2607132016382672147905,2026-07-13,08:17 pm,Paid to SHREE BALAJI SUPER MARKET,337041653463,DEBIT,Paid by XXXXXX9948,30.0,INR,SHREE BALAJI SUPER MARKET,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Monday,7,2026,,,,106,Paid to SHREE BALAJI SUPER MARKET SHREE BALAJI SUPER MARKET Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-07,-30.0,False,False,True,False,3.4339872044851463,0,Grocery,2
+NX26071320002767950580081,2026-07-13,08:00 pm,Mobile recharged 9881700871,306534679771,DEBIT,Paid by XXXXXX9948,353.0,INR,Mobile recharged 9881700871,Unknown,Needs Review,DEBIT,Unknown,Unknown,,Unknown,,,1,Low,Monday,7,2026,,,,109,Mobile recharged 9881700871 Mobile recharged 9881700871 Unknown,Mobile Recharge,0.4436315519200785,Mobile Recharge,ML,mobile recharged 9881700871,2026-07,-353.0,False,False,True,False,5.869296913133774,0,Mobile Recharge,0
+T2607131645519527505934,2026-07-13,04:45 pm,Paid to SHITAL FRUITS AND VEGETABLES,653771949383,DEBIT,Paid by XXXXXX9948,10.0,INR,SHITAL FRUITS AND VEGETABLES,Unknown,Needs Review,DEBIT,Unknown,Unknown,,Unknown,,,1,Very Low,Monday,7,2026,,,,111,Paid to SHITAL FRUITS AND VEGETABLES SHITAL FRUITS AND VEGETABLES Unknown,Grocery,0.6361249216724034,Grocery,ML,shital fruits and vegetables,2026-07,-10.0,False,False,True,False,2.3978952727983707,0,Grocery,1
+T2607121430375728530597,2026-07-12,02:30 pm,Paid to Shree Balaji Super Market,975418201791,DEBIT,Paid by XXXXXX9948,10.0,INR,Shree Balaji Super Market,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Sunday,7,2026,,,,117,Paid to Shree Balaji Super Market Shree Balaji Super Market Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-07,-10.0,False,False,True,False,2.3978952727983707,6,Grocery,1
+T2607121423219932067810,2026-07-12,02:23 pm,Paid to HOTEL JAYSHREE DINING,662690047694,DEBIT,Paid by XXXXXX9948,120.0,INR,HOTEL JAYSHREE DINING,Restaurant,Food & Dining,DEBIT,Discretionary,High,0.8,Unknown,,,1,Low,Sunday,7,2026,,,,118,Paid to HOTEL JAYSHREE DINING HOTEL JAYSHREE DINING Restaurant,Food & Dining,0.3229638755048298,Food & Dining,Deterministic rule,hotel jayshree dining,2026-07,-120.0,False,False,True,False,4.795790545596741,6,Food & Dining,0
+T2607091957427026070381,2026-07-09,07:57 pm,Paid to SHREE BALAJI SUPER MARKET,324593781368,DEBIT,Paid by XXXXXX9948,20.0,INR,SHREE BALAJI SUPER MARKET,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Thursday,7,2026,,,,128,Paid to SHREE BALAJI SUPER MARKET SHREE BALAJI SUPER MARKET Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-07,-20.0,False,False,True,False,3.044522437723423,3,Grocery,1
+T2607091957224316683631,2026-07-09,07:57 pm,Paid to SHREE BALAJI SUPER MARKET,495347171574,DEBIT,Paid by XXXXXX9948,64.0,INR,SHREE BALAJI SUPER MARKET,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Thursday,7,2026,,,,129,Paid to SHREE BALAJI SUPER MARKET SHREE BALAJI SUPER MARKET Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-07,-64.0,False,False,True,False,4.174387269895637,3,Grocery,2
+T2607091724313432234102,2026-07-09,05:24 pm,Paid to Shree Balaji Super Market,414769145162,DEBIT,Paid by XXXXXX9948,15.0,INR,Shree Balaji Super Market,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Thursday,7,2026,,,,133,Paid to Shree Balaji Super Market Shree Balaji Super Market Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-07,-15.0,False,False,True,False,2.772588722239781,3,Grocery,1
+T2607062120000230283317,2026-07-06,09:20 pm,Paid to SHREE BALAJI SUPER MARKET,682271741890,DEBIT,Paid by XXXXXX9948,25.0,INR,SHREE BALAJI SUPER MARKET,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Monday,7,2026,,,,145,Paid to SHREE BALAJI SUPER MARKET SHREE BALAJI SUPER MARKET Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-07,-25.0,False,False,True,False,3.258096538021482,0,Grocery,2
+T2607052058348299841827,2026-07-05,08:58 pm,Paid to Shree Balaji Super Market,844662325268,DEBIT,Paid by XXXXXX9948,40.0,INR,Shree Balaji Super Market,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Sunday,7,2026,,,,149,Paid to Shree Balaji Super Market Shree Balaji Super Market Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-07,-40.0,False,False,True,False,3.713572066704308,6,Grocery,2
+T2607041241435925977753,2026-07-04,12:41 pm,Paid to THE KOHINOOR UNISEX SALON,325007951311,DEBIT,Paid by XXXXXX9948,150.0,INR,THE KOHINOOR UNISEX SALON,Personal Care,Personal Care,DEBIT,Discretionary,High,0.8,Unknown,,,1,Low,Saturday,7,2026,,,,154,Paid to THE KOHINOOR UNISEX SALON THE KOHINOOR UNISEX SALON Personal Care,Personal Care,0.4033180046154813,Personal Care,User merchant feedback,the kohinoor unisex salon,2026-07,-150.0,False,False,True,False,5.017279836814924,5,Personal Care,0
+T2607010219335058163492,2026-07-01,02:19 am,Paid to  IRCTC Rail APP,037023399856,DEBIT,Paid by XXXXXX9948,267.25,INR,IRCTC Rail APP,Transport,Transport,DEBIT,Essential,Low,0.3,Unknown,,,1,Low,Wednesday,7,2026,,,,165,Paid to IRCTC Rail APP IRCTC Rail APP Transport,Transport,0.2756804709957775,Transport,Deterministic rule,irctc rail app,2026-07,-267.25,False,False,True,False,5.591919381510808,2,Transport,0
+NX26061523451402944717721,2026-06-15,11:45 pm,Mobile recharged 9881700871,246739568103,DEBIT,Paid by XXXXXX9948,353.0,INR,Mobile recharged 9881700871,Unknown,Needs Review,DEBIT,Unknown,Unknown,,Unknown,,,1,Low,Monday,6,2026,,,,181,Mobile recharged 9881700871 Mobile recharged 9881700871 Unknown,Mobile Recharge,0.4436315519200785,Mobile Recharge,ML,mobile recharged 9881700871,2026-06,-353.0,False,False,True,False,5.869296913133774,0,Mobile Recharge,0
+T2606102046390764508382,2026-06-10,08:46 pm,Paid to New AL Hayat Biryani,266197419332,DEBIT,Paid by XXXXXX9948,60.0,INR,New AL Hayat Biryani,Restaurant,Food & Dining,DEBIT,Discretionary,High,0.8,Unknown,,,1,Very Low,Wednesday,6,2026,,,,184,Paid to New AL Hayat Biryani New AL Hayat Biryani Restaurant,Food & Dining,0.32604464362704255,Food & Dining,Deterministic rule,new al hayat biryani,2026-06,-60.0,False,False,True,False,4.110873864173311,2,Food & Dining,0
+T2606031453471475836307,2026-06-03,02:53 pm,Paid to MEESHO TECHNOLOGIES PRIVATE LIMITED,395127600581,DEBIT,Paid by XXXXXX9948,335.0,INR,MEESHO TECHNOLOGIES PRIVATE LIMITED,Shopping,Shopping,DEBIT,Discretionary,High,0.8,Unknown,,,1,Low,Wednesday,6,2026,,,,199,Paid to MEESHO TECHNOLOGIES PRIVATE LIMITED MEESHO TECHNOLOGIES PRIVATE LIMITED Shopping,Shopping,0.3838527571736527,Shopping,Deterministic rule,meesho technologies private limited,2026-06,-335.0,False,False,True,False,5.817111159963204,2,Shopping,0
+T2606031445082797868352,2026-06-03,02:45 pm,Paid to Flipkart Payments,232493404640,DEBIT,Paid by XXXXXX9948,239.0,INR,Flipkart Payments,Shopping,Shopping,DEBIT,Discretionary,High,0.8,Unknown,,,1,Low,Wednesday,6,2026,,,,201,Paid to Flipkart Payments Flipkart Payments Shopping,Shopping,0.5135544450557407,Shopping,Deterministic rule,flipkart payments,2026-06,-239.0,False,False,True,False,5.480638923341991,2,Shopping,0
+T2605252109189374585598,2026-05-25,09:09 pm,Paid to jay ganesh general store,570165328753,DEBIT,Paid by XXXXXX9948,25.0,INR,jay ganesh general store,Unknown,Needs Review,DEBIT,Unknown,Unknown,,Unknown,,,1,Very Low,Monday,5,2026,,,,206,Paid to jay ganesh general store jay ganesh general store Unknown,Grocery,0.2597115865321872,Grocery,User merchant feedback,jay ganesh general store,2026-05,-25.0,False,False,True,False,3.258096538021482,0,Grocery,2
+T2605251608041400111138,2026-05-25,04:08 pm,Paid to SINHGAD FRUIT CENTER,063511209329,DEBIT,Paid by XXXXXX9948,20.0,INR,SINHGAD FRUIT CENTER,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Monday,5,2026,,,,207,Paid to SINHGAD FRUIT CENTER SINHGAD FRUIT CENTER Groceries,Grocery,0.3741303915826696,Grocery,Deterministic rule,sinhgad fruit center,2026-05,-20.0,False,False,True,False,3.044522437723423,0,Grocery,2
+T2605251552077286981783,2026-05-25,03:52 pm,Paid to SINHGAD FRUIT CENTER,472678330143,DEBIT,Paid by XXXXXX9948,60.0,INR,SINHGAD FRUIT CENTER,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Monday,5,2026,,,,208,Paid to SINHGAD FRUIT CENTER SINHGAD FRUIT CENTER Groceries,Grocery,0.3741303915826696,Grocery,Deterministic rule,sinhgad fruit center,2026-05,-60.0,False,False,True,False,4.110873864173311,0,Grocery,2
+T2605242151347125655976,2026-05-24,09:51 pm,Paid to Swiggy Ltd,174129075052,DEBIT,Paid by XXXXXX9948,429.0,INR,Swiggy Ltd,Restaurant,Food & Dining,DEBIT,Discretionary,High,0.8,Unknown,,,1,Low,Sunday,5,2026,,,,210,Paid to Swiggy Ltd Swiggy Ltd Restaurant,Food & Dining,0.46886776953498793,Bills & Utilities,User merchant feedback,swiggy ltd,2026-05,-429.0,False,False,True,False,6.063785208687608,6,Bills & Utilities,0
+T2605241452181585434409,2026-05-24,02:52 pm,Paid to JAI SHREE DINING HALL,854247939813,DEBIT,Paid by XXXXXX9948,120.0,INR,JAI SHREE DINING HALL,Restaurant,Food & Dining,DEBIT,Discretionary,High,0.8,Unknown,,,1,Low,Sunday,5,2026,,,,214,Paid to JAI SHREE DINING HALL JAI SHREE DINING HALL Restaurant,Food & Dining,0.34488672254324193,Food & Dining,Deterministic rule,jai shree dining hall,2026-05,-120.0,False,False,True,False,4.795790545596741,6,Food & Dining,0
+T2605232240195050765778,2026-05-23,10:40 pm,Paid to Shree Balaji Super Market,919189852816,DEBIT,Paid by XXXXXX9948,10.0,INR,Shree Balaji Super Market,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Saturday,5,2026,,,,215,Paid to Shree Balaji Super Market Shree Balaji Super Market Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-05,-10.0,False,False,True,False,2.3978952727983707,5,Grocery,1
+T2605222018464205033838,2026-05-22,08:18 pm,Paid to SHREE BALAJI SUPER MARKET,320616121401,DEBIT,Paid by XXXXXX9948,10.0,INR,SHREE BALAJI SUPER MARKET,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Friday,5,2026,,,,219,Paid to SHREE BALAJI SUPER MARKET SHREE BALAJI SUPER MARKET Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-05,-10.0,False,False,True,False,2.3978952727983707,4,Grocery,1
+T2605220645095442778712,2026-05-22,06:45 am,Paid to LUKDE AND BROTHER S,325746454641,DEBIT,Paid by XXXXXX9948,30.0,INR,LUKDE AND BROTHER S,Unknown,Needs Review,DEBIT,Unknown,Unknown,,Unknown,,,1,Very Low,Friday,5,2026,,,,223,Paid to LUKDE AND BROTHER S LUKDE AND BROTHER S Unknown,Personal Transfer,0.13185327588584556,Grocery,User merchant feedback,lukde and brother s,2026-05,-30.0,False,False,True,False,3.4339872044851463,4,Grocery,2
+T2605212019543113421961,2026-05-21,08:19 pm,Paid to Priyas South Indian dosa centre,717780334466,DEBIT,Paid by XXXXXX9948,60.0,INR,Priyas South Indian dosa centre,Unknown,Needs Review,DEBIT,Unknown,Unknown,,Unknown,,,1,Very Low,Thursday,5,2026,,,,226,Paid to Priyas South Indian dosa centre Priyas South Indian dosa centre Unknown,Food & Dining,0.2638063962719772,Food & Dining,User merchant feedback,priyas south indian dosa centre,2026-05,-60.0,False,False,True,False,4.110873864173311,3,Food & Dining,0
+T2605202228403878372243,2026-05-20,10:28 pm,Paid to Shree Balaji Super Market,320991972330,DEBIT,Paid by XXXXXX9948,10.0,INR,Shree Balaji Super Market,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Wednesday,5,2026,,,,227,Paid to Shree Balaji Super Market Shree Balaji Super Market Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-05,-10.0,False,False,True,False,2.3978952727983707,2,Grocery,1
+T2605201914352715461970,2026-05-20,07:14 pm,Paid to Amazon India,180135004592,DEBIT,Paid by XXXXXX9948,203.6,INR,Amazon India,Shopping,Shopping,DEBIT,Discretionary,High,0.8,Unknown,,,1,Low,Wednesday,5,2026,,,,229,Paid to Amazon India Amazon India Shopping,Shopping,0.48561268939441343,Shopping,Deterministic rule,amazon india,2026-05,-203.6,False,False,True,False,5.321056853517526,2,Shopping,0
+T2605201311095559580322,2026-05-20,01:11 pm,Paid to V I T FRUIT CANTEEN,500753089732,DEBIT,Paid by XXXXXX9948,15.0,INR,V I T FRUIT CANTEEN,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Wednesday,5,2026,,,,231,Paid to V I T FRUIT CANTEEN V I T FRUIT CANTEEN Groceries,Grocery,0.4734465080204451,Grocery,Deterministic rule,v i t fruit canteen,2026-05,-15.0,False,False,True,False,2.772588722239781,2,Grocery,1
+T2605191250456213654102,2026-05-19,12:50 pm,Paid to SANJOG,913686769823,DEBIT,Paid by XXXXXX9948,100.0,INR,SANJOG,Unknown,Needs Review,DEBIT,Unknown,Unknown,,Unknown,,,1,Very Low,Tuesday,5,2026,,,,235,Paid to SANJOG SANJOG Unknown,Personal Transfer,0.1056270970527262,Food & Dining,User merchant feedback,sanjog,2026-05,-100.0,False,False,True,False,4.61512051684126,1,Food & Dining,0
+T2605190841253091963872,2026-05-19,08:41 am,Paid to Shree Balaji Super Market,182444503834,DEBIT,Paid by XXXXXX9948,10.0,INR,Shree Balaji Super Market,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Tuesday,5,2026,,,,236,Paid to Shree Balaji Super Market Shree Balaji Super Market Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-05,-10.0,False,False,True,False,2.3978952727983707,1,Grocery,1
+T2605190840382478175196,2026-05-19,08:40 am,Paid to LUKDE AND BROTHER S,762903862810,DEBIT,Paid by XXXXXX9948,20.0,INR,LUKDE AND BROTHER S,Unknown,Needs Review,DEBIT,Unknown,Unknown,,Unknown,,,1,Very Low,Tuesday,5,2026,,,,237,Paid to LUKDE AND BROTHER S LUKDE AND BROTHER S Unknown,Personal Transfer,0.13185327588584556,Grocery,User merchant feedback,lukde and brother s,2026-05,-20.0,False,False,True,False,3.044522437723423,1,Grocery,1
+NX26051823430526300586601,2026-05-18,11:43 pm,Mobile recharged 9881700871,095971031344,DEBIT,Paid by XXXXXX9948,353.0,INR,Mobile recharged 9881700871,Unknown,Needs Review,DEBIT,Unknown,Unknown,,Unknown,,,1,Low,Monday,5,2026,,,,238,Mobile recharged 9881700871 Mobile recharged 9881700871 Unknown,Mobile Recharge,0.4436315519200785,Mobile Recharge,ML,mobile recharged 9881700871,2026-05,-353.0,False,False,True,False,5.869296913133774,0,Mobile Recharge,0
+T2605181929018702498797,2026-05-18,07:29 pm,Paid to SHREE BALAJI SUPER MARKET,458962141108,DEBIT,Paid by XXXXXX9948,30.0,INR,SHREE BALAJI SUPER MARKET,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Monday,5,2026,,,,240,Paid to SHREE BALAJI SUPER MARKET SHREE BALAJI SUPER MARKET Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-05,-30.0,False,False,True,False,3.4339872044851463,0,Grocery,2
+T2605181320213538077184,2026-05-18,01:20 pm,Paid to FRUIT CANTEEN,080542797651,DEBIT,Paid by XXXXXX9948,100.0,INR,FRUIT CANTEEN,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Monday,5,2026,,,,242,Paid to FRUIT CANTEEN FRUIT CANTEEN Groceries,Grocery,0.4734465080204451,Grocery,Deterministic rule,fruit canteen,2026-05,-100.0,False,False,True,False,4.61512051684126,0,Grocery,2
+T2605181306510775553095,2026-05-18,01:06 pm,Paid to FRUIT CANTEEN,104977363635,DEBIT,Paid by XXXXXX9948,10.0,INR,FRUIT CANTEEN,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Monday,5,2026,,,,243,Paid to FRUIT CANTEEN FRUIT CANTEEN Groceries,Grocery,0.4734465080204451,Grocery,Deterministic rule,fruit canteen,2026-05,-10.0,False,False,True,False,2.3978952727983707,0,Grocery,1
+T2605172235381771479249,2026-05-17,10:35 pm,Paid to Shree Balaji Super Market,218170031538,DEBIT,Paid by XXXXXX9948,10.0,INR,Shree Balaji Super Market,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Sunday,5,2026,,,,245,Paid to Shree Balaji Super Market Shree Balaji Super Market Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-05,-10.0,False,False,True,False,2.3978952727983707,6,Grocery,1
+T2605171426243841876958,2026-05-17,02:26 pm,Paid to JAI SHREE DINING HALL,861579863780,DEBIT,Paid by XXXXXX9948,120.0,INR,JAI SHREE DINING HALL,Restaurant,Food & Dining,DEBIT,Discretionary,High,0.8,Unknown,,,1,Low,Sunday,5,2026,,,,249,Paid to JAI SHREE DINING HALL JAI SHREE DINING HALL Restaurant,Food & Dining,0.34488672254324193,Food & Dining,Deterministic rule,jai shree dining hall,2026-05,-120.0,False,False,True,False,4.795790545596741,6,Food & Dining,0
+T2605161810366726473183,2026-05-16,06:10 pm,Paid to COINAGE HOSPITALITY,677995672822,DEBIT,Paid by XXXXXX9948,50.0,INR,COINAGE HOSPITALITY,Unknown,Needs Review,DEBIT,Unknown,Unknown,,Unknown,,,1,Very Low,Saturday,5,2026,,,,253,Paid to COINAGE HOSPITALITY COINAGE HOSPITALITY Unknown,Health,0.3289487550048821,Health,ML,coinage hospitality,2026-05,-50.0,False,False,True,False,3.9318256327243257,5,Health,2
+T2605160939522392214024,2026-05-16,09:39 am,Paid to SHREE BALAJI SUPER MARKET,473192163333,DEBIT,Paid by XXXXXX9948,24.0,INR,SHREE BALAJI SUPER MARKET,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Saturday,5,2026,,,,256,Paid to SHREE BALAJI SUPER MARKET SHREE BALAJI SUPER MARKET Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-05,-24.0,False,False,True,False,3.2188758248682006,5,Grocery,2
+T2605160937183392490574,2026-05-16,09:37 am,Paid to LUKDE AND BROTHER S,359308755774,DEBIT,Paid by XXXXXX9948,30.0,INR,LUKDE AND BROTHER S,Unknown,Needs Review,DEBIT,Unknown,Unknown,,Unknown,,,1,Very Low,Saturday,5,2026,,,,257,Paid to LUKDE AND BROTHER S LUKDE AND BROTHER S Unknown,Personal Transfer,0.13185327588584556,Grocery,User merchant feedback,lukde and brother s,2026-05,-30.0,False,False,True,False,3.4339872044851463,5,Grocery,2
+T2605152230163053072734,2026-05-15,10:30 pm,Paid to SHREE BALAJI SUPER MARKET,800091489670,DEBIT,Paid by XXXXXX9948,10.0,INR,SHREE BALAJI SUPER MARKET,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Friday,5,2026,,,,259,Paid to SHREE BALAJI SUPER MARKET SHREE BALAJI SUPER MARKET Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-05,-10.0,False,False,True,False,2.3978952727983707,4,Grocery,1
+T2605151234269955732982,2026-05-15,12:34 pm,Paid to FRUIT CANTEEN,804323718982,DEBIT,Paid by XXXXXX9948,10.0,INR,FRUIT CANTEEN,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Friday,5,2026,,,,264,Paid to FRUIT CANTEEN FRUIT CANTEEN Groceries,Grocery,0.4734465080204451,Grocery,Deterministic rule,fruit canteen,2026-05,-10.0,False,False,True,False,2.3978952727983707,4,Grocery,1
+T2605142016395176264800,2026-05-14,08:16 pm,Paid to Shree Balaji Super Market,862249593014,DEBIT,Paid by XXXXXX9948,10.0,INR,Shree Balaji Super Market,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Thursday,5,2026,,,,266,Paid to Shree Balaji Super Market Shree Balaji Super Market Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-05,-10.0,False,False,True,False,2.3978952727983707,3,Grocery,1
+T2605140904141988875210,2026-05-14,09:04 am,Paid to V I T FRUIT CANTEEN,468027113886,DEBIT,Paid by XXXXXX9948,10.0,INR,V I T FRUIT CANTEEN,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Thursday,5,2026,,,,268,Paid to V I T FRUIT CANTEEN V I T FRUIT CANTEEN Groceries,Grocery,0.4734465080204451,Grocery,Deterministic rule,v i t fruit canteen,2026-05,-10.0,False,False,True,False,2.3978952727983707,3,Grocery,1
+T2605120648221754120430,2026-05-12,06:48 am,Paid to LUKDE AND BROTHER S,424096154688,DEBIT,Paid by XXXXXX9948,30.0,INR,LUKDE AND BROTHER S,Unknown,Needs Review,DEBIT,Unknown,Unknown,,Unknown,,,1,Very Low,Tuesday,5,2026,,,,275,Paid to LUKDE AND BROTHER S LUKDE AND BROTHER S Unknown,Personal Transfer,0.13185327588584556,Grocery,User merchant feedback,lukde and brother s,2026-05,-30.0,False,False,True,False,3.4339872044851463,1,Grocery,2
+T2605112212452915657012,2026-05-11,10:12 pm,Paid to Shree Balaji Super Market,562442371860,DEBIT,Paid by XXXXXX9948,10.0,INR,Shree Balaji Super Market,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Monday,5,2026,,,,277,Paid to Shree Balaji Super Market Shree Balaji Super Market Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-05,-10.0,False,False,True,False,2.3978952727983707,0,Grocery,1
+T2605111813083063546048,2026-05-11,06:13 pm,Paid to THE KOHINOOR UNISEX SALON,072449311433,DEBIT,Paid by XXXXXX9948,150.0,INR,THE KOHINOOR UNISEX SALON,Personal Care,Personal Care,DEBIT,Discretionary,High,0.8,Unknown,,,1,Low,Monday,5,2026,,,,278,Paid to THE KOHINOOR UNISEX SALON THE KOHINOOR UNISEX SALON Personal Care,Personal Care,0.4033180046154813,Personal Care,User merchant feedback,the kohinoor unisex salon,2026-05,-150.0,False,False,True,False,5.017279836814924,0,Personal Care,0
+T2605102251369474398407,2026-05-10,10:51 pm,Paid to VINAYAK MEDICAL,955332332826,DEBIT,Paid by XXXXXX9948,5.0,INR,VINAYAK MEDICAL,Healthcare,Health,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Sunday,5,2026,,,,280,Paid to VINAYAK MEDICAL VINAYAK MEDICAL Healthcare,Health,0.6522503852845103,Health,Deterministic rule,vinayak medical,2026-05,-5.0,False,False,True,False,1.791759469228055,6,Health,1
+T2605102141096588740163,2026-05-10,09:41 pm,Paid to SHREE BALAJI SUPER MARKET,707752449688,DEBIT,Paid by XXXXXX9948,40.0,INR,SHREE BALAJI SUPER MARKET,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Sunday,5,2026,,,,281,Paid to SHREE BALAJI SUPER MARKET SHREE BALAJI SUPER MARKET Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-05,-40.0,False,False,True,False,3.713572066704308,6,Grocery,2
+T2605101502258853484514,2026-05-10,03:02 pm,Paid to JAI SHREE DINING HALL,647076676976,DEBIT,Paid by XXXXXX9948,120.0,INR,JAI SHREE DINING HALL,Restaurant,Food & Dining,DEBIT,Discretionary,High,0.8,Unknown,,,1,Low,Sunday,5,2026,,,,283,Paid to JAI SHREE DINING HALL JAI SHREE DINING HALL Restaurant,Food & Dining,0.34488672254324193,Food & Dining,Deterministic rule,jai shree dining hall,2026-05,-120.0,False,False,True,False,4.795790545596741,6,Food & Dining,0
+T2605092158381114129239,2026-05-09,09:58 pm,Paid to Amazon Pay Groceries,523121189924,DEBIT,Paid by XXXXXX9948,180.0,INR,Amazon Pay Groceries,Shopping,Shopping,DEBIT,Discretionary,High,0.8,Unknown,,,1,Low,Saturday,5,2026,,,,286,Paid to Amazon Pay Groceries Amazon Pay Groceries Shopping,Grocery,0.3927104389923697,Shopping,Deterministic rule,amazon pay groceries,2026-05,-180.0,False,False,True,False,5.198497031265826,5,Shopping,0
+T2605091843219642926156,2026-05-09,06:43 pm,Paid to SHREE BALAJI SUPER MARKET,617338476373,DEBIT,Paid by XXXXXX9948,30.0,INR,SHREE BALAJI SUPER MARKET,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Saturday,5,2026,,,,288,Paid to SHREE BALAJI SUPER MARKET SHREE BALAJI SUPER MARKET Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-05,-30.0,False,False,True,False,3.4339872044851463,5,Grocery,2
+T2605082237417963380959,2026-05-08,10:37 pm,Paid to Shree Balaji Super Market,931561476068,DEBIT,Paid by XXXXXX9948,10.0,INR,Shree Balaji Super Market,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Friday,5,2026,,,,290,Paid to Shree Balaji Super Market Shree Balaji Super Market Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-05,-10.0,False,False,True,False,2.3978952727983707,4,Grocery,1
+T2605082120535779962632,2026-05-08,09:20 pm,Paid to Shree Balaji Super Market,592293070869,DEBIT,Paid by XXXXXX9948,28.0,INR,Shree Balaji Super Market,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Friday,5,2026,,,,291,Paid to Shree Balaji Super Market Shree Balaji Super Market Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-05,-28.0,False,False,True,False,3.367295829986474,4,Grocery,2
+T2605081955137830261243,2026-05-08,07:55 pm,Paid to SHREE BALAJI SUPER MARKET,975063503571,DEBIT,Paid by XXXXXX9948,35.0,INR,SHREE BALAJI SUPER MARKET,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Friday,5,2026,,,,292,Paid to SHREE BALAJI SUPER MARKET SHREE BALAJI SUPER MARKET Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-05,-35.0,False,False,True,False,3.58351893845611,4,Grocery,2
+T2605071812216319760886,2026-05-07,06:12 pm,Paid to FRUIT CANTEEN,611814429519,DEBIT,Paid by XXXXXX9948,10.0,INR,FRUIT CANTEEN,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Thursday,5,2026,,,,297,Paid to FRUIT CANTEEN FRUIT CANTEEN Groceries,Grocery,0.4734465080204451,Grocery,Deterministic rule,fruit canteen,2026-05,-10.0,False,False,True,False,2.3978952727983707,3,Grocery,1
+T2605052013595422654188,2026-05-05,08:14 pm,Paid to Shree Balaji Super Market,113371285143,DEBIT,Paid by XXXXXX9948,10.0,INR,Shree Balaji Super Market,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Tuesday,5,2026,,,,305,Paid to Shree Balaji Super Market Shree Balaji Super Market Groceries,Grocery,0.457841859033456,Grocery,Deterministic rule,shree balaji super market,2026-05,-10.0,False,False,True,False,2.3978952727983707,1,Grocery,1
+T2605051837030944835600,2026-05-05,06:37 pm,Paid to MEESHO TECHNOLOGIES PRIVATE LIMITED,592297784972,DEBIT,Paid by XXXXXX9948,66.0,INR,MEESHO TECHNOLOGIES PRIVATE LIMITED,Shopping,Shopping,DEBIT,Discretionary,High,0.8,Unknown,,,1,Very Low,Tuesday,5,2026,,,,307,Paid to MEESHO TECHNOLOGIES PRIVATE LIMITED MEESHO TECHNOLOGIES PRIVATE LIMITED Shopping,Shopping,0.3838527571736527,Shopping,Deterministic rule,meesho technologies private limited,2026-05,-66.0,False,False,True,False,4.204692619390966,1,Shopping,0
+T2605051726283427803244,2026-05-05,05:26 pm,Paid to MEESHO TECHNOLOGIES PRIVATE LIMITED,043560664657,DEBIT,Paid by XXXXXX9948,95.0,INR,MEESHO TECHNOLOGIES PRIVATE LIMITED,Shopping,Shopping,DEBIT,Discretionary,High,0.8,Unknown,,,1,Very Low,Tuesday,5,2026,,,,308,Paid to MEESHO TECHNOLOGIES PRIVATE LIMITED MEESHO TECHNOLOGIES PRIVATE LIMITED Shopping,Shopping,0.3838527571736527,Shopping,Deterministic rule,meesho technologies private limited,2026-05,-95.0,False,False,True,False,4.564348191467836,1,Shopping,0
+T2605051719460158663720,2026-05-05,05:19 pm,Paid to Meesho,662958199083,DEBIT,Paid by XXXXXX9948,96.0,INR,Meesho,Shopping,Shopping,DEBIT,Discretionary,High,0.8,Unknown,,,1,Very Low,Tuesday,5,2026,,,,309,Paid to Meesho Meesho Shopping,Shopping,0.4856143838403763,Shopping,Deterministic rule,meesho,2026-05,-96.0,False,False,True,False,4.574710978503383,1,Shopping,0
+T2605051717425638401761,2026-05-05,05:17 pm,Paid to Meesho,865584158640,DEBIT,Paid by XXXXXX9948,102.0,INR,Meesho,Shopping,Shopping,DEBIT,Discretionary,High,0.8,Unknown,,,1,Low,Tuesday,5,2026,,,,310,Paid to Meesho Meesho Shopping,Shopping,0.4856143838403763,Shopping,Deterministic rule,meesho,2026-05,-102.0,False,False,True,False,4.634728988229636,1,Shopping,0
+T2605051418160069741267,2026-05-05,02:18 pm,Paid to V I T FRUIT CANTEEN,533236407065,DEBIT,Paid by XXXXXX9948,10.0,INR,V I T FRUIT CANTEEN,Groceries,Grocery,DEBIT,Essential,Low,0.3,Unknown,,,1,Very Low,Tuesday,5,2026,,,,312,Paid to V I T FRUIT CANTEEN V I T FRUIT CANTEEN Groceries,Grocery,0.4734465080204451,Grocery,Deterministic rule,v i t fruit canteen,2026-05,-10.0,False,False,True,False,2.3978952727983707,1,Grocery,1
