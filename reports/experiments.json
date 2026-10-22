@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-22T10:12:16.267120+00:00",
+  "generated_at_utc": "2026-10-22T11:25:36.766615+00:00",
   "classification": {
     "model_version": "1.0",
     "dataset": "training.csv",
@@ -510,66 +510,75 @@
   },
   "flexibility_comparison": {
     "assumption": "10% reduction; hypothetical, not an observed saving.",
-    "observed_months": 4,
-    "eligible_observations": 24,
-    "flexibility_adjusted_estimated_monthly_difference": 86.34,
-    "no_flexibility_layer_estimated_monthly_difference": 163.77125,
-    "estimated_difference_from_layer": -77.43125,
-    "average_all_consumption_expenses_per_observed_month": 1637.7125,
+    "observed_months": 13,
+    "eligible_observations": 95,
+    "flexibility_adjusted_estimated_monthly_difference": 99.88923076923078,
+    "no_flexibility_layer_estimated_monthly_difference": 240.59384615384616,
+    "estimated_difference_from_layer": -140.70461538461538,
+    "average_all_consumption_expenses_per_observed_month": 2405.9384615384615,
     "interpretation": "The flexibility layer limits the hypothetical reduction base to categories marked potentially adjustable; results remain category proxies."
   },
   "expense_forecast": {
     "available": true,
-    "forecast_month": "2026-09",
-    "last_observed_month": "2026-08",
+    "forecast_month": "2026-11",
+    "last_observed_month": "2026-10",
     "as_of_month": "2026-10",
-    "data_age_months": 2,
-    "is_current_forecast": false,
+    "data_age_months": 0,
+    "is_current_forecast": true,
     "forecast_basis": "Month immediately after last observed month; may be a historical period.",
-    "forecast_expense_historical_mean": 1637.7125,
-    "forecast_expense_moving_average_3_month": 1211.4166666666667,
-    "history_months": 4,
+    "forecast_expense_historical_mean": 2405.9384615384615,
+    "forecast_expense_moving_average_3_month": 2539.3333333333335,
+    "history_months": 13,
     "observed_months": [
+      "2025-10",
+      "2025-11",
+      "2025-12",
+      "2026-01",
+      "2026-02",
+      "2026-03",
+      "2026-04",
       "2026-05",
       "2026-06",
       "2026-07",
-      "2026-08"
+      "2026-08",
+      "2026-09",
+      "2026-10"
     ],
-    "chronological_validation_origins": 2,
-    "historical_mean_mae": 1150.2000000000003,
-    "moving_average_mae": 1150.2000000000003,
+    "chronological_validation_origins": 11,
+    "historical_mean_mae": 402.56945543093263,
+    "moving_average_mae": 431.31515151515157,
     "limitation": "Calendar months are based on statement coverage, which is incomplete at its first and last month. One-step historical errors are not a guarantee of future accuracy; seasonality is not estimated."
   },
   "spending_cluster_comparison": {
     "method": "KMeans on log amount, category, and weekday; one-hot/scaled features",
     "random_state": 42,
-    "silhouette_score": 0.21289452611581142,
+    "silhouette_score": 0.23483095837595508,
     "amount_only_baseline": {
       "method": "KMeans on standardized raw transaction amount only",
       "random_state": 42,
-      "silhouette_score": 0.7630571135012877
+      "silhouette_score": 0.7466946197783877
     },
     "summary": [
       {
         "spending_cluster": 0,
-        "transaction_count": 30,
-        "mean_amount": 174.32833333333335,
-        "median_amount": 130.0,
-        "category_mix": "Food & Dining"
-      },
-      {
-        "spending_cluster": 1,
-        "transaction_count": 37,
-        "mean_amount": 10.675675675675675,
+        "transaction_count": 226,
+        "mean_amount": 11.667477876106194,
         "median_amount": 10.0,
         "category_mix": "Grocery"
       },
       {
-        "spending_cluster": 2,
-        "transaction_count": 25,
-        "mean_amount": 37.04,
-        "median_amount": 30.0,
+        "spending_cluster": 1,
+        "transaction_count": 161,
+        "mean_amount": 50.05590062111801,
+        "median_amount": 40.0,
         "category_mix": "Grocery"
+      },
+      {
+        "spending_cluster": 2,
+        "transaction_count": 120,
+        "mean_amount": 171.51125,
+        "median_amount": 130.0,
+        "category_mix": "Food & Dining"
       }
     ]
   },

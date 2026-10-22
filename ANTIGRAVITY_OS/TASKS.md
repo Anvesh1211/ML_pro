@@ -4,7 +4,7 @@
 - [x] Inspect project, interpreter, dependencies, source and datasets.
 - [x] Verify duplicates and archive; exclude unrelated/duplicate files.
 - [x] Validate statement columns, preserve identifiers as strings and audit footer rows.
-- [x] Keep source datasets unchanged; create traceable derived output.
+- [x] Preserve training and supplemental sources; replace the PhonePe input only when explicitly requested and regenerate traceable derived outputs.
 - [x] Reproducible grouped model evaluation and model freshness check.
 - [x] Persist predictions and validate output by reading it back.
 - [x] Load and apply scoped saved feedback without overwriting model prediction.

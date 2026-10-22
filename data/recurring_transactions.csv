@@ -1,35 +1,118 @@
 merchant,observations,first_seen,last_seen,median_interval_days,interval_variation,median_amount,amount_variation,evidence,status
-Shree Balaji Super Market,27,2026-05-05,2026-08-02,1.5,5.32426497289942,10.0,0.6574704169296596,"27 distinct dates; observed intervals 3, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 2, 1, 43, 1, 3, 3, 1, 2, 5, 2, 4, 2, 1, 2, 2 days.",Repeated; cadence unclear
-NEW BALAJI TRADERS,18,2026-05-10,2026-07-31,2.0,4.821017997567732,20.0,0.5836976510538697,"18 distinct dates; observed intervals 1, 4, 3, 2, 43, 2, 5, 2, 3, 1, 1, 1, 1, 5, 1, 3, 4 days.",Repeated; cadence unclear
-ESHA  FOODS,16,2026-05-05,2026-07-31,3.0,3.2092459019619017,80.0,0.44686479438364163,"16 distinct dates; observed intervals 1, 1, 6, 2, 5, 2, 41, 4, 2, 3, 2, 2, 3, 9, 4 days.",Repeated; cadence unclear
-VILAS ANANT CHHATRE,14,2026-05-05,2026-07-30,4.0,2.723717873285418,40.0,0.46734551187031353,"14 distinct dates; observed intervals 4, 5, 4, 4, 44, 2, 2, 5, 6, 2, 1, 5, 2 days.",Repeated; cadence unclear
-NEW HOTEL SAWAJI,13,2026-05-07,2026-07-30,4.0,2.5860201081971503,120.0,0.7727108910128362,"13 distinct dates; observed intervals 5, 3, 5, 3, 41, 5, 2, 4, 4, 3, 7, 2 days.",Repeated; cadence unclear
-Shri Sai Pani Puri Centre 1,8,2026-05-31,2026-06-30,4.0,0.47648800229022625,25.0,0.4035453047609222,"8 distinct dates; observed intervals 4, 4, 8, 6, 3, 2, 3 days.",Repeated; cadence unclear
-Baramati agro chicken,7,2026-05-05,2026-07-30,5.5,3.3106667354539785,39.0,0.40447485817204354,"7 distinct dates; observed intervals 2, 6, 5, 4, 54, 15 days.",Probable pattern
-Rajput traders,7,2026-06-04,2026-06-28,2.5,1.460593486680443,10.0,1.851563870632163,"7 distinct dates; observed intervals 6, 1, 11, 1, 1, 4 days.",Repeated; cadence unclear
-Firange Vijay Baban,6,2026-07-02,2026-07-29,5.0,0.2712931993250107,85.0,0.18243830201848052,"6 distinct dates; observed intervals 4, 4, 5, 7, 7 days.",Probable pattern
-SHITAL FRUITS AND VEGETABLES,6,2026-07-13,2026-07-30,3.0,0.618241233033047,10.0,0.8970437559004577,"6 distinct dates; observed intervals 2, 5, 1, 6, 3 days.",Repeated; cadence unclear
-SINHGAD FRUIT CENTER,5,2026-05-25,2026-07-28,5.5,3.7986513483229416,10.0,0.820370845060022,"5 distinct dates; observed intervals 52, 4, 1, 7 days.",Probable pattern
-HOTEL JAYSHREE DINING,4,2026-07-12,2026-07-29,7.0,0.2693740118805895,125.0,0.10206207261596575,"4 distinct dates; observed intervals 7, 7, 3 days.",Probable pattern
-LUKDE AND BROTHER S,4,2026-05-12,2026-05-22,3.0,0.15713484026367722,30.0,0.1574591643244434,"4 distinct dates; observed intervals 4, 3, 3 days.",Repeated; cadence unclear
-PASALKAR PUSHPA RUPESH,4,2026-05-13,2026-07-24,21.0,0.7648751621051909,80.0,0.49056603773584906,"4 distinct dates; observed intervals 6, 45, 21 days.",Probable pattern
+Shree Balaji Super Market,128,2025-10-28,2026-10-15,2.0,2.2729052624772255,13.0,0.751396397838456,"128 distinct dates; observed intervals 14, 1, 1, 2, 1, 3, 1, 4, 1, 1, 1, 1, 2, 2, 3, 1, 1, 4, 2, 24, 2, 2, 1, 1, 1, 1, 4, 4, 2, 1, 1, 7, 5, 1, 2, 2, 1, 2, 2, 3, 1, 1, 6, 1, 2, 1, 2, 1, 3, 1, 1, 2, 1, 2, 9, 2, 5, 1, 4, 5, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 3, 1, 3, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 2, 1, 43, 1, 3, 3, 1, 2, 5, 2, 4, 2, 1, 2, 2, 3, 2, 2, 1, 1, 3, 1, 1, 12, 3, 2, 5, 3, 3, 1, 4, 4, 2, 8, 5, 3, 4, 1 days.",Repeated; cadence unclear
+NEW BALAJI TRADERS,87,2025-11-11,2026-10-15,2.0,2.9666662615483745,15.0,0.5782856320841467,"87 distinct dates; observed intervals 2, 3, 3, 1, 2, 1, 1, 6, 1, 1, 1, 1, 1, 4, 28, 6, 1, 1, 1, 3, 16, 1, 2, 1, 2, 2, 2, 4, 4, 10, 11, 3, 8, 2, 1, 3, 1, 5, 2, 7, 1, 18, 6, 1, 4, 3, 2, 43, 2, 5, 2, 3, 1, 1, 1, 1, 5, 1, 3, 4, 3, 1, 2, 6, 1, 5, 2, 1, 3, 4, 3, 1, 2, 5, 3, 13, 1, 1, 1, 1, 1, 1, 1, 2, 5, 7 days.",Repeated; cadence unclear
+ESHA  FOODS,84,2025-10-27,2026-10-21,2.0,3.0241083857103623,75.0,0.3572425257751689,"84 distinct dates; observed intervals 12, 2, 1, 3, 5, 2, 1, 4, 3, 3, 3, 3, 2, 31, 2, 1, 1, 2, 6, 2, 5, 1, 7, 1, 2, 7, 3, 1, 1, 12, 20, 1, 1, 6, 1, 4, 1, 2, 1, 2, 2, 1, 1, 4, 2, 1, 1, 5, 1, 3, 1, 1, 1, 6, 2, 5, 2, 41, 4, 2, 3, 2, 2, 3, 9, 4, 7, 4, 2, 1, 3, 7, 4, 7, 17, 7, 7, 4, 3, 2, 2, 3, 2 days.",Repeated; cadence unclear
+V I T FRUIT CANTEEN,51,2025-10-29,2026-05-20,2.0,2.228026032163897,20.0,0.9701990542635132,"51 distinct dates; observed intervals 1, 5, 2, 1, 3, 3, 1, 6, 7, 2, 2, 3, 5, 28, 1, 2, 11, 7, 1, 1, 1, 3, 1, 1, 1, 1, 1, 4, 3, 2, 1, 6, 2, 7, 6, 1, 1, 2, 2, 1, 7, 8, 9, 1, 11, 5, 2, 6, 9, 6 days.",Repeated; cadence unclear
+VILAS ANANT CHHATRE,37,2026-01-06,2026-10-17,5.0,1.7636942149790642,50.0,0.39471509291975365,"37 distinct dates; observed intervals 2, 25, 7, 4, 1, 14, 6, 6, 12, 13, 16, 2, 6, 5, 4, 5, 4, 4, 44, 2, 2, 5, 6, 2, 1, 5, 2, 11, 9, 1, 1, 13, 4, 1, 29, 10 days.",Probable pattern
+TOLARAM BHUNDARAMJI DEWASI,34,2025-11-03,2026-09-12,5.0,2.5843919451883557,10.0,1.1825075636501416,"34 distinct dates; observed intervals 12, 6, 1, 6, 7, 1, 4, 3, 28, 1, 11, 7, 1, 1, 1, 1, 4, 7, 3, 4, 5, 8, 11, 14, 15, 3, 12, 5, 68, 34, 23, 4, 2 days.",Probable pattern
+NEW HOTEL SAWAJI,30,2026-04-21,2026-10-19,5.0,1.4168008376463117,120.0,0.6665829356104879,"30 distinct dates; observed intervals 8, 5, 3, 5, 3, 5, 3, 41, 5, 2, 4, 4, 3, 7, 2, 6, 5, 2, 6, 7, 2, 15, 4, 8, 5, 8, 3, 3, 7 days.",Probable pattern
+JAI SHREE DINING HALL,25,2025-11-02,2026-05-24,7.0,0.8551357121345129,120.0,0.6948599751141296,"25 distinct dates; observed intervals 7, 7, 7, 7, 7, 35, 5, 2, 7, 7, 7, 7, 7, 7, 14, 14, 7, 7, 7, 7, 7, 7, 7, 7 days.",Probable pattern
+SINHGAD FRUIT CENTER,24,2026-05-25,2026-10-21,4.0,2.549370729280445,75.0,0.7009196023343932,"24 distinct dates; observed intervals 52, 4, 1, 7, 6, 2, 1, 6, 1, 11, 1, 2, 4, 1, 2, 5, 3, 4, 2, 12, 8, 8, 6 days.",Repeated; cadence unclear
+Firange Vijay Baban,23,2026-01-10,2026-10-03,5.0,3.766797091771538,75.0,0.1954339899926429,"23 distinct dates; observed intervals 1, 6, 21, 5, 2, 3, 9, 4, 24, 2, 2, 1, 10, 83, 4, 4, 5, 7, 7, 13, 50, 3 days.",Probable pattern
+FRUIT CANTEEN,21,2025-11-12,2026-05-18,5.5,1.858885296475968,15.0,1.0366570993830933,"21 distinct dates; observed intervals 3, 3, 16, 4, 44, 1, 14, 7, 5, 1, 6, 2, 11, 4, 3, 17, 27, 8, 8, 3 days.",Probable pattern
+SHITAL FRUITS AND VEGETABLES,20,2026-07-13,2026-10-22,4.0,1.4166598772310284,10.0,1.4724955590532718,"20 distinct dates; observed intervals 2, 5, 1, 6, 3, 4, 1, 1, 1, 4, 1, 2, 4, 1, 18, 19, 16, 7, 5 days.",Repeated; cadence unclear
+AARYAS BIRYANI HUB,19,2025-10-29,2026-03-27,5.0,1.4217447115046211,130.0,0.0,"19 distinct dates; observed intervals 12, 3, 2, 3, 3, 4, 3, 6, 4, 30, 6, 14, 15, 5, 4, 5, 12, 18 days.",Probable pattern
+Sprouts Aunti,19,2025-11-09,2026-10-17,6.0,3.8554114606438827,20.0,0.11466596451673744,"19 distinct dates; observed intervals 4, 13, 41, 3, 31, 1, 6, 6, 3, 56, 78, 13, 60, 13, 2, 5, 4, 3 days.",Probable pattern
+DALIM  SK,17,2026-07-22,2026-10-21,4.0,1.085122220938729,45.0,0.29929415408348325,"17 distinct dates; observed intervals 11, 12, 2, 3, 4, 16, 4, 2, 4, 1, 3, 11, 5, 8, 2, 3 days.",Repeated; cadence unclear
+DIPAK VISHWANATH KATAKE,17,2026-03-06,2026-05-24,3.0,1.492894048112219,15.0,0.1414213562373095,"17 distinct dates; observed intervals 2, 3, 18, 7, 2, 7, 3, 2, 2, 2, 2, 1, 4, 3, 11, 10 days.",Repeated; cadence unclear
+HOTEL JAYSHREE DINING,16,2026-07-12,2026-10-18,7.0,0.5417700058410626,130.0,0.14491833982389246,"16 distinct dates; observed intervals 7, 7, 3, 18, 7, 3, 11, 7, 4, 3, 4, 3, 7, 7, 7 days.",Probable pattern
+LUKDE AND BROTHER S,16,2025-11-19,2026-05-22,7.0,1.6858487974312684,30.0,0.1024986709130639,"16 distinct dates; observed intervals 6, 2, 8, 32, 4, 7, 9, 37, 20, 34, 7, 8, 4, 3, 3 days.",Probable pattern
+Rajput traders,16,2025-12-16,2026-06-28,4.0,6.076228728047978,10.0,1.664460739639376,"16 distinct dates; observed intervals 6, 4, 4, 2, 2, 2, 72, 1, 77, 6, 1, 11, 1, 1, 4 days.",Repeated; cadence unclear
+Gurudatta Dairy,14,2026-05-08,2026-10-21,3.0,8.896512181415975,20.0,0.148093856229281,"14 distinct dates; observed intervals 103, 20, 10, 15, 1, 4, 2, 3, 1, 2, 1, 3, 1 days.",Repeated; cadence unclear
+PASALKAR PUSHPA RUPESH,12,2026-02-19,2026-07-24,6.0,2.5090286919529556,80.0,0.45821494683172437,"12 distinct dates; observed intervals 41, 3, 2, 2, 5, 6, 4, 20, 6, 45, 21 days.",Probable pattern
+Shri Sai Pani Puri Centre 1,12,2025-12-24,2026-06-30,4.0,6.846079290578846,30.0,0.3603437878323461,"12 distinct dates; observed intervals 6, 2, 78, 72, 4, 4, 8, 6, 3, 2, 3 days.",Repeated; cadence unclear
+Shri sadguru Krupa Snacks & Mess Center,12,2025-11-06,2026-03-10,8.0,1.3293997589168822,80.0,0.37778580863006006,"12 distinct dates; observed intervals 11, 12, 8, 43, 2, 7, 7, 3, 14, 11, 6 days.",Probable pattern
+Bharmati agero chikan,11,2025-10-29,2026-04-02,14.5,0.6427127407038234,40.0,0.2566143800047889,"11 distinct dates; observed intervals 14, 15, 11, 32, 18, 7, 7, 1, 21, 29 days.",Repeated; cadence unclear
+Mobile recharged 9881700871,11,2025-11-03,2026-10-05,28.0,0.4,353.0,0.0012626235787542156,"11 distinct dates; observed intervals 28, 28, 56, 28, 28, 28, 28, 28, 28, 56 days.",Probable pattern
+Super chicken,11,2026-08-27,2026-10-19,3.5,1.4,42.0,0.33259496204409594,"11 distinct dates; observed intervals 9, 18, 1, 5, 2, 7, 2, 2, 2, 5 days.",Repeated; cadence unclear
+AMIT VIT CANTEEN,10,2026-01-07,2026-03-04,6.0,0.9053264119689123,65.0,0.3057281937488681,"10 distinct dates; observed intervals 20, 1, 6, 8, 1, 6, 6, 6, 2 days.",Probable pattern
+Baramati agro chicken,10,2026-04-20,2026-07-30,5.0,3.1393952393949704,39.0,0.3693829055476168,"10 distinct dates; observed intervals 2, 2, 11, 2, 6, 5, 4, 54, 15 days.",Probable pattern
+Cc COPIERS,10,2025-10-30,2026-08-11,24.0,1.2875531872029766,4.0,1.078423949728495,"10 distinct dates; observed intervals 28, 11, 52, 1, 24, 9, 6, 50, 104 days.",Probable pattern
+Paresh Gautamchand Lodha,10,2025-11-13,2026-09-11,5.0,9.169083856385658,3.5,2.3581801615223092,"10 distinct dates; observed intervals 5, 6, 102, 5, 1, 5, 49, 2, 127 days.",Probable pattern
+SUJAL ANIL ADSUL,10,2025-10-31,2026-09-10,6.0,11.174387724394082,100.0,1.9594717715024954,"10 distinct dates; observed intervals 4, 4, 6, 1, 1, 11, 6, 64, 217 days.",Probable pattern
+Master SUJAL RAJENDRA PAYGUDE,9,2025-10-27,2026-07-19,24.5,1.3406528493513783,70.0,0.07579891449151828,"9 distinct dates; observed intervals 5, 6, 99, 1, 7, 42, 42, 63 days.",Probable pattern
+PMPML,9,2025-11-05,2026-08-31,11.0,5.043188987663386,20.0,0.3535533905932738,"9 distinct dates; observed intervals 174, 1, 2, 62, 36, 2, 19, 3 days.",Repeated; cadence unclear
+KARISHMA KANARAM CHOUDHARY,8,2025-11-09,2026-09-14,10.0,5.4903626139493795,70.0,0.3328713326493031,"8 distinct dates; observed intervals 2, 62, 7, 10, 2, 62, 164 days.",Repeated; cadence unclear
+SHYAM SUPER MARKET,8,2026-01-10,2026-04-21,12.0,0.7026835506368431,5.0,0.5335936864527374,"8 distinct dates; observed intervals 12, 12, 11, 14, 5, 34, 13 days.",Repeated; cadence unclear
+Shree Sai Mees,8,2026-08-21,2026-10-13,8.0,0.6841872878810006,80.0,0.562121055898847,"8 distinct dates; observed intervals 2, 1, 9, 3, 16, 14, 8 days.",Probable pattern
+Deshmukh Sunil Yadavrao,7,2026-02-18,2026-10-18,32.0,1.1584532312048204,80.0,0.13856406460551018,"7 distinct dates; observed intervals 15, 1, 45, 117, 29, 35 days.",Probable pattern
+NEW HOTEL SAVJI,7,2026-01-30,2026-04-17,9.0,0.9800828609184623,110.0,0.3436891581993841,"7 distinct dates; observed intervals 32, 9, 13, 6, 9, 8 days.",Probable pattern
+192 K K MARKET,6,2025-10-27,2026-10-04,14.0,6.8092973655322835,46.5,0.20858174348191688,"6 distinct dates; observed intervals 255, 3, 14, 11, 59 days.",Repeated; cadence unclear
+BHORDE MAHESH MUKUND,6,2025-10-28,2026-10-13,34.0,1.4346189347311964,650.0,0.029039843863633633,"6 distinct dates; observed intervals 104, 150, 34, 30, 32 days.",Probable pattern
+NAVNATH RASHVANTI GRUH,6,2025-11-01,2026-05-10,36.0,0.8592273301858313,17.5,0.8108066399625791,"6 distinct dates; observed intervals 1, 73, 36, 7, 73 days.",Probable pattern
+Nitu Snacks Center,6,2025-12-08,2026-08-21,43.0,0.7870504116381035,20.0,0.3358509460879419,"6 distinct dates; observed intervals 43, 74, 102, 33, 4 days.",Repeated; cadence unclear
+SHIVAM DAIRY,6,2026-04-16,2026-10-11,10.0,5.336140927674231,20.0,0.40406101782088427,"6 distinct dates; observed intervals 142, 15, 2, 10, 9 days.",Repeated; cadence unclear
+Swiggy Ltd,6,2026-02-01,2026-09-26,37.0,0.5711853807878071,120.0,0.7904362491527578,"6 distinct dates; observed intervals 75, 37, 70, 33, 22 days.",Probable pattern
+ASHOK BHAWRAO KADAM,5,2026-04-01,2026-04-16,3.0,0.6400954789890506,60.0,0.0,"5 distinct dates; observed intervals 7, 2, 3, 3 days.",Repeated; cadence unclear
+HOTEL PADMA RAJ BHUVAN,5,2025-11-16,2026-04-01,15.5,2.5264469998969386,57.5,0.6177207681213422,"5 distinct dates; observed intervals 4, 10, 101, 21 days.",Repeated; cadence unclear
+Hotel padmaraj bhuvan,5,2026-07-13,2026-09-09,17.5,0.420883424647321,90.0,0.5119214864998102,"5 distinct dates; observed intervals 18, 2, 21, 17 days.",Repeated; cadence unclear
+Kukudku chicken,5,2026-04-16,2026-05-08,6.5,0.31716197120135853,57.5,0.36921042394385795,"5 distinct dates; observed intervals 6, 2, 7, 7 days.",Probable pattern
+Mumbai juice and Chinese spot,5,2026-04-18,2026-10-05,43.0,0.7208364530152962,100.0,0.3499271061118826,"5 distinct dates; observed intervals 81, 3, 23, 63 days.",Repeated; cadence unclear
+Shree Balaji Supar Market,5,2026-09-10,2026-09-27,3.5,0.889278542713481,20.0,0.439790447668071,"5 distinct dates; observed intervals 2, 5, 1, 9 days.",Repeated; cadence unclear
+Shree sadguru krupa snacks and mess,5,2026-04-20,2026-09-29,32.5,0.7906255481556675,60.0,0.4381780460041329,"5 distinct dates; observed intervals 83, 14, 31, 34 days.",Probable pattern
+THE KOHINOOR UNISEX SALON,5,2026-05-11,2026-10-04,32.5,0.33317550504165716,150.0,0.0,"5 distinct dates; observed intervals 54, 27, 37, 28 days.",Probable pattern
+Vighnahrtha Fruits,5,2025-11-06,2026-04-22,23.5,2.0073146006143996,30.0,0.0,"5 distinct dates; observed intervals 3, 2, 118, 44 days.",Probable pattern
+YOGITA FRUITS AND VEGETABLES,5,2026-01-08,2026-04-29,30.5,0.7082934815501621,85.0,0.37493259858933636,"5 distinct dates; observed intervals 12, 1, 49, 49 days.",Probable pattern
+AMRUTA,4,2025-10-28,2026-02-07,19.0,1.5040726490773901,20.0,0.35294117647058826,"4 distinct dates; observed intervals 9, 74, 19 days.",Repeated; cadence unclear
+ANOKHA POLI BHAJI KENDRA,4,2025-11-01,2026-10-20,4.0,40.54130267051396,50.0,0.22591967055246226,"4 distinct dates; observed intervals 2, 4, 347 days.",Repeated; cadence unclear
+Gurudev dosa center,4,2025-11-25,2026-01-17,16.0,0.5408647910727987,75.0,0.4472135954999579,"4 distinct dates; observed intervals 16, 29, 8 days.",Repeated; cadence unclear
+J A KACHHI DABELI,4,2026-03-26,2026-04-26,3.0,3.69517536629242,40.0,0.11547005383792516,"4 distinct dates; observed intervals 2, 26, 3 days.",Repeated; cadence unclear
+KIRAN MAHADEV KANADE,4,2026-07-27,2026-10-13,15.0,1.084571941503327,32.5,0.07692307692307693,"4 distinct dates; observed intervals 14, 49, 15 days.",Repeated; cadence unclear
+KRISHNA SUPER BAZAR,4,2025-12-24,2026-06-12,9.0,8.046333588968686,10.0,0.7829701330475319,"4 distinct dates; observed intervals 9, 2, 159 days.",Probable pattern
+Mohammad Aslam,4,2025-11-03,2026-03-16,51.0,0.5205832091958138,110.0,0.8828154914631,"4 distinct dates; observed intervals 73, 9, 51 days.",Repeated; cadence unclear
+Mohammad Shakil Fruits,4,2025-11-22,2026-02-17,17.0,1.4344581300526966,27.5,0.09090909090909091,"4 distinct dates; observed intervals 17, 63, 7 days.",Repeated; cadence unclear
+Mrs JAYSHRI RAM GHODKE,4,2026-08-14,2026-10-10,5.0,4.245782220824175,30.0,0.06928203230275509,"4 distinct dates; observed intervals 49, 5, 3 days.",Probable pattern
+RAM AWADH YADAV,4,2026-03-11,2026-05-12,12.0,1.0808375810190956,111.0,1.2459562632508496,"4 distinct dates; observed intervals 11, 39, 12 days.",Repeated; cadence unclear
 RAM NAMDEO GHODKAE,4,2026-07-03,2026-07-24,7.0,0.11664236870396086,30.0,0.11785113019775792,"4 distinct dates; observed intervals 6, 7, 8 days.",Regular cadence observed (3+ dates)
-192 K K MARKET,3,2026-07-09,2026-07-26,8.5,0.6470588235294118,48.0,0.019372788525658838,"3 distinct dates; observed intervals 3, 14 days.",Probable pattern
-FRUIT CANTEEN,3,2026-05-07,2026-05-18,5.5,0.45454545454545453,10.0,1.1991120975476843,"3 distinct dates; observed intervals 8, 3 days.",Probable pattern
+Redbus India Private Limited,4,2025-12-14,2026-05-25,69.0,0.3281470086520134,725.815,0.26223507510215394,"4 distinct dates; observed intervals 22, 71, 69 days.",Repeated; cadence unclear
+SAKSHI KRISHNA ASOLKAR,4,2026-03-12,2026-05-05,18.0,0.13608276348795434,5.0,1.287496906030652,"4 distinct dates; observed intervals 18, 21, 15 days.",Repeated; cadence unclear
+SANJOG,4,2025-11-20,2026-09-09,96.0,0.6932802741894846,100.0,0.2886751345948129,"4 distinct dates; observed intervals 180, 96, 17 days.",Repeated; cadence unclear
+Seema foods,4,2025-11-24,2026-03-12,8.0,4.949747468305833,5.0,1.0,"4 distinct dates; observed intervals 92, 8, 8 days.",Probable pattern
+Swiggy,4,2026-02-09,2026-09-07,50.0,1.2569805089976536,158.0,0.47106781370817863,"4 distinct dates; observed intervals 50, 155, 5 days.",Repeated; cadence unclear
+TEJAS SHARAD ANDHARE,4,2025-11-23,2026-04-14,46.0,0.5683672913370312,100.0,0.3154439581188423,"4 distinct dates; observed intervals 16, 80, 46 days.",Repeated; cadence unclear
+UTTAM KANARAM CHOUDHARI,4,2025-11-14,2026-10-14,20.0,6.959086785555192,45.0,0.5928523618089873,"4 distinct dates; observed intervals 6, 20, 308 days.",Probable pattern
+VIJAY SUPER MARKET,4,2025-10-30,2026-02-19,36.0,0.8395855990023449,15.0,0.5226030092961996,"4 distinct dates; observed intervals 1, 36, 75 days.",Probable pattern
+VINAYAK MEDICAL,4,2026-02-11,2026-09-09,88.0,0.43311209652267846,10.0,1.657864190516637,"4 distinct dates; observed intervals 88, 105, 17 days.",Repeated; cadence unclear
+BRIJESH KUMAR,3,2026-08-27,2026-09-11,7.5,0.06666666666666667,30.0,0.0,"3 distinct dates; observed intervals 7, 8 days.",Regular cadence observed (3+ dates)
+Dalim Shaikh,3,2025-11-06,2026-01-06,30.5,0.8360655737704918,40.0,0.6663222250695764,"3 distinct dates; observed intervals 5, 56 days.",Probable pattern
 HOTEL SANGOJ,3,2026-05-15,2026-07-16,31.0,0.7419354838709677,100.0,0.045619792334615966,"3 distinct dates; observed intervals 8, 54 days.",Probable pattern
-Hotel padmaraj bhuvan,3,2026-07-13,2026-08-02,10.0,0.8,80.0,0.5007283325055224,"3 distinct dates; observed intervals 18, 2 days.",Repeated; cadence unclear
-JAI SHREE DINING HALL,3,2026-05-10,2026-05-24,7.0,0.0,120.0,0.0,"3 distinct dates; observed intervals 7, 7 days.",Regular cadence observed (3+ dates)
+JAYASHREE DATTATRAY BHADALE,3,2026-08-02,2026-09-30,29.5,0.288135593220339,120.0,0.662401321106836,"3 distinct dates; observed intervals 38, 21 days.",Probable pattern
+JOGESHWARI  MISAL  AND  BHEL,3,2025-12-03,2026-05-06,77.0,0.8571428571428571,121.0,0.7365192935752115,"3 distinct dates; observed intervals 143, 11 days.",Repeated; cadence unclear
+Kanifnath Rasvanti Gruh,3,2025-11-09,2026-05-16,94.0,0.9787234042553191,15.0,0.2721655269759087,"3 distinct dates; observed intervals 2, 186 days.",Repeated; cadence unclear
 MEESHO TECHNOLOGIES PRIVATE LIMITED,3,2026-05-05,2026-08-02,44.5,0.34831460674157305,90.5,0.7553964990400976,"3 distinct dates; observed intervals 29, 60 days.",Repeated; cadence unclear
-Mobile recharged 9881700871,3,2026-05-18,2026-07-13,28.0,0.0,353.0,0.0,"3 distinct dates; observed intervals 28, 28 days.",Regular cadence observed (3+ dates)
-THE KOHINOOR UNISEX SALON,3,2026-05-11,2026-07-31,40.5,0.3333333333333333,150.0,0.0,"3 distinct dates; observed intervals 54, 27 days.",Repeated; cadence unclear
-V I T FRUIT CANTEEN,3,2026-05-05,2026-05-20,7.5,0.2,10.0,0.20203050891044214,"3 distinct dates; observed intervals 9, 6 days.",Regular cadence observed (3+ dates)
-DALIM  SK,2,2026-07-22,2026-08-02,11.0,0.0,35.0,0.30304576336566325,2 distinct dates; observed intervals 11 days.,Repeated; cadence unclear
-DIPAK VISHWANATH KATAKE,2,2026-05-14,2026-05-24,10.0,0.0,15.0,0.0,2 distinct dates; observed intervals 10 days.,Repeated; cadence unclear
-Master SUJAL RAJENDRA PAYGUDE,2,2026-05-17,2026-07-19,63.0,0.0,70.0,0.0,2 distinct dates; observed intervals 63 days.,Repeated; cadence unclear
-Mumbai juice and Chinese spot,2,2026-07-08,2026-07-11,3.0,0.0,150.0,0.3333333333333333,2 distinct dates; observed intervals 3 days.,Repeated; cadence unclear
-Paresh Gautamchand Lodha,2,2026-05-05,2026-05-07,2.0,0.0,2.0,0.0,2 distinct dates; observed intervals 2 days.,Repeated; cadence unclear
-Rohit Girdharilal Sirvi,2,2026-07-24,2026-07-31,7.0,0.0,7.5,0.3333333333333333,2 distinct dates; observed intervals 7 days.,Probable pattern
+Mr  TOLARAM  DEWASI,3,2026-02-14,2026-08-15,91.0,0.5824175824175825,15.0,0.2721655269759087,"3 distinct dates; observed intervals 38, 144 days.",Repeated; cadence unclear
+Mrs. VIDHYA PRAVIN SITAPURE,3,2026-05-21,2026-08-15,43.0,0.7906976744186046,90.0,0.32141217326661253,"3 distinct dates; observed intervals 77, 9 days.",Repeated; cadence unclear
+NILESH SHAMBHU KANSA,3,2025-10-28,2025-11-03,3.0,0.6666666666666666,20.0,0.0,"3 distinct dates; observed intervals 1, 5 days.",Repeated; cadence unclear
+PRASHANT S SAKAT,3,2026-01-09,2026-04-07,44.0,0.4318181818181818,120.0,0.0,"3 distinct dates; observed intervals 25, 63 days.",Repeated; cadence unclear
+Raghunath Bayaji Shinde,3,2025-11-03,2026-09-22,161.5,0.3065015479876161,30.0,0.40406101782088427,"3 distinct dates; observed intervals 112, 211 days.",Repeated; cadence unclear
+Rohit Girdharilal Sirvi,3,2026-07-24,2026-09-19,28.5,0.7543859649122807,10.0,0.9636241116594315,"3 distinct dates; observed intervals 7, 50 days.",Probable pattern
+Sarthak Dandale🧑‍� ���‍🧑,3,2025-10-26,2026-08-16,147.0,0.05442176870748299,295.0,0.5474290245087754,"3 distinct dates; observed intervals 155, 139 days.",Repeated; cadence unclear
+Shivani Hemant Shikhare,3,2026-05-01,2026-10-10,81.0,0.9259259259259259,20.0,0.43204937989385733,"3 distinct dates; observed intervals 156, 6 days.",Repeated; cadence unclear
+THE KOHINOOR UNISEX SALON JSBPUNE,3,2025-10-28,2026-02-23,59.0,0.3220338983050847,150.0,0.0,"3 distinct dates; observed intervals 78, 40 days.",Repeated; cadence unclear
+Vijay Supper Market,3,2025-11-01,2026-04-23,86.5,0.27167630057803466,12.0,0.13608276348795434,"3 distinct dates; observed intervals 110, 63 days.",Repeated; cadence unclear
+Vinod Vishwanath Sakhare,3,2026-03-14,2026-08-16,77.5,0.5483870967741935,60.0,0.0831890330807703,"3 distinct dates; observed intervals 120, 35 days.",Repeated; cadence unclear
+Viraj Adake-it,3,2026-01-05,2026-09-01,119.5,0.9916317991631799,120.0,1.2718062902378378,"3 distinct dates; observed intervals 238, 1 days.",Repeated; cadence unclear
+Vision Sta,3,2026-08-28,2026-10-21,27.0,0.2962962962962963,100.0,0.4651978470080014,"3 distinct dates; observed intervals 35, 19 days.",Probable pattern
+ANITA ASHOK GAIKWAD,2,2026-02-01,2026-02-20,19.0,0.0,30.0,0.0,2 distinct dates; observed intervals 19 days.,Repeated; cadence unclear
+Arun Sopan Dolare,2,2026-07-13,2026-09-10,59.0,0.0,25.0,0.2,2 distinct dates; observed intervals 59 days.,Repeated; cadence unclear
+DEEPAK MAHADEV KANADE,2,2025-10-31,2026-02-09,101.0,0.0,30.0,0.0,2 distinct dates; observed intervals 101 days.,Repeated; cadence unclear
+DODMANI BHOJNALAY,2,2025-11-11,2026-09-25,318.0,0.0,210.0,0.7142857142857143,2 distinct dates; observed intervals 318 days.,Repeated; cadence unclear
+Hotel shree Swami Samarth,2,2026-02-19,2026-09-19,212.0,0.0,70.0,1.0848041297856494,2 distinct dates; observed intervals 212 days.,Repeated; cadence unclear
+M S F FASHION,2,2026-01-02,2026-01-04,2.0,0.0,475.0,0.05263157894736842,2 distinct dates; observed intervals 2 days.,Repeated; cadence unclear
+Mr VIJAY BABAN FIRANGE,2,2025-11-06,2026-05-16,191.0,0.0,67.5,0.25925925925925924,2 distinct dates; observed intervals 191 days.,Repeated; cadence unclear
+Mrs SHABANA MAHAMMADALI SHAIKH,2,2025-10-27,2026-04-02,157.0,0.0,27.5,0.09090909090909091,2 distinct dates; observed intervals 157 days.,Repeated; cadence unclear
+NIKHIL BASAGARE,2,2026-01-12,2026-02-05,24.0,0.0,145.0,0.10344827586206896,2 distinct dates; observed intervals 24 days.,Probable pattern
+NITU SNACKS,2,2025-11-25,2025-11-29,4.0,0.0,24.5,0.6326530612244898,2 distinct dates; observed intervals 4 days.,Repeated; cadence unclear
+PUNE METRO CCA DR WA,2,2025-12-14,2026-02-01,49.0,0.0,52.5,0.5141009655323955,2 distinct dates; observed intervals 49 days.,Repeated; cadence unclear
+RESHMA DATTATRAY JADHAV,2,2025-10-30,2026-03-16,137.0,0.0,47.5,0.2631578947368421,2 distinct dates; observed intervals 137 days.,Repeated; cadence unclear
+Rohit giridharilal sirvi,2,2026-04-11,2026-04-25,14.0,0.0,22.5,0.7777777777777778,2 distinct dates; observed intervals 14 days.,Repeated; cadence unclear
+Ronit Dahiwal,2,2026-02-26,2026-03-15,17.0,0.0,97.5,0.7948717948717948,2 distinct dates; observed intervals 17 days.,Repeated; cadence unclear
 SAMBAR.CONNAR,2,2026-05-12,2026-05-22,10.0,0.0,30.0,0.0,2 distinct dates; observed intervals 10 days.,Repeated; cadence unclear
-Shree sadguru krupa snacks and mess,2,2026-07-12,2026-07-26,14.0,0.0,40.0,0.5,2 distinct dates; observed intervals 14 days.,Repeated; cadence unclear
-Sprouts Aunti,2,2026-07-09,2026-07-22,13.0,0.0,20.0,0.0,2 distinct dates; observed intervals 13 days.,Repeated; cadence unclear
-Swiggy Ltd,2,2026-05-24,2026-08-02,70.0,0.0,270.5,0.5859519408502772,2 distinct dates; observed intervals 70 days.,Repeated; cadence unclear
+SHATRUGHNA SAJJAN JA,2,2026-02-04,2026-02-28,24.0,0.0,37.5,0.2,2 distinct dates; observed intervals 24 days.,Probable pattern
+SINHGAD FRUIT POINT  AMCPA4897R,2,2026-08-04,2026-10-01,58.0,0.0,112.5,0.24444444444444444,2 distinct dates; observed intervals 58 days.,Repeated; cadence unclear
+Samarth Dairy,2,2026-04-22,2026-04-24,2.0,0.0,10.0,0.0,2 distinct dates; observed intervals 2 days.,Repeated; cadence unclear
+Shabana Fruit,2,2026-08-01,2026-10-18,78.0,0.0,27.5,0.09090909090909091,2 distinct dates; observed intervals 78 days.,Repeated; cadence unclear
+Shivani Shikhare,2,2025-10-30,2025-11-17,18.0,0.0,25.0,0.2,2 distinct dates; observed intervals 18 days.,Repeated; cadence unclear
+VARADRAJ SANJAY JADHAV,2,2026-08-01,2026-09-10,40.0,0.0,121.0,0.0,2 distinct dates; observed intervals 40 days.,Probable pattern
+Vishweshwar Sinhgad Fruits Center,2,2025-11-06,2025-11-24,18.0,0.0,53.5,0.5887850467289719,2 distinct dates; observed intervals 18 days.,Repeated; cadence unclear
+vedant mishra,2,2026-01-06,2026-04-09,93.0,0.0,40.0,0.5,2 distinct dates; observed intervals 93 days.,Repeated; cadence unclear

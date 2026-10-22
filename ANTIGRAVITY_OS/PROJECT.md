@@ -51,16 +51,16 @@ Run from the root:
 | File | Rows/columns | Purpose and status |
 |---|---:|---|
 | `data/training.csv` | 900 × 27 | Sole supervised source; 13 labels, 108 merchants; no missing labels. Category counts: Grocery 120, Food & Dining 110, Personal Transfer 100, Shopping 85, Transport 80, Bills & Utilities 75, Mobile Recharge 65, Health 55, Personal Care 50, Entertainment 45, Education 45, Salary/Income 35, Rent 35. |
-| `data/testing.csv` | 319 transaction/footer rows × 8 | Original PhonePe statement with 2-line preamble and trailing statement footer. Valid transaction dates span 2026-05-05–2026-08-02. |
-| `data/phonepe_processed.csv` | 312 × 28 | Valid PhonePe rows plus source-line traceability. |
-| `data/phonepe_predictions.csv` | 312 × 33 | Current predictions, confidence, final category and source. |
-| `data/final_phonepe_results.csv` | 312 × 33 | Same current result as the predictions file. |
-| `data/user_feedback.csv` | 8 × 2 initially | Preserved existing merchant-level corrections; extended with explicit scope only when new corrections are saved. |
-| `data/spending_behavior.csv` | 92 × 44 | Classified, non-transfer consumption debits and richer KMeans cluster features. |
-| `data/anomaly_results.csv` | 278 × 48 | Debit rows with Isolation Forest, robust IQR comparison and review fields. |
-| `data/preprocessing_audit.csv` | 7 × 4 | Footer/non-transaction exclusion reasons and physical source lines 317–323. |
-| `data/expense_flexibility.csv` | 312 × 42 | Category-proxy flexibility class and explanation per row. |
-| `data/recurring_transactions.csv` | 34 × 10 | Repeated merchant/date evidence, not a promise of future recurrence. |
+| `data/testing.csv` | 1,594 CSV records × 8 (including footer records) | Current supplied PhonePe statement; valid dates span 2025-10-26–2026-10-22. |
+| `data/phonepe_processed.csv` | 1,587 × 28 | Valid PhonePe rows plus physical source-line traceability. |
+| `data/phonepe_predictions.csv` | 1,587 × 33 | Current predictions, confidence, final category and source. |
+| `data/final_phonepe_results.csv` | 1,587 × 33 | Same current result as the predictions file. |
+| `data/user_feedback.csv` | 9 × 4 | Preserved merchant corrections with scope and transaction-ID fields. |
+| `data/spending_behavior.csv` | 507 × 44 | Classified consumption debits and richer KMeans cluster features. |
+| `data/anomaly_results.csv` | 1,487 × 48 | Debit rows with Isolation Forest, robust IQR comparison and review fields. |
+| `data/preprocessing_audit.csv` | 7 × 4 | Footer/non-transaction exclusion reasons and physical source lines 1593–1600. |
+| `data/expense_flexibility.csv` | 1,587 × 42 | Category-proxy flexibility class and explanation per row. |
+| `data/recurring_transactions.csv` | 117 × 10 | Repeated merchant/date evidence, not a promise of future recurrence. |
 
 ### Other supplied datasets and duplicates
 
@@ -68,7 +68,7 @@ Run from the root:
 |---|---|---|
 | `miscellaneous/FinTwin_Indian_PhonePe_Compatible_Training .csv` | 1,000 × 27 | Supplemental historical training draft; not used by the active model. |
 | `miscellaneous/training(wrong).csv` | 1,000 × 27 | Byte-identical duplicate of the supplemental training draft; not additional examples. |
-| `miscellaneous/PhonePe_testing dataset.csv` | 319 × 8 | Byte-identical duplicate of `data/testing.csv`; not used separately. |
+| `miscellaneous/PhonePe_testing dataset.csv` | 319 × 8 | Older May–August 2026 PhonePe statement; not byte-identical to the current testing file and not used separately. |
 | `miscellaneous/archive (5).zip` → `personal_finance_tracking.csv` | 1,000 × 16 | Separate USD synthetic budgeting dataset (archive README calls it synthetic). Not merged because it is not the PhonePe history and uses another schema/currency. |
 | `miscellaneous/archive (5).zip` → `personal_finance_tracking.xlsx` | 1 sheet, 1,000 × 16 | Spreadsheet copy of the same archived finance table; not used. |
 
@@ -88,7 +88,10 @@ transaction_status, and notes.
   `remaining_budget`, `savings_goal`.
 - `data/testing.csv` fields (8): `Date`, `Time`, `Transaction Details`,
   `Transaction ID`, `UTR`, `Transaction Type`, `Credit/debit instrument`,
-  `Amount`.
+  `Amount`. The file has a two-line statement preamble and a blank line before
+  the header. Date values use mixed month-name formats; parsing uses mixed
+  format recognition. Seven footer records are audited, not treated as
+  transactions.
 - `data/phonepe_processed.csv` has the training schema plus `source_line`
   (28 fields). Budget, city, and transaction status are unknown in the raw
   statement and are not fabricated.
@@ -125,24 +128,24 @@ performance on independently verified real-world PhonePe labels.
 | Source file | SHA-256 |
 |---|---|
 | `data/training.csv` | `a45c74d5e2cf785a81944f8a238b3397d4957e840afd64be1a9296a42e5817da` |
-| `data/testing.csv` | `53db118cf92f8c565d9bc626dbb661ef109cad485be3f04c07b72ced014555ae` |
-| `data/user_feedback.csv` | `07bcfb9144ff4359138484b5c6d8b64653f59b40b7e330ddbff49a7631eb7027` |
+| `data/testing.csv` | `29287c81046712951cfc3596ed24b684444820d3fa48d485f52312e8304f86af` |
+| `data/user_feedback.csv` | `3992430c9f10e717ac381a82928561de1a39c951804186d19f51bc58db68bece` |
 | Supplemental training pair | `efe3c376593c19583a5eba64ddb6cc6b08c0f212c54ef2e4428cb8d8f47e5195` |
-| Raw PhonePe duplicate | `53db118cf92f8c565d9bc626dbb661ef109cad485be3f04c07b72ced014555ae` |
+| Older raw PhonePe duplicate | `53db118cf92f8c565d9bc626dbb661ef109cad485be3f04c07b72ced014555ae` |
 | Archive ZIP | `7fe3d71da660647eb16b127b7421cdada008524bab2cfb3886d72a0cf2ffe611` |
 
-The active result source counts include 180 `Needs Review` rows (low ML
-confidence), 104 deterministic-rule rows, 16 saved merchant-feedback rows,
-and 12 direct ML rows. This substantial review burden is exposed rather than
-hidden by broad person-name rules. The 312-row statement has 278 debits and
-34 credits. Only 92 debit rows currently have a sufficiently known category
-to enter classified consumption totals; unclassified debits and transfers are
-kept separate. The ledger's all-debit and cash-flow totals still reconcile.
+The active result source counts include 971 `Needs Review` rows (low ML
+confidence), 512 deterministic-rule rows, 42 saved merchant-feedback rows,
+and 62 direct ML rows. This substantial review burden is exposed rather than
+hidden by broad person-name rules. The 1,587-row active statement has 1,487
+debits and 100 credits. Only classified, non-transfer debits enter consumption
+totals; unclassified debits and transfers are kept separate. The ledger's
+all-debit and cash-flow totals still reconcile.
 
 `miscellaneous/FinTwin_Indian_PhonePe_Compatible_Training .csv` and
 `miscellaneous/training(wrong).csv` are byte-identical historical copies and
-are excluded from training. `miscellaneous/PhonePe_testing dataset.csv` is a
-byte-identical statement copy and is excluded from pipeline input.
+are excluded from training. `miscellaneous/PhonePe_testing dataset.csv` is an
+older statement and is excluded from pipeline input.
 `miscellaneous/archive (5).zip` includes a separate USD personal-finance
 dataset; it is not merged or used.
 

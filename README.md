@@ -16,19 +16,23 @@ complete income history.
 The project uses existing files only:
 
 - `data/training.csv` is the sole supervised classification source.
-- `data/testing.csv` is the raw PhonePe statement; its first two lines are
-  statement metadata and the CSV header follows.
-- Seven trailing statement-footer lines are excluded as non-transactions and
-  recorded, by source line and reason, in `data/preprocessing_audit.csv`.
+- `data/testing.csv` is the latest supplied PhonePe statement. Its metadata,
+  blank separator, and CSV header are retained; the importer supports the
+  statement's mixed month-name date formats.
+- The current file has 1,587 valid transactions from 2025-10-26 through
+  2026-10-22. Seven trailing statement-footer records are excluded and
+  recorded with their physical source lines in `data/preprocessing_audit.csv`.
 - `data/user_feedback.csv` contains existing user merchant corrections.
 - Other existing prediction/analysis CSVs are regenerated derived outputs, not
   training labels.
 - Identical duplicate files in `miscellaneous/` and the unrelated archived
   USD personal-finance dataset are not added to training or analytics.
-- Original training, raw PhonePe, and supplemental files are preserved.
+- The original training and supplemental files are preserved. The active
+  `testing.csv` was replaced with the newly supplied October 2025–October 2026
+  statement; the older duplicate in `miscellaneous/` is not used.
 - The training table has 900 rows, 27 fields, 13 categories, and 108 merchants;
-  the PhonePe statement has 312 valid transactions from 2026-05-05 through
-  2026-08-02 after auditing seven non-transaction footer rows.
+  the active PhonePe statement has 1,587 valid transactions after auditing
+  seven non-transaction footer records.
 - Exact field lists, output schemas, duplicate hashes, archive details, and
   dataset limitations are documented in
   [`ANTIGRAVITY_OS/PROJECT.md`](ANTIGRAVITY_OS/PROJECT.md).
@@ -101,10 +105,10 @@ Use the **Transaction intelligence** page to correct either one transaction
 or, after explicit confirmation, all current/future transactions with the
 exact merchant name. The app saves feedback in `data/user_feedback.csv`,
 preserves the model prediction, and refreshes dependent predictions and
-analytics. Existing two-column feedback is interpreted as the merchant-level
-corrections recorded by the prior review script. SQLite stores user-created
-goals and anomaly-review status in `data/fintwin_state.sqlite3`; it does not
-duplicate the transaction ledger.
+analytics. Legacy two-column feedback rows are interpreted as the
+merchant-level corrections recorded by the prior review script. SQLite stores
+user-created goals and anomaly-review status in `data/fintwin_state.sqlite3`;
+it does not duplicate the transaction ledger.
 
 ## Website
 
@@ -129,19 +133,16 @@ python -m unittest discover -s tests -v
 The unit tests use the project statement/training data for data/model checks
 and hand-calculated **scenario parameters** for deterministic arithmetic
 checks. They do not create synthetic training or financial transaction data.
-The current statement covers only a few calendar months, with partial first
-and last months; seasonality and long-term cash flow cannot be established.
-Anomaly outputs have no verified fraud labels and must be treated as review
-signals only.
-As of October 2026, the statement ends in August 2026. A next-month
-after-observation estimate therefore targets September 2026 and is shown only
-as a historical baseline demonstration, not a current forecast.
+The current statement covers October 2025–October 2026 with partial boundary
+months. This supports a next-month expense baseline but not a verified income
+forecast or reliable seasonal claim. Anomaly outputs have no verified fraud
+labels and must be treated as review signals only.
 
 See `ANTIGRAVITY_OS/PROJECT.md`, `ISSUES.md`, `DECISIONS.md`,
 `DEBUG_LOGS.md`, and `EXPERIMENTS.md` for the recorded state, decisions,
 limitations, and measured runs.
 
-<!-- .\venv\Scripts\python.exe -m src.pipeline
+.\venv\Scripts\python.exe -m src.pipeline
 .\venv\Scripts\python.exe -m src.research
 .\venv\Scripts\python.exe -m streamlit run app.py
-.\venv\Scripts\python.exe -m unittest discover -s tests -v -->
+.\venv\Scripts\python.exe -m unittest discover -s tests -v

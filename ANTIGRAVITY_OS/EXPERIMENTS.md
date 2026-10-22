@@ -38,20 +38,21 @@ outputs are in `reports/classification_metrics.json`,
 - `Salary/Income` is absent from the evaluation set. No held-out merchant in
   this sample has mixed category labels, which makes the merchant rule unusually
   favorable and limits generalization.
-- This is an offline simulation, not an experiment on the eight real saved
+- This is an offline simulation, not an experiment on the nine current saved
   user corrections and not independently verified PhonePe accuracy. Do not
   claim a user-level accuracy improvement from it.
 
 ## Experiment C — Expense-flexibility comparison
 
-- Period: four observed calendar months; boundary months are partial.
-- Actual eligible data: 24 debit transactions in the potentially adjustable
+- Period: 2025-10-26 through 2026-10-22; the first and last calendar months
+  are partial.
+- Actual eligible data: 95 debit transactions in the potentially adjustable
   category proxy.
 - Identical hypothetical assumption: reduce eligible outlay by **10%**.
 - Without the flexibility filter, 10% of observed average monthly
-  classified consumption outlay is **₹163.77**.
-- With the flexibility proxy, the estimated amount is **₹86.34/month**, a
-  **₹77.43/month lower** estimated reduction base than the unfiltered
+  classified consumption outlay is **₹240.59**.
+- With the flexibility proxy, the estimated amount is **₹99.89/month**, a
+  **₹140.70/month lower** estimated reduction base than the unfiltered
   calculation.
 - These values are arithmetic estimates, not observed savings or a
   recommendation that the user should reduce those expenses. Category-level
@@ -60,32 +61,32 @@ outputs are in `reports/classification_metrics.json`,
 ## Experiment D — Expense forecast baseline
 
 - Target: next-month recorded consumption debits (transfers excluded).
-- Observed coverage: May–August 2026 (four months, with partial May/August).
-- Baselines: historical mean **₹1,637.71** and three-month moving average
-  **₹1,211.42** for September 2026.
-- Chronological one-step evaluation: only **2 origins** are available.
-  Both approaches produced MAE **₹1,150.20** on these origins.
-- No seasonal forecast or income forecast is justified. The shared MAE and
-  tiny evaluation set are not evidence of forecast reliability. As of the
-  current October 2026 runtime, September 2026 is already past; this is a
-  historical next-observation estimate, not a current financial forecast.
+- Observed coverage: October 2025–October 2026 (13 calendar months, with
+  partial October 2025 and October 2026).
+- Baselines for November 2026: historical mean **₹2,405.94** and three-month
+  moving average **₹2,539.33**.
+- Chronological one-step evaluation: **11 origins**. Historical-mean MAE is
+  **₹402.57**; moving-average MAE is **₹431.32**.
+- This remains a simple baseline, not a validated seasonal forecast. The
+  recent statement supports next-month expense estimation but still does not
+  provide a verified recurring income series for income forecasting.
 
 ## Experiment E — Flexible clustering versus amount-only baseline
 
-- Input: 92 classified consumption debit transactions; transfers and unknown
+- Input: 507 classified consumption debit transactions; transfers and unknown
   categories are excluded.
-- Amount-only baseline: K-Means on standardized amount, silhouette **0.7631**.
+- Amount-only baseline: K-Means on standardized amount, silhouette **0.7467**.
 - Richer feature comparison: K-Means on log amount, category, and weekday,
-  silhouette **0.2129**.
+  silhouette **0.2348**.
 - The richer feature set did **not** improve silhouette on this dataset. The
   cluster output is exploratory; cluster labels are not health scores and
   should not be presented as a validated behavioral improvement.
 
 ## Experiment F — Anomaly exploration
 
-- Input: 278 debit rows.
-- Isolation Forest at a fixed 5% contamination flagged **8** transactions.
-- A robust 1.5×IQR baseline on log amount flagged **4** rows.
+- Input: 1,487 debit rows.
+- Isolation Forest at a fixed 5% contamination flagged **75** transactions.
+- A robust 1.5×IQR baseline on log amount flagged **45** rows.
 - There are no verified fraud/anomaly outcome labels, so precision, recall,
   and fraud accuracy cannot be calculated. These flags are review leads only.
 

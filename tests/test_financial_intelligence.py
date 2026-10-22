@@ -41,10 +41,35 @@ from src.train_model import train_and_evaluate
 class ProjectDatasetTests(unittest.TestCase):
     def test_statement_footer_is_audited_not_silently_treated_as_transactions(self):
         processed, audit = load_phonepe_statement(RAW_PATH)
-        self.assertEqual(len(processed), 312)
-        self.assertEqual(len(audit), 7)
-        self.assertEqual(int(audit.iloc[0]["source_line"]), 317)
-        self.assertEqual(int(audit.iloc[-1]["source_line"]), 323)
+        raw = pd.read_csv(
+            RAW_PATH,
+            skiprows=2,
+            dtype={"Transaction ID": "string", "UTR": "string"},
+            keep_default_na=False,
+            low_memory=False,
+        )
+        dates = pd.to_datetime(raw["Date"], errors="coerce", format="mixed")
+        amounts = pd.to_numeric(raw["Amount"], errors="coerce")
+        transaction_types = raw["Transaction Type"].str.strip().str.upper()
+        expected_valid = (
+            dates.notna()
+            & amounts.notna()
+            & transaction_types.isin({"DEBIT", "CREDIT"})
+            & raw["Transaction ID"].astype(str).str.strip().ne("")
+            & raw["Transaction Details"].astype(str).str.strip().ne("")
+        )
+        source_lines = pd.concat(
+            [processed["source_line"], audit["source_line"]], ignore_index=True
+        )
+        self.assertGreater(len(processed), 0)
+        self.assertEqual(len(processed), int(expected_valid.sum()))
+        self.assertEqual(len(processed) + len(audit), len(raw))
+        self.assertEqual(source_lines.nunique(), len(source_lines))
+        self.assertTrue(
+            pd.to_datetime(
+                processed["transaction_date"], errors="coerce", format="mixed"
+            ).notna().all()
+        )
         self.assertTrue(audit["reason"].str.contains("statement_footer").all())
         self.assertTrue(processed["source_line"].is_unique)
 
@@ -204,7 +229,7 @@ class FinancialCalculationTests(unittest.TestCase):
 class FeedbackAndPersistenceTests(unittest.TestCase):
     def test_existing_feedback_is_loaded_and_legacy_scope_is_merchant(self):
         feedback = load_feedback(FEEDBACK_PATH)
-        self.assertEqual(len(feedback), 8)
+        self.assertGreater(len(feedback), 0)
         self.assertTrue(feedback["scope"].eq("merchant").all())
 
     def test_feedback_overrides_the_prediction_for_exact_transaction(self):
@@ -267,6 +292,7 @@ class FeedbackAndPersistenceTests(unittest.TestCase):
     def test_saving_correction_preserves_existing_feedback_and_applies_it(self):
         processed = pd.read_csv(PROCESSED_PATH, dtype={"transaction_id": "string"})
         row = processed.iloc[0]
+        existing_feedback_count = len(load_feedback(FEEDBACK_PATH))
         with tempfile.TemporaryDirectory() as directory:
             feedback_path = Path(directory) / "feedback.csv"
             output_path = Path(directory) / "predictions.csv"
@@ -283,7 +309,7 @@ class FeedbackAndPersistenceTests(unittest.TestCase):
                 output_paths=(output_path,),
                 feedback_path=feedback_path,
             )
-        self.assertEqual(len(saved), 9)
+        self.assertEqual(len(saved), existing_feedback_count + 1)
         corrected = result.loc[
             result["transaction_id"].astype(str).eq(str(row["transaction_id"]))
         ].iloc[0]
@@ -291,12 +317,15 @@ class FeedbackAndPersistenceTests(unittest.TestCase):
         self.assertEqual(corrected["category_source"], "User transaction correction")
 
     def test_predictions_are_persisted_and_read_back(self):
+        expected_rows = len(
+            pd.read_csv(PROCESSED_PATH, dtype={"transaction_id": "string"})
+        )
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / "predictions.csv"
             results = run_prediction(output_paths=(output,))
             persisted = pd.read_csv(output, low_memory=False)
-        self.assertEqual(len(results), 312)
-        self.assertEqual(len(persisted), 312)
+        self.assertEqual(len(results), expected_rows)
+        self.assertEqual(len(persisted), expected_rows)
         self.assertTrue(
             {"ml_category", "final_category", "category_source"}.issubset(
                 persisted.columns

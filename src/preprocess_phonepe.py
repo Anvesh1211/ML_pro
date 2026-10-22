@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import re
 from pathlib import Path
 
@@ -99,6 +100,44 @@ def classify_description(
     return "Needs Review"
 
 
+def _statement_record_start_lines(
+    path: Path, expected_columns: set[str], expected_rows: int
+) -> list[int]:
+    starts = []
+    with path.open("r", encoding="utf-8-sig", newline="") as source_file:
+        reader = csv.reader(source_file)
+        for _ in range(2):
+            next(reader, None)
+        previous_line = reader.line_num
+
+        while True:
+            start_line = previous_line + 1
+            row = next(reader, None)
+            if row is None:
+                raise ValueError(
+                    f"Could not find the PhonePe CSV header in {path}."
+                )
+            previous_line = reader.line_num
+            if not row:
+                continue
+            if set(column.strip() for column in row) == expected_columns:
+                break
+
+        for row in reader:
+            start_line = previous_line + 1
+            previous_line = reader.line_num
+            if row:
+                starts.append(start_line)
+
+    if len(starts) != expected_rows:
+        raise ValueError(
+            f"Could not map all parsed statement rows to source lines in {path}: "
+            f"CSV parser found {len(starts)} data records but pandas parsed "
+            f"{expected_rows}."
+        )
+    return starts
+
+
 def load_phonepe_statement(path=RAW_PATH) -> tuple[pd.DataFrame, pd.DataFrame]:
     if not path.exists():
         raise FileNotFoundError(f"PhonePe statement not found: {path}")
@@ -115,7 +154,12 @@ def load_phonepe_statement(path=RAW_PATH) -> tuple[pd.DataFrame, pd.DataFrame]:
             f"PhonePe statement is missing required columns: {', '.join(missing)}"
         )
 
-    dates = pd.to_datetime(raw["Date"], errors="coerce")
+    source_lines = pd.Series(
+        _statement_record_start_lines(path, set(raw.columns), len(raw)),
+        index=raw.index,
+        dtype="int64",
+    )
+    dates = pd.to_datetime(raw["Date"], errors="coerce", format="mixed")
     amounts = pd.to_numeric(raw["Amount"], errors="coerce")
     transaction_types = raw["Transaction Type"].str.strip().str.upper()
     has_identifier = raw["Transaction ID"].astype(str).str.strip().ne("")
@@ -145,7 +189,7 @@ def load_phonepe_statement(path=RAW_PATH) -> tuple[pd.DataFrame, pd.DataFrame]:
         audit_rows.append(
             {
                 "source_file": path.name,
-                "source_line": int(row_index) + 5,
+                "source_line": int(source_lines.loc[row_index]),
                 "disposition": "excluded",
                 "reason": ";".join(reasons),
             }
@@ -223,7 +267,7 @@ def load_phonepe_statement(path=RAW_PATH) -> tuple[pd.DataFrame, pd.DataFrame]:
             "monthly_budget": pd.NA,
             "remaining_budget": pd.NA,
             "savings_goal": pd.NA,
-            "source_line": clean.index.astype(int) + 5,
+            "source_line": source_lines.loc[clean.index].to_numpy(),
         },
         index=clean.index,
     ).reset_index(drop=True)

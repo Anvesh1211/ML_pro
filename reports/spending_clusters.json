@@ -1,33 +1,33 @@
 {
   "method": "KMeans on log amount, category, and weekday; one-hot/scaled features",
   "random_state": 42,
-  "silhouette_score": 0.20763484941608162,
+  "silhouette_score": 0.23483095837595508,
   "amount_only_baseline": {
     "method": "KMeans on standardized raw transaction amount only",
     "random_state": 42,
-    "silhouette_score": 0.7630571135012877
+    "silhouette_score": 0.7466946197783877
   },
   "summary": [
     {
       "spending_cluster": 0,
-      "transaction_count": 30,
-      "mean_amount": 174.32833333333335,
-      "median_amount": 130.0,
-      "category_mix": "Food & Dining"
-    },
-    {
-      "spending_cluster": 1,
-      "transaction_count": 37,
-      "mean_amount": 10.675675675675675,
+      "transaction_count": 226,
+      "mean_amount": 11.667477876106194,
       "median_amount": 10.0,
       "category_mix": "Grocery"
     },
     {
-      "spending_cluster": 2,
-      "transaction_count": 25,
-      "mean_amount": 37.04,
-      "median_amount": 30.0,
+      "spending_cluster": 1,
+      "transaction_count": 161,
+      "mean_amount": 50.05590062111801,
+      "median_amount": 40.0,
       "category_mix": "Grocery"
+    },
+    {
+      "spending_cluster": 2,
+      "transaction_count": 120,
+      "mean_amount": 171.51125,
+      "median_amount": 130.0,
+      "category_mix": "Food & Dining"
     }
   ]
 }
