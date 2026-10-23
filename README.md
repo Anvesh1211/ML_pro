@@ -1,5 +1,15 @@
 # FinTwin AI — Adaptive Personal Finance Intelligence
 
+run this exact in the terminal  fintwin to run the project plz do not share any of the dataset to anyone else 
+.\venv\Scripts\python.exe -m src.pipeline
+.\venv\Scripts\python.exe -m src.research
+.\venv\Scripts\python.exe -m streamlit run app.py
+.\venv\Scripts\python.exe -m unittest discover -s tests -v 
+
+
+git add README.md
+git commit -m "Update"
+git push -u origin main
 FinTwin is a local-first personal-finance prototype. It classifies PhonePe
 transactions with a merchant-disjoint-evaluated text model, applies explicit
 user corrections, separates transfers from consumption, and provides
