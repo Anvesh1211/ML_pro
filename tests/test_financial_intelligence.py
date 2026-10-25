@@ -230,7 +230,8 @@ class FeedbackAndPersistenceTests(unittest.TestCase):
     def test_existing_feedback_is_loaded_and_legacy_scope_is_merchant(self):
         feedback = load_feedback(FEEDBACK_PATH)
         self.assertGreater(len(feedback), 0)
-        self.assertTrue(feedback["scope"].eq("merchant").all())
+        legacy_rows = feedback["transaction_id"].eq("")
+        self.assertTrue(feedback.loc[legacy_rows, "scope"].eq("merchant").all())
 
     def test_feedback_overrides_the_prediction_for_exact_transaction(self):
         processed = pd.read_csv(PROCESSED_PATH, dtype={"transaction_id": "string"})
@@ -292,11 +293,15 @@ class FeedbackAndPersistenceTests(unittest.TestCase):
     def test_saving_correction_preserves_existing_feedback_and_applies_it(self):
         processed = pd.read_csv(PROCESSED_PATH, dtype={"transaction_id": "string"})
         row = processed.iloc[0]
-        existing_feedback_count = len(load_feedback(FEEDBACK_PATH))
         with tempfile.TemporaryDirectory() as directory:
             feedback_path = Path(directory) / "feedback.csv"
             output_path = Path(directory) / "predictions.csv"
             pd.read_csv(FEEDBACK_PATH).to_csv(feedback_path, index=False)
+            before = load_feedback(feedback_path)
+            already_corrected = (
+                before["scope"].eq("transaction")
+                & before["transaction_id"].astype(str).eq(str(row["transaction_id"]))
+            ).any()
             save_correction(
                 str(row["merchant"]),
                 "Grocery",
@@ -309,7 +314,7 @@ class FeedbackAndPersistenceTests(unittest.TestCase):
                 output_paths=(output_path,),
                 feedback_path=feedback_path,
             )
-        self.assertEqual(len(saved), existing_feedback_count + 1)
+        self.assertEqual(len(saved), len(before) + (0 if already_corrected else 1))
         corrected = result.loc[
             result["transaction_id"].astype(str).eq(str(row["transaction_id"]))
         ].iloc[0]

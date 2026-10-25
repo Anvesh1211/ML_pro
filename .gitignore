@@ -9,4 +9,5 @@ __pycache__/
 *.tmp
 data/*.sqlite
 data/*.sqlite3
+data/*.bak
 models/*.joblib

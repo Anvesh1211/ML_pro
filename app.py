@@ -1,17 +1,39 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import math
+import os
+import sqlite3
 from datetime import date
+from decimal import Decimal, ROUND_HALF_UP
 
 import pandas as pd
 import streamlit as st
 
-from src.common import (
-    BASE_CATEGORIES,
-    DATA_DIR,
-    REPORT_DIR,
-    atomic_write_csv,
+from src.common import BASE_CATEGORIES
+from src.auth import (
+    AuthenticationError,
+    authenticate,
+    get_session_user,
+    register_user,
+    revoke_session,
+)
+from src.finance_store import (
+    count_import_duplicate_candidates,
+    delete_user_goal,
+    get_import_history,
+    get_user_anomaly_statuses,
+    get_user_feedback,
+    get_user_transactions,
+    list_user_goals,
+    list_user_recommendations,
+    save_import,
+    save_recommendations,
+    save_user_correction,
+    save_user_goal,
+    set_recommendation_status,
+    set_user_anomaly_status,
 )
 from src.financial_intelligence import (
     Scenario,
@@ -19,24 +41,21 @@ from src.financial_intelligence import (
     build_recommendations,
     calculate_goal,
     calculate_scenario,
-    clear_application_state,
-    delete_goal,
+    canonicalize_transactions,
+    cluster_spending,
+    detect_anomalies,
     detect_recurring_transactions,
     forecast_monthly_expenses,
-    get_anomaly_review_statuses,
-    load_goals,
     monthly_summary,
-    save_goal,
-    set_anomaly_review_status,
 )
-from src.pipeline import run_pipeline
-from src.predict_phonepe import (
-    FEEDBACK_PATH,
-    FINAL_RESULTS_PATH,
-    PREDICTIONS_PATH,
-    run_prediction,
+from src.phonepe_upload import (
+    MAX_UPLOAD_BYTES,
+    ParsedStatement,
+    PhonePeUploadError,
+    parse_phonepe_csv,
 )
-from src.review_transactions import save_correction
+from src.predict_phonepe import _load_model, predict_transactions
+from src.recommendations import build_personalized_suggestions
 
 
 st.set_page_config(
@@ -50,21 +69,21 @@ st.markdown(
     """
     <style>
     :root {
-      --ft-bg: #F5F0FF;
+      --ft-bg: #F8F7FC;
       --ft-surface: #FFFFFF;
       --ft-navy: #594481;
-      --ft-blue: #9B8AE6;
+      --ft-blue: #8064D8;
       --ft-soft: #EDE5FF;
-      --ft-border: #DCD0F5;
-      --ft-text: #332B45;
+      --ft-border: #E3DDF0;
+      --ft-text: #393047;
       --ft-muted: #77708A;
       --ft-green: #78BFA5;
       --ft-amber: #E8BF78;
-      --ft-red: #E69BA8;
+      --ft-red: #DE8F9B;
     }
 
     .stApp {
-      background: linear-gradient(135deg, #F5F0FF 0%, #FFF4F7 50%, #EDF7FF 100%);
+      background: var(--ft-bg);
       color: var(--ft-text);
     }
 
@@ -73,7 +92,7 @@ st.markdown(
     }
 
     [data-testid="stSidebar"] {
-      background: linear-gradient(180deg, #EDE5FF 0%, #F8EDFF 55%, #EAF5FF 100%);
+      background: #EDE5FF;
       border-right: 1px solid var(--ft-border);
     }
 
@@ -92,72 +111,72 @@ st.markdown(
     h3 { font-size: 1.05rem !important; }
 
     div[data-testid="stMetric"] {
-      background: linear-gradient(145deg, #FFFFFF, #F3EDFF);
-      border: 1px solid #DCD0F5;
+      background: #FFFFFF;
+      border: 1px solid var(--ft-border);
       padding: 18px 16px;
-      border-radius: 14px;
-      box-shadow: 0 4px 14px rgba(89, 68, 129, 0.07);
+      border-radius: 10px;
+      box-shadow: 0 3px 12px rgba(89, 68, 129, 0.05);
     }
 
     div[data-testid="stMetric"] label {
-      color: #77708A !important;
+      color: var(--ft-muted) !important;
     }
 
     div[data-testid="stMetric"] [data-testid="stMetricValue"] {
-      color: #594481 !important;
+      color: var(--ft-navy) !important;
       font-weight: 700;
     }
 
     div.stButton > button,
     div.stDownloadButton > button,
     div[data-testid="stFormSubmitButton"] > button {
-      border-radius: 10px;
-      border: 1px solid #CFC0F0;
-      background: #F0E9FF;
+      border-radius: 8px;
+      border: 1px solid #D6C9EF;
+      background: #EDE5FF;
       color: #594481;
       font-weight: 600;
       min-height: 2.5rem;
-      transition: all 0.2s ease;
+      transition: background-color 0.15s ease;
     }
 
     div.stButton > button:hover,
     div.stDownloadButton > button:hover {
-      background: #DFD3FF;
-      border-color: #9B8AE6;
+      background: #E3D5FF;
+      border-color: #B69AF7;
       color: #40305F;
     }
 
     div.stButton > button[kind="primary"],
     div[data-testid="stFormSubmitButton"] > button[kind="primary"] {
-      background: linear-gradient(135deg, #7962B8, #A08BE5);
+      background: #8064D8;
       color: #FFFFFF;
       border: none;
     }
 
     div.stButton > button[kind="primary"]:hover,
     div[data-testid="stFormSubmitButton"] > button[kind="primary"]:hover {
-      background: linear-gradient(135deg, #6850A7, #8C76D4);
+      background: #594481;
       color: #FFFFFF;
     }
 
     div[data-baseweb="select"] > div,
     div[data-baseweb="input"] > div,
     div[data-baseweb="textarea"] > div {
-      border-radius: 9px;
+      border-radius: 8px;
       border-color: #D6C9EF;
       background: #FFFFFF;
     }
 
     [data-testid="stDataFrame"] {
-      border: 1px solid #DCD0F5;
-      border-radius: 10px;
+      border: 1px solid var(--ft-border);
+      border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 3px 12px rgba(89, 68, 129, 0.05);
+      box-shadow: none;
     }
 
     [data-testid="stAlert"] {
-      border-radius: 12px;
-      border: 1px solid #E5D9F7;
+      border-radius: 8px;
+      border: 1px solid var(--ft-border);
     }
 
     [data-testid="stHeader"] {
@@ -169,7 +188,7 @@ st.markdown(
     }
 
     .ft-kicker {
-      color: #8B78B8;
+      color: var(--ft-blue);
       font-size: 0.78rem;
       letter-spacing: .08em;
       text-transform: uppercase;
@@ -185,40 +204,519 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-@st.cache_data(show_spinner=False)
-def load_results(path: str, modified: float) -> pd.DataFrame:
-    del modified
-    frame = pd.read_csv(
-        path,
-        dtype={"transaction_id": "string", "utr": "string"},
-        low_memory=False,
-    )
-    required = {
-        "transaction_date",
-        "transaction_type",
-        "amount",
-        "merchant",
-        "final_category",
-        "category_source",
-    }
-    missing = required.difference(frame.columns)
-    if missing:
-        raise ValueError(
-            "The final transaction file is missing required fields: "
-            + ", ".join(sorted(missing))
-        )
-    return frame
+@st.cache_resource(show_spinner=False)
+def load_classifier() -> object:
+    return _load_model()
 
 
-def current_transactions() -> pd.DataFrame:
-    if not FINAL_RESULTS_PATH.exists():
-        raise FileNotFoundError(
-            "No verified prediction output exists. Run `python -m src.pipeline` first."
-        )
-    return load_results(
-        str(FINAL_RESULTS_PATH),
-        FINAL_RESULTS_PATH.stat().st_mtime,
+def render_public_page() -> None:
+    st.markdown(
+        """
+        <style>
+        :root {
+          --ft-bg: #FFF6F2;
+          --ft-surface: #FFFFFF;
+          --ft-navy: #80566B;
+          --ft-blue: #B87591;
+          --ft-soft: #FFE0D5;
+          --ft-border: #F2D7DF;
+          --ft-text: #493642;
+          --ft-muted: #947D89;
+          --ft-green: #78BFA5;
+          --ft-amber: #E8BF78;
+          --ft-red: #DE8F83;
+        }
+
+        .stApp {
+          background: #FFF6F2;
+          color: var(--ft-text);
+        }
+
+        [data-testid="stMain"] {
+          background: transparent;
+        }
+
+        [data-testid="stMainBlockContainer"] {
+          padding-top: 3rem;
+          padding-bottom: 3rem;
+          max-width: 1250px;
+        }
+
+        h1, h2, h3 {
+          color: var(--ft-navy);
+          letter-spacing: -0.03em;
+          font-weight: 700;
+        }
+
+        h1 {
+          font-size: 2.8rem !important;
+          line-height: 1.2 !important;
+        }
+
+        h2 {
+          font-size: 1.6rem !important;
+        }
+
+        h3 {
+          font-size: 1.1rem !important;
+        }
+
+        .ft-kicker {
+          color: #B87591;
+          font-size: 0.78rem;
+          letter-spacing: .12em;
+          text-transform: uppercase;
+          font-weight: 700;
+          margin-bottom: 1rem;
+        }
+
+        [data-testid="stMainBlockContainer"] > div > div > div > div[data-testid="stVerticalBlock"] {
+          gap: 1rem;
+        }
+
+        div[data-testid="stForm"] {
+          background: #FFFFFF;
+          border: 1px solid #F2D7DF;
+          border-radius: 18px;
+          padding: 1.5rem;
+          box-shadow: 0 8px 28px rgba(128, 86, 107, 0.08);
+        }
+
+        div[data-testid="stForm"] label {
+          color: #80566B;
+          font-weight: 500;
+        }
+
+        div[data-baseweb="input"] > div,
+        div[data-baseweb="textarea"] > div {
+          border-radius: 9px;
+          border-color: #F0CFDA;
+          background: #FFFCFB;
+        }
+
+        div[data-baseweb="input"] input {
+          color: #493642;
+        }
+
+        div.stButton > button,
+        div[data-testid="stFormSubmitButton"] > button {
+          border-radius: 9px;
+          border: 1px solid #E9BFD0;
+          background: #FFE0D5;
+          color: #80566B;
+          font-weight: 600;
+          min-height: 2.8rem;
+          transition: all 0.2s ease;
+        }
+
+        div[data-testid="stFormSubmitButton"] > button[kind="primary"] {
+          background: #B87591;
+          color: #FFFFFF;
+          border: 1px solid #B87591;
+        }
+
+        div[data-testid="stFormSubmitButton"] > button[kind="primary"]:hover {
+          background: #965C78;
+          border-color: #965C78;
+          color: #FFFFFF;
+        }
+
+        div.stButton > button:hover {
+          background: #F7BFAF;
+          border-color: #DE8F83;
+          color: #493642;
+        }
+
+        div[data-testid="stRadio"] label {
+          color: #80566B;
+        }
+
+        div[data-testid="stRadio"] [role="radiogroup"] {
+          gap: 0.5rem;
+        }
+
+        div[data-testid="stCaptionContainer"] {
+          color: #947D89;
+        }
+
+        [data-testid="stAlert"] {
+          border-radius: 10px;
+          border: 1px solid #F2D7DF;
+        }
+
+        [data-testid="stHeader"] {
+          background: transparent;
+        }
+
+        #MainMenu, footer {
+          visibility: hidden;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
     )
+
+    st.markdown(
+        '<div class="ft-kicker">FinTwin AI · Personal finance intelligence</div>',
+        unsafe_allow_html=True,
+    )
+    st.title("Understand your transaction history.")
+    st.write(
+        "Import a PhonePe statement to review categories, explore spending patterns, "
+        "and plan goals using information you provide. Transaction data stays in the "
+        "local project database."
+    )
+    left, right = st.columns([1.3, 0.7])
+    with left:
+        st.subheader("A clearer view of your recorded finances")
+        st.write(
+            "Review transaction categories, examine repeated payment patterns, "
+            "compare recorded outgoings, and test savings assumptions."
+        )
+        st.caption(
+            "FinTwin is a local decision-support prototype. It is not a bank, "
+            "financial adviser, verified fraud detector, or source of account balances."
+        )
+    with right:
+        mode = st.radio("Account", ["Sign in", "Create account"], horizontal=True)
+        if mode == "Create account":
+            with st.form("register_form", clear_on_submit=False):
+                name = st.text_input("Full name")
+                email = st.text_input("Email address")
+                password = st.text_input(
+                    "Password", type="password",
+                    help="Use at least 12 characters.",
+                )
+                confirmation = st.text_input("Confirm password", type="password")
+                submitted = st.form_submit_button("Create account", type="primary")
+            if submitted:
+                if password != confirmation:
+                    st.error("The passwords do not match.")
+                else:
+                    try:
+                        register_user(name, email, password)
+                        user, token, _expires = authenticate(email, password)
+                        st.session_state.clear()
+                        st.session_state["_fintwin_session_token"] = token
+                        st.session_state["_fintwin_user_id"] = user["id"]
+                        st.rerun()
+                    except (ValueError, RuntimeError, OSError, sqlite3.Error) as error:
+                        st.error(str(error))
+        else:
+            with st.form("login_form"):
+                email = st.text_input("Email address")
+                password = st.text_input("Password", type="password")
+                submitted = st.form_submit_button("Sign in", type="primary")
+            if submitted:
+                try:
+                    user, token, _expires = authenticate(email, password)
+                    st.session_state.clear()
+                    st.session_state["_fintwin_session_token"] = token
+                    st.session_state["_fintwin_user_id"] = user["id"]
+                    st.rerun()
+                except AuthenticationError as error:
+                    st.error(str(error))
+                except (RuntimeError, OSError, sqlite3.Error) as error:
+                    st.error(f"Sign-in is unavailable: {error}")
+
+def _get_authenticated_user() -> dict[str, str] | None:
+    token = str(st.session_state.get("_fintwin_session_token", ""))
+    user = get_session_user(token)
+    if user is None:
+        if token:
+            st.session_state.clear()
+        return None
+    st.session_state["_fintwin_user_id"] = user["id"]
+    return user
+
+
+def _logout() -> None:
+    token = str(st.session_state.get("_fintwin_session_token", ""))
+    try:
+        revoke_session(token)
+    finally:
+        st.session_state.clear()
+    st.rerun()
+
+
+def _filter_transactions(frame: pd.DataFrame, user_id: str) -> pd.DataFrame:
+    if frame.empty:
+        return frame
+    filtered = frame.copy()
+    period = st.sidebar.selectbox(
+        "Analysis period",
+        ["All history", "Month", "Year", "Custom dates"],
+        key="analysis_period",
+    )
+    dates = pd.to_datetime(filtered["transaction_date"], errors="coerce")
+    if period == "Month":
+        months = sorted(dates.dt.to_period("M").astype(str).dropna().unique())
+        selected = st.sidebar.selectbox("Month", months, key="analysis_month")
+        filtered = filtered.loc[dates.dt.to_period("M").astype(str).eq(selected)]
+    elif period == "Year":
+        years = sorted(dates.dt.year.dropna().astype(int).unique().tolist())
+        year = st.sidebar.selectbox("Year", years, key="analysis_year")
+        filtered = filtered.loc[dates.dt.year.eq(year)]
+    elif period == "Custom dates":
+        min_date = dates.min().date()
+        max_date = dates.max().date()
+        value = st.sidebar.date_input(
+            "Date range", value=(min_date, max_date), min_value=min_date, max_value=max_date,
+            key="analysis_custom_dates",
+        )
+        if isinstance(value, tuple) and len(value) == 2:
+            start, end = value
+            filtered = filtered.loc[
+                dates.dt.date.between(start, end, inclusive="both")
+            ]
+
+    category_options = ["All"] + sorted(filtered["final_category"].dropna().unique())
+    category = st.sidebar.selectbox("Category", category_options, key="analysis_category")
+    if category != "All":
+        filtered = filtered.loc[filtered["final_category"].eq(category)]
+    merchant_options = ["All"] + sorted(filtered["merchant"].dropna().unique())
+    merchant = st.sidebar.selectbox("Merchant", merchant_options, key="analysis_merchant")
+    if merchant != "All":
+        filtered = filtered.loc[filtered["merchant"].eq(merchant)]
+    tx_type = st.sidebar.selectbox(
+        "Direction", ["All", "DEBIT", "CREDIT"], key="analysis_type"
+    )
+    if tx_type != "All":
+        filtered = filtered.loc[filtered["transaction_type"].eq(tx_type)]
+    review_options = ["All"] + sorted(filtered["review_status"].dropna().unique())
+    review = st.sidebar.selectbox("Review status", review_options, key="analysis_review")
+    if review != "All":
+        filtered = filtered.loc[filtered["review_status"].eq(review)]
+    history = get_import_history(user_id)
+    if not history.empty:
+        import_labels = {
+            f"{row['original_filename']} · {row['uploaded_at']}": row["id"]
+            for row in history.to_dict(orient="records")
+        }
+        selected_import = st.sidebar.selectbox(
+            "Statement import", ["All"] + list(import_labels), key="analysis_import"
+        )
+        if selected_import != "All":
+            filtered = filtered.loc[
+                filtered["import_id"].eq(import_labels[selected_import])
+            ]
+    return filtered.copy()
+
+
+def upload_page(user: dict[str, str]) -> None:
+    page_header(
+        "Statement upload & history",
+        "Upload PhonePe CSV statements. Preview and validation happen before user-scoped records are committed.",
+    )
+    st.write(f"Welcome, {user['name']}. Your imported transactions are private to this account.")
+    try:
+        configured_limit = int(
+            os.environ.get(
+                "FINTWIN_MAX_UPLOAD_MB",
+                str(MAX_UPLOAD_BYTES // (1024 * 1024)),
+            )
+        )
+    except ValueError:
+        st.error("FINTWIN_MAX_UPLOAD_MB must be a whole-number file size.")
+        return
+    if not 1 <= configured_limit <= 100:
+        st.error("FINTWIN_MAX_UPLOAD_MB must be between 1 and 100.")
+        return
+    max_bytes = configured_limit * 1024 * 1024
+    uploads = st.file_uploader(
+        "Choose one or more PhonePe CSV statements",
+        type=["csv"],
+        accept_multiple_files=True,
+        help=f"Maximum {configured_limit} MB per file. Files are parsed in memory and are not saved as public uploads.",
+    )
+    statements: list[ParsedStatement] = []
+    cache_key = f"_fintwin_upload_cache_{user['id']}"
+    imported_key = f"_fintwin_imported_hashes_{user['id']}"
+    cached_statements = st.session_state.setdefault(cache_key, {})
+    imported_hashes = st.session_state.setdefault(imported_key, set())
+    if uploads:
+        active_hashes: set[str] = set()
+        for upload in uploads:
+            try:
+                content = upload.getvalue()
+                content_hash = hashlib.sha256(content).hexdigest()
+                if content_hash in imported_hashes:
+                    st.caption(
+                        f"{upload.name}: this exact file was already imported into this account."
+                    )
+                    continue
+                if content_hash in active_hashes:
+                    st.caption(
+                        f"{upload.name}: identical file content is already selected."
+                    )
+                    continue
+                active_hashes.add(content_hash)
+                statement = cached_statements.get(content_hash)
+                if statement is None:
+                    statement = parse_phonepe_csv(
+                        content, upload.name, max_bytes=max_bytes
+                    )
+                    cached_statements[content_hash] = statement
+                statements.append(statement)
+            except PhonePeUploadError as error:
+                st.error(f"{upload.name}: {error}")
+        for inactive_hash in set(cached_statements).difference(active_hashes):
+            del cached_statements[inactive_hash]
+        for statement in statements:
+            st.subheader(statement.filename)
+            existing_duplicates = count_import_duplicate_candidates(
+                user["id"], statement
+            )
+            metrics = st.columns(5)
+            metrics[0].metric("Total rows", statement.total_rows)
+            metrics[1].metric("Valid rows", statement.valid_rows)
+            metrics[2].metric("Rejected rows", len(statement.rejected))
+            metrics[3].metric(
+                "Duplicate candidates",
+                statement.duplicate_candidates
+                + existing_duplicates["exact"]
+                + existing_duplicates["possible"],
+            )
+            metrics[4].metric(
+                "Date coverage",
+                f"{statement.date_start or '—'} – {statement.date_end or '—'}",
+            )
+            preview_columns = [
+                "transaction_date", "transaction_time", "merchant",
+                "transaction_type", "amount", "category", "duplicate_type",
+            ]
+            st.dataframe(
+                statement.processed[preview_columns].head(12),
+                hide_index=True,
+                width="stretch",
+            )
+            if existing_duplicates["exact"] or existing_duplicates["possible"]:
+                st.caption(
+                    f"Already in this account: {existing_duplicates['exact']} exact "
+                    f"transaction-ID match(es); {existing_duplicates['possible']} "
+                    "possible matches without IDs. Exact matches are skipped; possible "
+                    "matches remain reviewable."
+                )
+            if statement.rejected:
+                st.warning(f"{len(statement.rejected)} row(s) will be excluded and recorded.")
+                st.dataframe(
+                    pd.DataFrame(
+                        [
+                            {"source_line": row.source_line, "reason": row.reason}
+                            for row in statement.rejected
+                        ]
+                    ),
+                    hide_index=True,
+                    width="stretch",
+                )
+    else:
+        cached_statements.clear()
+        st.info(
+            "No statement has been selected. Your existing financial workspaces "
+            "remain available after an import."
+        )
+    last_import_notice = st.session_state.pop("_fintwin_last_import", None)
+    if last_import_notice:
+        if last_import_notice["imported"]:
+            st.success(
+                "Completed imports: " + " · ".join(last_import_notice["imported"])
+            )
+        if last_import_notice["failures"]:
+            st.error(
+                "Some files could not be imported; each failed import rolled back. "
+                + " · ".join(last_import_notice["failures"])
+            )
+        overview_page(user_transactions(user), user)
+    if statements and st.button("Import valid rows", type="primary"):
+        try:
+            classifier = load_classifier()
+            imported = []
+            failures = []
+            for statement in statements:
+                try:
+                    processed = statement.processed.drop(
+                        columns=["amount_minor", "duplicate_type"], errors="ignore"
+                    ).copy()
+                    predictions = predict_transactions(
+                        processed,
+                        model=classifier,
+                        feedback=get_user_feedback(user["id"]),
+                    )
+                    result = save_import(user["id"], statement, predictions)
+                    imported_hashes.add(statement.file_sha256)
+                    imported.append(
+                        f"{statement.filename}: {result['accepted_rows']} saved, "
+                        f"{result['rejected_rows']} rejected, "
+                        f"{result['duplicate_rows']} exact duplicates skipped, "
+                        f"{result['possible_duplicate_rows']} possible matches retained for review"
+                    )
+                except (OSError, ValueError, RuntimeError) as error:
+                    failures.append(f"{statement.filename}: {error}")
+            for statement in statements:
+                cached_statements.pop(statement.file_sha256, None)
+            if imported:
+                st.session_state["_fintwin_last_import"] = {
+                    "imported": imported,
+                    "failures": failures,
+                }
+            if failures:
+                if not imported:
+                    st.error(
+                        "Some files could not be imported; each failed import rolled back. "
+                        + " · ".join(failures)
+                    )
+            if imported:
+                st.rerun()
+        except (OSError, ValueError, RuntimeError) as error:
+            st.error(f"Import failed; the affected file was not partially saved: {error}")
+
+    st.subheader("Your import history")
+    history = get_import_history(user["id"])
+    if history.empty:
+        st.caption("Imports you make will appear here.")
+    else:
+        st.dataframe(
+            history[
+                [
+                    "original_filename", "uploaded_at", "period_start", "period_end",
+                    "total_rows", "accepted_rows", "rejected_rows", "duplicate_rows",
+                    "possible_duplicate_rows", "status", "error_summary",
+                ]
+            ],
+            hide_index=True,
+            width="stretch",
+        )
+        import_id = st.selectbox(
+            "Inspect transactions from an import",
+            history["id"].tolist(),
+            format_func=lambda selected_id: history.loc[
+                history["id"].eq(selected_id), "original_filename"
+            ].iloc[0],
+        )
+        imported_transactions = get_user_transactions(
+            user["id"], import_id=str(import_id)
+        )
+        if imported_transactions.empty:
+            st.info("This import has no saved transaction rows.")
+        else:
+            columns = [
+                column
+                for column in (
+                    "transaction_date", "transaction_time", "merchant", "amount",
+                    "transaction_type", "final_category", "category_source",
+                    "review_status",
+                )
+                if column in imported_transactions
+            ]
+            st.dataframe(
+                imported_transactions[columns],
+                hide_index=True,
+                width="stretch",
+            )
+
+
+def user_transactions(user: dict[str, str]) -> pd.DataFrame:
+    return get_user_transactions(user["id"])
 
 
 def money(value: float | int) -> str:
@@ -226,6 +724,8 @@ def money(value: float | int) -> str:
 
 
 def month_picker(frame: pd.DataFrame, key: str) -> str:
+    if frame.empty:
+        return ""
     months = sorted(
         pd.to_datetime(frame["transaction_date"]).dt.to_period("M").astype(str).unique()
     )
@@ -244,11 +744,107 @@ def selected_month_records(frame: pd.DataFrame, month: str) -> pd.DataFrame:
     return frame.loc[dates.dt.to_period("M").astype(str).eq(month)].copy()
 
 
-def overview_page(frame: pd.DataFrame) -> None:
+def overview_page(frame: pd.DataFrame, user: dict[str, str]) -> None:
+    st.markdown(
+        """
+        <style>
+        :root {
+          --ft-page-accent: #48A77A;
+          --ft-page-soft: #EFFBF5;
+          --ft-page-border: #D0F2E0;
+        }
+
+        div[data-testid="stMetric"] {
+          background: #FFFFFF;
+          border: 1px solid var(--ft-page-border);
+          border-top: 3px solid var(--ft-page-accent);
+          padding: 18px 16px;
+          border-radius: 10px;
+          box-shadow: 0 3px 12px rgba(72, 167, 122, 0.06);
+        }
+
+        div[data-testid="stMetric"] [data-testid="stMetricValue"] {
+          color: #327C5B !important;
+          font-weight: 700;
+        }
+
+        div[data-testid="stMetric"] label {
+          color: #6D897A !important;
+        }
+
+        div[data-testid="stMetric"] [data-testid="stMetricDelta"] {
+          color: #48A77A !important;
+        }
+
+        [data-testid="stDataFrame"] {
+          border: 1px solid #D0F2E0;
+          border-radius: 10px;
+          overflow: hidden;
+        }
+
+        div[data-baseweb="select"] > div {
+          border-color: #B9E4CB;
+          border-radius: 8px;
+        }
+
+        [data-testid="stAlert"] {
+          border-radius: 9px;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        """
+        <style>
+        /* Main application background */
+        .stApp,
+        [data-testid="stAppViewContainer"],
+        [data-testid="stMain"],
+        [data-testid="stMainBlockContainer"] {
+            background-color: #EFFBF5 !important;
+        }
+
+        /* Sidebar background */
+        [data-testid="stSidebar"],
+        [data-testid="stSidebar"] > div {
+            background-color: #E3F5E9 !important;
+        }
+
+        /* Main content area */
+        [data-testid="stMainBlockContainer"] {
+            padding-top: 2rem;
+        }
+
+        /* Metric cards */
+        div[data-testid="stMetric"] {
+            background-color: #FFFFFF !important;
+            border: 1px solid #D0F2E0;
+            border-top: 3px solid #48A77A;
+            padding: 18px 16px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(72, 167, 122, 0.06);
+        }
+
+        div[data-testid="stMetric"] [data-testid="stMetricValue"] {
+            color: #327C5B !important;
+        }
+
+        [data-testid="stDataFrame"] {
+            border: 1px solid #D0F2E0;
+            border-radius: 10px;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
     page_header(
         "Financial overview",
         "Observed transaction activity from your PhonePe statement. Missing inputs are not treated as zero.",
     )
+    if frame.empty:
+        st.info("No imported transactions are available for this account and period.")
+        return
     month = month_picker(frame, "overview_month")
     latest_date = pd.to_datetime(frame["transaction_date"]).max().date()
     if latest_date < date.today():
@@ -262,6 +858,7 @@ def overview_page(frame: pd.DataFrame) -> None:
         st.info("There are no valid transactions in this period.")
         return
     values = summary.iloc[0]
+    ledger = canonicalize_transactions(selected)
     income_value = (
         money(values["salary_income_category_credits"])
         if values["salary_income_category_credit_count"] > 0
@@ -283,6 +880,70 @@ def overview_page(frame: pd.DataFrame) -> None:
             f"{money(values['unclassified_debits'])}. These may include transfers or other unknown purposes."
         )
 
+    debit_total = float(
+        ledger.loc[ledger["transaction_type"].eq("DEBIT"), "amount"].sum()
+    )
+    credit_total = float(
+        ledger.loc[ledger["transaction_type"].eq("CREDIT"), "amount"].sum()
+    )
+    largest_debit = ledger.loc[ledger["transaction_type"].eq("DEBIT"), "amount"]
+    daily_expenses = ledger.loc[ledger["is_consumption_expense"]].groupby(
+        ledger.loc[ledger["is_consumption_expense"], "transaction_date"].dt.date
+    )["amount"].sum()
+    daily_average = float(daily_expenses.mean()) if not daily_expenses.empty else 0.0
+    second_metrics = st.columns(4)
+    second_metrics[0].metric("Total recorded debits", money(debit_total))
+    second_metrics[1].metric("Total recorded credits", money(credit_total))
+    second_metrics[2].metric(
+        "Largest recorded debit",
+        money(float(largest_debit.max())) if not largest_debit.empty else "—",
+    )
+    second_metrics[3].metric(
+        "Average daily consumption",
+        money(daily_average),
+        help="Average over dates with classified consumption transactions in this period.",
+    )
+    category_totals = (
+        ledger.loc[ledger["is_consumption_expense"]]
+        .groupby("final_category")["amount"]
+        .sum()
+        .sort_values(ascending=False)
+    )
+    try:
+        anomaly_count = int(detect_anomalies(selected)["anomaly"].eq(-1).sum())
+    except ValueError:
+        anomaly_count = 0
+    goals = list_user_goals(user["id"])
+    goal_progress = (
+        float(
+            (
+                goals["current_saved_minor"].astype(float)
+                / goals["target_amount_minor"].replace(0, pd.NA).astype(float)
+            )
+            .dropna()
+            .clip(upper=1)
+            .mean()
+            * 100
+        )
+        if not goals.empty else None
+    )
+    third_metrics = st.columns(4)
+    third_metrics[0].metric(
+        "Highest spending category",
+        str(category_totals.index[0]) if not category_totals.empty else "—",
+        money(float(category_totals.iloc[0])) if not category_totals.empty else None,
+    )
+    third_metrics[1].metric(
+        "Transactions needing review",
+        int(ledger["final_category"].eq("Needs Review").sum()),
+    )
+    third_metrics[2].metric("Anomaly signals to review", anomaly_count)
+    third_metrics[3].metric(
+        "User-entered goal progress",
+        f"{goal_progress:.1f}%" if goal_progress is not None else "No saved goals",
+        help="Average across saved goals, based on user-entered saved amounts.",
+    )
+
     col_a, col_b = st.columns([1.1, 0.9])
     with col_a:
         st.subheader("Recorded spending by category")
@@ -298,7 +959,7 @@ def overview_page(frame: pd.DataFrame) -> None:
         if category_totals.empty:
             st.info("No categorized consumption debits were observed.")
         else:
-            st.bar_chart(category_totals, horizontal=True, color="#386FA4")
+            st.bar_chart(category_totals, horizontal=True, color="#78BFA5")
     with col_b:
         st.subheader("Recent transactions")
         recent_columns = [
@@ -317,13 +978,90 @@ def overview_page(frame: pd.DataFrame) -> None:
     )
 
 
-def transaction_page(frame: pd.DataFrame) -> None:
+def transaction_page(frame: pd.DataFrame, user: dict[str, str]) -> None:
+    st.markdown(
+        """
+        <style>
+        .stApp,
+        [data-testid="stAppViewContainer"],
+        [data-testid="stMain"],
+        [data-testid="stMainBlockContainer"] {
+            background-color: #F5F0FF !important;
+        }
+
+        [data-testid="stSidebar"],
+        [data-testid="stSidebar"] > div {
+            background-color: #EAE0FA !important;
+        }
+
+        [data-testid="stMainBlockContainer"] {
+            padding-top: 2rem;
+        }
+
+        div[data-baseweb="input"] > div,
+        div[data-baseweb="select"] > div,
+        div[data-baseweb="textarea"] > div {
+            background-color: #FFFFFF !important;
+            border-color: #D8C8F0 !important;
+            border-radius: 9px !important;
+        }
+
+        div[data-testid="stDataFrame"] {
+            border: 1px solid #DDD0F3;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #FFFFFF;
+        }
+
+        div[data-testid="stMetric"] {
+            background-color: #FFFFFF !important;
+            border: 1px solid #DDD0F3;
+            border-top: 3px solid #9878CC;
+            padding: 16px;
+            border-radius: 10px;
+        }
+
+        div[data-testid="stAlert"] {
+            border-radius: 10px;
+        }
+
+        div[data-testid="stForm"] {
+            background-color: #FCFAFF;
+            border: 1px solid #DDD0F3;
+            border-radius: 12px;
+            padding: 18px;
+        }
+
+        div.stButton > button,
+        div[data-testid="stFormSubmitButton"] > button {
+            background-color: #9878CC;
+            color: #FFFFFF;
+            border: 1px solid #9878CC;
+            border-radius: 9px;
+        }
+
+        div.stButton > button:hover,
+        div[data-testid="stFormSubmitButton"] > button:hover {
+            background-color: #8261B7;
+            color: #FFFFFF;
+            border-color: #8261B7;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
     page_header(
         "Transaction intelligence",
         "Search and review classifications. Corrections are saved locally and applied on the next classification pass.",
     )
+    if frame.empty:
+        st.info("Import a statement to search or review your transactions.")
+        return
+
     month = month_picker(frame, "tx_month")
     visible = selected_month_records(frame, month)
+
     filter_cols = st.columns([1.3, 1, 1])
     query = filter_cols[0].text_input("Search merchant or description")
     category = filter_cols[1].selectbox(
@@ -332,6 +1070,7 @@ def transaction_page(frame: pd.DataFrame) -> None:
     tx_type = filter_cols[2].selectbox(
         "Transaction type", ["All", "DEBIT", "CREDIT"]
     )
+
     if query.strip():
         needle = query.strip().casefold()
         text = (
@@ -340,10 +1079,13 @@ def transaction_page(frame: pd.DataFrame) -> None:
             + visible["transaction_details"].fillna("").astype(str)
         ).str.casefold()
         visible = visible.loc[text.str.contains(needle, regex=False)]
+
     if category != "All":
         visible = visible.loc[visible["final_category"].eq(category)]
+
     if tx_type != "All":
         visible = visible.loc[visible["transaction_type"].eq(tx_type)]
+
     columns = [
         name for name in (
             "transaction_date", "transaction_time", "merchant", "transaction_details",
@@ -351,6 +1093,7 @@ def transaction_page(frame: pd.DataFrame) -> None:
             "ml_confidence", "category_source",
         ) if name in visible.columns
     ]
+
     st.dataframe(
         visible[columns],
         hide_index=True,
@@ -364,9 +1107,11 @@ def transaction_page(frame: pd.DataFrame) -> None:
 
     needs_review = frame.loc[frame["final_category"].eq("Needs Review")]
     st.subheader("Correct a category")
+
     if frame.empty:
         st.info("No transactions are available to correct.")
         return
+
     options = frame.reset_index(drop=True)
     selected_index = st.selectbox(
         "Choose a transaction",
@@ -378,7 +1123,9 @@ def transaction_page(frame: pd.DataFrame) -> None:
             f"{options.at[index, 'final_category']}"
         ),
     )
+
     row = options.iloc[selected_index]
+
     with st.form("transaction_correction"):
         correction_scope = st.radio(
             "Apply correction to",
@@ -390,54 +1137,113 @@ def transaction_page(frame: pd.DataFrame) -> None:
             "Correct category", BASE_CATEGORIES
         )
         confirm_merchant = False
+
         if correction_scope.startswith("All transactions"):
             confirm_merchant = st.checkbox(
                 "I confirm this merchant consistently represents the selected category."
             )
-        submitted = st.form_submit_button("Save correction and refresh predictions", type="primary")
+
+        submitted = st.form_submit_button(
+            "Save correction and refresh predictions", type="primary"
+        )
+
     if submitted:
         if correction_scope.startswith("All transactions") and not confirm_merchant:
             st.error("Confirm the merchant-wide correction or select transaction-only.")
         else:
             try:
-                save_correction(
-                    str(row.get("merchant", "")),
+                save_user_correction(
+                    user["id"],
+                    int(row["record_id"]),
                     new_category,
-                    transaction_id=(
-                        None
-                        if correction_scope.startswith("All transactions")
-                        else str(row["transaction_id"])
-                    ),
+                    merchant_wide=correction_scope.startswith("All transactions"),
                 )
-                updated = run_prediction()
-                from src.pipeline import refresh_derived_outputs
-
-                refresh_derived_outputs(updated)
-                st.cache_data.clear()
-                st.success("Correction saved; predictions and dependent analytics refreshed.")
+                st.success("Correction saved for this account.")
                 st.rerun()
             except (OSError, ValueError, RuntimeError) as error:
-                st.error(f"Could not save and apply this correction: {error}")
-    st.caption(
-        f"{len(needs_review)} transactions currently need review. "
-        f"Saved feedback file: {FEEDBACK_PATH.name}."
+                st.error(f"Could not save the correction: {error}")
+
+    st.caption(f"{len(needs_review)} transactions currently need category review.")
+def spending_page(frame: pd.DataFrame) -> None:
+    st.markdown(
+        """
+        <style>
+        .stApp,
+        [data-testid="stAppViewContainer"],
+        [data-testid="stMain"],
+        [data-testid="stMainBlockContainer"] {
+            background-color: #FFF4EC !important;
+        }
+
+        [data-testid="stSidebar"],
+        [data-testid="stSidebar"] > div {
+            background-color: #FBE5D7 !important;
+        }
+
+        [data-testid="stMainBlockContainer"] {
+            padding-top: 2rem;
+        }
+
+        div[data-baseweb="input"] > div,
+        div[data-baseweb="select"] > div {
+            background-color: #FFFFFF !important;
+            border-color: #F0CCB5 !important;
+            border-radius: 9px !important;
+        }
+
+        div[data-testid="stDataFrame"] {
+            border: 1px solid #F0D1BE;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: #FFFFFF;
+        }
+
+        div[data-testid="stMetric"] {
+            background-color: #FFFFFF !important;
+            border: 1px solid #F0D1BE;
+            border-top: 3px solid #D99068;
+            padding: 16px;
+            border-radius: 10px;
+        }
+
+        div[data-testid="stAlert"] {
+            border-radius: 10px;
+        }
+
+        div.stButton > button,
+        div[data-testid="stFormSubmitButton"] > button {
+            background-color: #D99068;
+            color: #FFFFFF;
+            border: 1px solid #D99068;
+            border-radius: 9px;
+        }
+
+        div.stButton > button:hover,
+        div[data-testid="stFormSubmitButton"] > button:hover {
+            background-color: #BF7953;
+            color: #FFFFFF;
+            border-color: #BF7953;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
     )
 
-
-def spending_page(frame: pd.DataFrame) -> None:
     page_header(
         "Spending analytics",
         "Observed spending, transparent category proxies, recurrence evidence, and exploratory clusters.",
     )
+
     summary = monthly_summary(frame)
     st.subheader("Monthly observed totals")
+
     if summary.empty:
         st.info("No monthly activity is available.")
     else:
         chart = summary.set_index("month")[
             ["consumption_expenses", "debit_transfers", "net_observed_cash_flow"]
         ]
-        st.line_chart(chart, color=["#386FA4", "#A16207", "#18794E"])
+        st.line_chart(chart, color=["#D99068", "#C49A6C", "#78A98B"])
         st.dataframe(summary, hide_index=True, width="stretch")
 
     flexibility = add_expense_flexibility(frame)
@@ -445,6 +1251,7 @@ def spending_page(frame: pd.DataFrame) -> None:
     st.caption(
         "A category is not proof of a transaction's purpose. These labels are rules-based estimates, not user-verified facts."
     )
+
     st.dataframe(
         flexibility.loc[
             flexibility["transaction_type"].eq("DEBIT"),
@@ -453,26 +1260,40 @@ def spending_page(frame: pd.DataFrame) -> None:
         hide_index=True,
         width="stretch",
     )
+
     recommendations = build_recommendations(frame)
     st.subheader("Illustrative adjustment opportunities")
     st.caption("Estimated impact assumes a 10% reduction in observed potentially adjustable categories; it is not a promised saving.")
+
     if recommendations.empty:
         st.info("The available transactions do not support an adjustable-category estimate.")
     else:
         st.dataframe(recommendations, hide_index=True, width="stretch")
+
     st.subheader("Recurring payment signals")
     recurring = detect_recurring_transactions(frame)
+
     if recurring.empty:
         st.info("No repeated merchant transactions provide a recurrence signal.")
     else:
         st.dataframe(recurring, hide_index=True, width="stretch")
         st.caption("Observed patterns cover only the statement period; they do not establish a future commitment.")
-    cluster_path = REPORT_DIR / "spending_clusters.json"
-    if cluster_path.exists():
-        st.subheader("Exploratory spending clusters")
-        st.json(json.loads(cluster_path.read_text(encoding="utf-8")))
-        st.caption("K-Means cluster IDs are descriptive groups, not financial-health ratings.")
 
+    if len(frame) >= 3:
+        try:
+            clusters, metrics = cluster_spending(frame)
+            st.subheader("Exploratory spending clusters")
+            st.dataframe(
+                metrics["summary"],
+                hide_index=True,
+                width="stretch",
+            )
+            st.caption(
+                f"{len(clusters)} transactions grouped using this account's selected "
+                "history. Cluster IDs are descriptive, not financial-health ratings."
+            )
+        except ValueError as error:
+            st.caption(f"Clustering unavailable for this selection: {error}")
 
 def twin_page(frame: pd.DataFrame) -> None:
     page_header(
@@ -555,6 +1376,9 @@ def scenario_page(frame: pd.DataFrame) -> None:
         "Scenario lab",
         "Test explicit what-if assumptions against observed spending. Results are deterministic estimates, not predictions or guarantees.",
     )
+    if frame.empty:
+        st.info("Import transactions before estimating expense assumptions.")
+        return
     month = month_picker(frame, "scenario_month")
     st.session_state.setdefault("scenario_comparison", [])
     selected = selected_month_records(frame, month)
@@ -660,121 +1484,277 @@ def scenario_page(frame: pd.DataFrame) -> None:
         st.info("Calculate a scenario to add a comparison row.")
 
 
-def goals_page() -> None:
+def goals_page(user: dict[str, str]) -> None:
     page_header(
         "Financial goals",
-        "Store goals locally and estimate required contributions. Feasibility requires an explicit contribution assumption.",
+        "Goals are stored privately for this account. Contribution feasibility is calculated only from values you provide.",
+    )
+    goals = list_user_goals(user["id"])
+    goal_options = {"Create a new goal": None}
+    if not goals.empty:
+        goal_options.update(
+            {
+                f"{row['title']} · {row['target_date']}": row["id"]
+                for row in goals.to_dict(orient="records")
+            }
+        )
+    selected_label = st.selectbox("Goal to edit", list(goal_options))
+    selected_id = goal_options[selected_label]
+    selected_goal = (
+        goals.loc[goals["id"].eq(selected_id)].iloc[0]
+        if selected_id is not None
+        else None
     )
     with st.form("goal_form"):
-        name = st.text_input("Goal name")
-        amount = st.number_input("Target amount (INR)", min_value=0.0, value=0.0, step=1000.0)
-        saved = st.number_input("Already saved (INR; user supplied)", min_value=0.0, value=0.0, step=1000.0)
-        target = st.date_input("Target date", value=date.today())
+        name = st.text_input(
+            "Goal name",
+            value=str(selected_goal["title"]) if selected_goal is not None else "",
+        )
+        amount = st.number_input(
+            "Target amount (INR)",
+            min_value=0.0,
+            value=(
+                int(selected_goal["target_amount_minor"]) / 100
+                if selected_goal is not None else 0.0
+            ),
+            step=1000.0,
+        )
+        saved = st.number_input(
+            "Already saved (INR; user supplied)",
+            min_value=0.0,
+            value=(
+                int(selected_goal["current_saved_minor"]) / 100
+                if selected_goal is not None else 0.0
+            ),
+            step=1000.0,
+        )
+        target = st.date_input(
+            "Target date",
+            value=(
+                pd.Timestamp(selected_goal["target_date"]).date()
+                if selected_goal is not None else date.today()
+            ),
+        )
         submitted = st.form_submit_button("Save or update goal", type="primary")
     if submitted:
         try:
             if not name.strip() or amount <= 0 or target <= date.today():
                 raise ValueError("Enter a goal name, positive target amount, and a future target date.")
-            save_goal(
-                {
-                    "goal_name": name.strip(),
-                    "goal_amount": amount,
-                    "current_saved": saved,
-                    "target_date": target.isoformat(),
-                }
+            amount_minor = int(
+                (Decimal(str(amount)) * 100).quantize(
+                    Decimal("1"), rounding=ROUND_HALF_UP
+                )
             )
-            st.success("Goal saved locally.")
+            saved_minor = int(
+                (Decimal(str(saved)) * 100).quantize(
+                    Decimal("1"), rounding=ROUND_HALF_UP
+                )
+            )
+            save_user_goal(
+                user["id"],
+                name,
+                amount_minor,
+                saved_minor,
+                target.isoformat(),
+                goal_id=str(selected_id) if selected_id is not None else None,
+            )
+            st.success("Goal saved for this account.")
             st.rerun()
         except (ValueError, OSError) as error:
             st.error(str(error))
-    goals = load_goals()
+    goals = list_user_goals(user["id"])
     st.subheader("Saved goals")
     if goals.empty:
         st.info("No goals have been saved yet.")
         return
-    st.dataframe(goals, hide_index=True, width="stretch")
-    options = goals["goal_name"].tolist()
-    selected_goal = st.selectbox("Evaluate goal", options)
-    goal = goals.loc[goals["goal_name"].eq(selected_goal)].iloc[0]
+    display_goals = goals.copy()
+    display_goals["target_amount"] = display_goals["target_amount_minor"] / 100
+    display_goals["current_saved"] = display_goals["current_saved_minor"] / 100
+    st.dataframe(
+        display_goals[
+            ["title", "target_amount", "current_saved", "target_date", "status"]
+        ],
+        hide_index=True,
+        width="stretch",
+        column_config={
+            "target_amount": st.column_config.NumberColumn("Target (INR)", format="₹%.2f"),
+            "current_saved": st.column_config.NumberColumn("Saved (INR)", format="₹%.2f"),
+        },
+    )
+    goal_ids = goals["id"].tolist()
+    selected_goal_id = st.selectbox(
+        "Evaluate goal",
+        goal_ids,
+        format_func=lambda goal_id: goals.loc[
+            goals["id"].eq(goal_id), "title"
+        ].iloc[0],
+    )
+    goal = goals.loc[goals["id"].eq(selected_goal_id)].iloc[0]
     target_date = pd.Timestamp(goal["target_date"]).date()
     if target_date <= date.today():
-        st.warning("This goal's target date has passed; choose a new future target date to reassess it.")
-        return
-    months = max(
-        (pd.Period(pd.Timestamp(target_date), freq="M") - pd.Period(date.today(), freq="M")).n + 1,
-        1,
-    )
-    contribution_text = st.text_input(
-        "Monthly contribution available for this goal (INR; optional)",
-        key="goal_contribution",
-    )
-    try:
-        contribution = (
-            float(contribution_text.replace(",", "").replace("₹", ""))
-            if contribution_text.strip()
-            else None
-        )
-        if contribution is not None and (not math.isfinite(contribution) or contribution < 0):
-            raise ValueError("Contribution must be finite and non-negative.")
-        result = calculate_goal(
-            float(goal["goal_amount"]),
-            float(goal["current_saved"]),
-            months,
-            contribution,
-        )
-    except ValueError as error:
-        st.error(str(error))
-        return
-    st.write(
-        f"Required contribution: **{money(result['required_monthly_contribution'])}/month** "
-        f"for {months} month(s)."
-    )
-    alternate_months = st.number_input(
-        "Compare an alternative deadline (months from now)",
-        min_value=1,
-        value=max(months + 3, 1),
-        step=1,
-    )
-    alternate_result = calculate_goal(
-        float(goal["goal_amount"]),
-        float(goal["current_saved"]),
-        int(alternate_months),
-    )
-    st.write(
-        f"At {int(alternate_months)} months, required contribution would be "
-        f"**{money(alternate_result['required_monthly_contribution'])}/month**."
-    )
-    if result["feasible_under_assumption"] is None:
-        st.info("Feasibility is unknown until you provide an available monthly contribution.")
-    elif result["feasible_under_assumption"]:
-        st.success("Feasible under the contribution assumption entered.")
+        st.warning("This goal's target date has passed; edit it to reassess the deadline.")
     else:
-        st.warning(
-            f"Shortfall under that assumption: {money(result['monthly_shortfall'])}/month."
+        months = max(
+            (pd.Period(pd.Timestamp(target_date), freq="M") - pd.Period(date.today(), freq="M")).n + 1,
+            1,
         )
+        contribution_text = st.text_input(
+            "Monthly contribution available for this goal (INR; optional)",
+            key="goal_contribution",
+        )
+        try:
+            contribution = (
+                float(contribution_text.replace(",", "").replace("₹", ""))
+                if contribution_text.strip()
+                else None
+            )
+            if contribution is not None and (not math.isfinite(contribution) or contribution < 0):
+                raise ValueError("Contribution must be finite and non-negative.")
+            result = calculate_goal(
+                int(goal["target_amount_minor"]) / 100,
+                int(goal["current_saved_minor"]) / 100,
+                months,
+                contribution,
+            )
+        except ValueError as error:
+            st.error(str(error))
+            result = None
+        if result is not None:
+            st.write(
+                f"Required contribution: **{money(result['required_monthly_contribution'])}/month** "
+                f"for {months} month(s)."
+            )
+            alternate_months = st.number_input(
+                "Compare an alternative deadline (months from now)",
+                min_value=1,
+                value=max(months + 3, 1),
+                step=1,
+            )
+            alternate_result = calculate_goal(
+                int(goal["target_amount_minor"]) / 100,
+                int(goal["current_saved_minor"]) / 100,
+                int(alternate_months),
+            )
+            st.write(
+                f"At {int(alternate_months)} months, required contribution would be "
+                f"**{money(alternate_result['required_monthly_contribution'])}/month**."
+            )
+            if result["feasible_under_assumption"] is None:
+                st.info("Feasibility is unknown until you provide an available monthly contribution.")
+            elif result["feasible_under_assumption"]:
+                st.success("Feasible under the contribution assumption entered.")
+            else:
+                st.warning(
+                    f"Shortfall under that assumption: {money(result['monthly_shortfall'])}/month."
+                )
     if st.button("Delete selected goal"):
-        delete_goal(selected_goal)
+        delete_user_goal(user["id"], selected_goal_id)
         st.rerun()
 
 
-def anomaly_page(frame: pd.DataFrame) -> None:
+def savings_page(frame: pd.DataFrame, user: dict[str, str]) -> None:
+    page_header(
+        "Savings suggestions",
+        "Deterministic observations based only on this account's imported transactions and saved goals.",
+    )
+    reduction = st.slider(
+        "Illustrative reduction assumption",
+        min_value=0,
+        max_value=50,
+        value=10,
+        step=5,
+        format="%d%%",
+    )
+    goals = list_user_goals(user["id"])
+    try:
+        suggestions = build_personalized_suggestions(
+            frame, goals, assumed_reduction_rate=reduction / 100
+        )
+        save_recommendations(user["id"], suggestions)
+    except (ValueError, RuntimeError) as error:
+        st.error(f"Could not calculate suggestions: {error}")
+        return
+    all_recommendations = list_user_recommendations(user["id"])
+    if not suggestions:
+        st.info(
+            "There is not enough evidence in the selected period for a personalized "
+            "suggestion. A saved goal can still produce a contribution-planning estimate."
+        )
+    if all_recommendations.empty:
+        return
+    st.caption(
+        "Any estimated saving is hypothetical arithmetic, not money already saved or "
+        "a recommendation to reduce essential spending."
+    )
+    st.dataframe(
+        all_recommendations[
+            [
+                "title", "explanation", "period_start", "period_end",
+                "estimated_potential_saving_minor", "status",
+            ]
+        ],
+        hide_index=True,
+        width="stretch",
+        column_config={
+            "estimated_potential_saving_minor": st.column_config.NumberColumn(
+                "Hypothetical saving (paise)", format="%d"
+            )
+        },
+    )
+    selected_id = st.selectbox(
+        "Inspect a suggestion",
+        all_recommendations["id"].tolist(),
+        format_func=lambda suggestion_id: all_recommendations.loc[
+            all_recommendations["id"].eq(suggestion_id), "title"
+        ].iloc[0],
+    )
+    selected = all_recommendations.loc[
+        all_recommendations["id"].eq(selected_id)
+    ].iloc[0]
+    st.write(str(selected["explanation"]))
+    st.caption(
+        f"Period: {selected['period_start'] or 'unspecified'} to "
+        f"{selected['period_end'] or 'unspecified'}."
+    )
+    try:
+        st.json(json.loads(selected["evidence_json"]))
+    except (TypeError, json.JSONDecodeError):
+        st.error("Saved suggestion evidence could not be read.")
+        return
+    status = st.selectbox(
+        "Your feedback",
+        ["Helpful", "Dismissed", "Addressed"],
+        key=f"recommendation_status_{selected_id}",
+    )
+    if st.button("Save suggestion feedback", type="primary"):
+        try:
+            set_recommendation_status(user["id"], selected_id, status)
+            st.success("Feedback saved to this account.")
+            st.rerun()
+        except ValueError as error:
+            st.error(str(error))
+
+
+def anomaly_page(frame: pd.DataFrame, user: dict[str, str]) -> None:
     page_header(
         "Anomaly review",
         "Exploratory unusual-amount flags for review. An anomaly is not a fraud determination.",
     )
-    result_path = DATA_DIR / "anomaly_results.csv"
-    if not result_path.exists():
-        st.info("Run the pipeline to create anomaly results.")
+    if frame.empty:
+        st.info("Import transactions to explore unusual debit amounts.")
         return
-    anomalies = pd.read_csv(result_path, dtype={"transaction_id": "string"}, low_memory=False)
+    try:
+        anomalies = detect_anomalies(frame)
+    except ValueError as error:
+        st.info(str(error))
+        return
     if anomalies.empty:
         st.info("There are not enough debit transactions for anomaly analysis.")
         return
-    stored_status = get_anomaly_review_statuses()
-    if "transaction_id" in anomalies:
-        anomalies["review_status"] = anomalies["transaction_id"].map(stored_status).fillna(
-            anomalies.get("review_status", "Unreviewed")
-        )
+    stored_status = get_user_anomaly_statuses(user["id"])
+    anomalies["review_status"] = anomalies["record_id"].map(stored_status).fillna(
+        "Unreviewed"
+    )
     flagged = anomalies.loc[anomalies["anomaly"].eq(-1)].copy()
     st.metric("Transactions flagged for review", len(flagged))
     display_columns = [
@@ -785,7 +1765,7 @@ def anomaly_page(frame: pd.DataFrame) -> None:
         ] if col in flagged.columns
     ]
     st.dataframe(flagged[display_columns], hide_index=True, width="stretch")
-    if flagged.empty or "transaction_id" not in flagged:
+    if flagged.empty or "record_id" not in flagged:
         return
     row_index = st.selectbox(
         "Choose flagged transaction",
@@ -802,22 +1782,31 @@ def anomaly_page(frame: pd.DataFrame) -> None:
         ["Reviewed - expected", "Reviewed - investigate", "Unreviewed"],
     )
     if st.button("Save review status", type="primary"):
-        set_anomaly_review_status(str(chosen["transaction_id"]), status)
-        st.success("Review status saved locally.")
-        st.rerun()
+        try:
+            set_user_anomaly_status(
+                user["id"],
+                int(chosen["record_id"]),
+                status,
+                anomaly_score=float(chosen["anomaly_score"]),
+                explanation=str(chosen["anomaly_explanation"]),
+            )
+            st.success("Review status saved for this account.")
+            st.rerun()
+        except (ValueError, RuntimeError) as error:
+            st.error(str(error))
 
 
-def report_page(frame: pd.DataFrame) -> None:
+def report_page(frame: pd.DataFrame, user: dict[str, str]) -> None:
     page_header(
         "Reports and settings",
-        "Export current calculations, inspect data provenance, and refresh from the existing local statement.",
+        "Export this account's calculations and inspect local data-handling settings.",
     )
     summary = monthly_summary(frame)
     forecast = forecast_monthly_expenses(frame)
-    recommendations = build_recommendations(frame)
+    recommendations = list_user_recommendations(user["id"])
     report = {
         "project": "FinTwin AI — Adaptive Personal Finance Intelligence",
-        "data_source": "Existing local data/testing.csv and data/training.csv",
+        "data_source": "Transactions imported by the authenticated account",
         "statement_coverage": (
             {
                 "first_date": str(pd.to_datetime(frame["transaction_date"]).min().date()),
@@ -828,7 +1817,11 @@ def report_page(frame: pd.DataFrame) -> None:
         ),
         "monthly_summary": summary.to_dict(orient="records"),
         "expense_forecast": forecast,
-        "illustrative_recommendations": recommendations.to_dict(orient="records"),
+        "illustrative_recommendations": (
+            recommendations.drop(columns=["evidence_json"], errors="ignore")
+            .to_dict(orient="records")
+            if not recommendations.empty else []
+        ),
         "limitations": [
             "PhonePe categories are not verified ground truth.",
             "The statement does not provide account balances or complete income.",
@@ -847,9 +1840,9 @@ def report_page(frame: pd.DataFrame) -> None:
     st.subheader("Local data and privacy")
     st.write(
         "- Processing and persistence run locally; no external financial API or cloud AI service is used.\n"
-        "- Original statement and training files are read-only inputs to the pipeline.\n"
-        "- Derived predictions, audit, analytics, user corrections, and goals are stored under `data/`.\n"
-        "- Transaction IDs and UTRs are omitted from the default transaction export."
+        "- Uploaded transactions, corrections, goals, and review statuses are scoped to this account in SQLite.\n"
+        "- Shared model training data and model artifacts are not changed by uploads or corrections.\n"
+        "- Transaction identifiers and UTRs are omitted from the default transaction export."
     )
     include_descriptions = st.checkbox(
         "Include merchant names and transaction descriptions in the CSV export",
@@ -859,14 +1852,17 @@ def report_page(frame: pd.DataFrame) -> None:
     if include_descriptions:
         export_columns = [
             col for col in frame.columns
-            if col not in {"transaction_id", "utr", "text", "payment_method"}
+            if col not in {
+                "transaction_id", "utr", "text", "payment_method",
+                "record_id", "import_id",
+            }
         ]
     else:
         export_columns = [
             col for col in frame.columns
             if col not in {
                 "transaction_id", "utr", "text", "transaction_details",
-                "merchant", "payment_method",
+                "merchant", "payment_method", "record_id", "import_id",
             }
         ]
     csv_bytes = frame[export_columns].to_csv(index=False).encode("utf-8")
@@ -876,39 +1872,32 @@ def report_page(frame: pd.DataFrame) -> None:
         file_name="fintwin_transactions.csv",
         mime="text/csv",
     )
-    audit_path = DATA_DIR / "preprocessing_audit.csv"
-    if audit_path.exists():
-        audit = pd.read_csv(audit_path)
-        st.write(f"Statement footer/invalid rows explicitly excluded: {len(audit)}")
-        if not audit.empty:
-            st.dataframe(audit, hide_index=True, width="stretch")
-    st.subheader("Refresh existing data")
-    if st.button("Re-run verified local pipeline", type="primary"):
+    st.subheader("Refresh account suggestions")
+    if st.button("Recalculate suggestions for this account", type="primary"):
         try:
-            with st.spinner("Processing local data and validating outputs..."):
-                result = run_pipeline()
-            st.cache_data.clear()
-            st.success(
-                f"Processed {result['processed_rows']} statements rows using the existing training dataset."
-            )
+            goals = list_user_goals(user["id"])
+            suggestions = build_personalized_suggestions(frame, goals)
+            save_recommendations(user["id"], suggestions)
+            st.success(f"Updated {len(suggestions)} account-specific suggestions.")
             st.rerun()
-        except (OSError, ValueError, RuntimeError, KeyError) as error:
-            st.error(f"Pipeline failed; previous derived files were not intentionally removed: {error}")
-    st.subheader("Delete locally stored application state")
-    st.caption("This clears saved goals and anomaly-review statuses only; it does not delete transaction files or user feedback.")
-    confirm_clear = st.checkbox("I understand and want to clear goals and review statuses.")
-    if st.button("Clear local goals and review statuses"):
-        try:
-            clear_application_state(confirmed=confirm_clear)
-            st.success("Local application state cleared.")
-        except ValueError as error:
-            st.error(str(error))
+        except (ValueError, RuntimeError) as error:
+            st.error(f"Could not refresh suggestions: {error}")
 
 
 def main() -> None:
+    try:
+        user = _get_authenticated_user()
+    except (OSError, RuntimeError, sqlite3.Error) as error:
+        st.error(f"FinTwin could not access its local account database: {error}")
+        return
+    if user is None:
+        render_public_page()
+        return
+
     st.sidebar.markdown("## FinTwin AI")
-    st.sidebar.caption("Personal finance intelligence")
+    st.sidebar.caption(f"Signed in as {user['name']}")
     pages = [
+        "Statement Upload & History",
         "Financial overview",
         "Transaction intelligence",
         "Spending analytics",
@@ -918,27 +1907,41 @@ def main() -> None:
         "Financial goals",
         "Anomaly review",
         "Reports and settings",
+        "Savings Suggestions",
     ]
     selected_page = st.sidebar.selectbox("Workspace", pages)
+    if st.sidebar.button("Sign out"):
+        _logout()
     st.sidebar.divider()
-    st.sidebar.caption("Local processing · Existing datasets only")
+    st.sidebar.caption("Local processing · Account-scoped data")
     try:
-        frame = current_transactions()
-    except (OSError, ValueError) as error:
-        st.error(str(error))
-        st.info("From the project folder, run `python -m src.pipeline`, then refresh this page.")
+        frame = user_transactions(user)
+        filtered = _filter_transactions(frame, user["id"])
+    except (OSError, ValueError, RuntimeError, sqlite3.Error) as error:
+        st.error(f"Could not load this account's transaction data: {error}")
         return
-    {
-        "Financial overview": overview_page,
-        "Transaction intelligence": transaction_page,
-        "Spending analytics": spending_page,
-        "Financial twin": twin_page,
-        "Cash-flow forecasting": forecasting_page,
-        "Scenario lab": scenario_page,
-        "Financial goals": lambda _: goals_page(),
-        "Anomaly review": anomaly_page,
-        "Reports and settings": report_page,
-    }[selected_page](frame)
+    if selected_page == "Statement Upload & History":
+        upload_page(user)
+    elif selected_page == "Financial overview":
+        overview_page(filtered, user)
+    elif selected_page == "Transaction intelligence":
+        transaction_page(filtered, user)
+    elif selected_page == "Spending analytics":
+        spending_page(filtered)
+    elif selected_page == "Financial twin":
+        twin_page(filtered)
+    elif selected_page == "Cash-flow forecasting":
+        forecasting_page(filtered)
+    elif selected_page == "Scenario lab":
+        scenario_page(filtered)
+    elif selected_page == "Financial goals":
+        goals_page(user)
+    elif selected_page == "Anomaly review":
+        anomaly_page(filtered, user)
+    elif selected_page == "Reports and settings":
+        report_page(filtered, user)
+    elif selected_page == "Savings Suggestions":
+        savings_page(filtered, user)
 
 
 if __name__ == "__main__":

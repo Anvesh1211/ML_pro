@@ -111,19 +111,21 @@ set. PhonePe predictions are not used for model training.
 
 ## Feedback and persistence
 
-Use the **Transaction intelligence** page to correct either one transaction
-or, after explicit confirmation, all current/future transactions with the
-exact merchant name. The app saves feedback in `data/user_feedback.csv`,
-preserves the model prediction, and refreshes dependent predictions and
-analytics. Legacy two-column feedback rows are interpreted as the
-merchant-level corrections recorded by the prior review script. SQLite stores
-user-created goals and anomaly-review status in `data/fintwin_state.sqlite3`;
-it does not duplicate the transaction ledger.
+The standalone prediction pipeline supports the existing
+`data/user_feedback.csv` corrections. In the signed-in website, corrections
+are stored per account in SQLite, separately from the original model
+prediction. A transaction correction affects only that transaction; a
+merchant-level correction requires explicit confirmation and is scoped to the
+signed-in user's imported transactions. Website goals, anomaly-review status,
+recommendations, imports, and transactions are also account-scoped.
 
 ## Website
 
 The Streamlit app includes:
 
+- Local account registration, sign-in, session expiry, and logout.
+- Private PhonePe CSV upload, validation preview, import history, and duplicate
+  review.
 - Financial overview and transaction search/review.
 - Spending and category-flexibility analysis.
 - Financial-state coverage, with unavailable balances/income disclosed.
@@ -133,6 +135,47 @@ The Streamlit app includes:
 - Persisted goals and contribution-feasibility arithmetic.
 - Exploratory anomaly review with saved review status.
 - JSON report and identifier-redacted transaction export.
+
+## Accounts, imports, and local storage
+
+The app uses a single local SQLite database for account records. Its default
+location is `data/fintwin_state.sqlite3`; set `FINTWIN_DATABASE_PATH` before
+starting Streamlit to use another path. It does not load `.env` files
+automatically. The optional settings in `.env.example` can be set as process
+environment variables:
+
+```powershell
+$env:FINTWIN_DATABASE_PATH = "data\fintwin_state.sqlite3"
+$env:FINTWIN_SESSION_TTL_MINUTES = "480"
+$env:FINTWIN_MAX_UPLOAD_MB = "10"
+.\venv\Scripts\python.exe -m streamlit run app.py
+```
+
+Passwords are stored as salted scrypt hashes. Browser session tokens are
+random, opaque values; only their SHA-256 digests are persisted in SQLite.
+Sessions expire after the configured number of minutes (480 by default), and
+logging out revokes the current session. Authentication does not include
+email verification or password recovery, so this prototype should remain on
+localhost unless a deployment adds appropriate account-recovery and
+operational controls.
+
+The upload screen accepts `.csv` PhonePe statements with date, transaction
+details, transaction type, and amount columns. Transaction identifiers,
+timestamps, payment method, and UTR are optional. Files are validated and
+previewed in memory before import; invalid rows are recorded with their source
+line and reason. Exact transaction-ID matches are skipped, while uncertain
+matches are retained and marked for review. Imported rows are stored in minor
+currency units and associated with the signed-in account. The existing
+`data/testing.csv` is not automatically imported into any account. Uploaded
+data and predictions do not retrain or overwrite the shared classifier or its
+global output CSVs.
+
+Database initialization is additive. It preserves legacy goals and anomaly
+reviews and does not assign those unscoped records to a newly registered
+account. Before upgrading an existing database, the app creates a
+timestamped `.pre-migration-*.bak` backup next to it, then applies schema
+version 3 and checks foreign-key integrity. Backups are local and ignored by
+Git. Keep a separate protected backup for important financial data.
 
 ## Tests and evaluation
 
