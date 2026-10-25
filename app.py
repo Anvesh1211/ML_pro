@@ -360,18 +360,17 @@ def render_public_page() -> None:
         '<div class="ft-kicker">FinTwin AI · Personal finance intelligence</div>',
         unsafe_allow_html=True,
     )
-    st.title("Understand your transaction history.")
+    st.title("FinTwin AI — Your Personal Financial Intelligence Beyond Spending, Into Insights...")
     st.write(
-        "Import a PhonePe statement to review categories, explore spending patterns, "
-        "and plan goals using information you provide. Transaction data stays in the "
-        "local project database."
+        "Turn your PhonePe transaction history into meaningful financial insights. Discover where your money goes, understand your spending habits, identify unusual transactions, and explore smarter ways to save — all through one intelligent dashboard."
     )
     left, right = st.columns([1.3, 0.7])
     with left:
         st.subheader("A clearer view of your recorded finances")
         st.write(
-            "Review transaction categories, examine repeated payment patterns, "
-            "compare recorded outgoings, and test savings assumptions."
+            "From category-wise spending and recurring payments to cash-flow forecasts",
+            "financial goals, and personalized savings scenarios, FinTwin helps you turn"
+            "recorded financial activity into clearer decisions."
         )
         st.caption(
             "FinTwin is a local decision-support prototype. It is not a bank, "

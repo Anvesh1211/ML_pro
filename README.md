@@ -7,7 +7,7 @@ run this exact in the terminal  fintwin to run the project plz do not share any 
 .\venv\Scripts\python.exe -m unittest discover -s tests -v 
 
 
-git add README.md
+git add .
 git commit -m "Update"
 git push -u origin main
 FinTwin is a local-first personal-finance prototype. It classifies PhonePe
