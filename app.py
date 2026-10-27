@@ -23,16 +23,24 @@ from src.finance_store import (
     count_import_duplicate_candidates,
     delete_user_goal,
     get_import_history,
+    get_goal_plan_preferences,
+    get_latest_goal_plan_snapshot,
+    list_goal_plan_feedback,
+    get_user_financial_profile,
     get_user_anomaly_statuses,
     get_user_feedback,
     get_user_transactions,
     list_user_goals,
     list_user_recommendations,
     save_import,
+    save_goal_plan_snapshot,
+    record_goal_plan_feedback,
     save_recommendations,
+    save_user_financial_profile,
     save_user_correction,
     save_user_goal,
     set_recommendation_status,
+    set_goal_plan_adjustment_status,
     set_user_anomaly_status,
 )
 from src.financial_intelligence import (
@@ -56,6 +64,13 @@ from src.phonepe_upload import (
 )
 from src.predict_phonepe import _load_model, predict_transactions
 from src.recommendations import build_personalized_suggestions
+from src.goal_planner import (
+    build_goal_savings_plan,
+    estimate_monthly_spending,
+    minor_to_rupees,
+    reconcile_savings_plan,
+    rupees_to_minor,
+)
 
 
 st.set_page_config(
@@ -1162,7 +1177,7 @@ def transaction_page(frame: pd.DataFrame, user: dict[str, str]) -> None:
             except (OSError, ValueError, RuntimeError) as error:
                 st.error(f"Could not save the correction: {error}")
 
-    st.caption(f"{len(needs_review)} transactions currently need category review.")
+    # st.caption(f"{len(needs_review)} transactions currently need category review.")
 def spending_page(frame: pd.DataFrame) -> None:
     st.markdown(
         """
@@ -1651,20 +1666,554 @@ def goals_page(user: dict[str, str]) -> None:
         st.rerun()
 
 
+def _profile_amount_input_value(value: int | None) -> str:
+    rupees = minor_to_rupees(value)
+    return "" if rupees is None else f"{rupees:.2f}"
+
+
+def _parse_optional_profile_amount(value: str) -> int | None:
+    return rupees_to_minor(value) if value.strip() else None
+
+
 def savings_page(frame: pd.DataFrame, user: dict[str, str]) -> None:
     page_header(
         "Savings suggestions",
-        "Deterministic observations based only on this account's imported transactions and saved goals.",
+        "Transaction-based observations and an account-specific, evidence-aware goal planner.",
     )
     reduction = st.slider(
-        "Illustrative reduction assumption",
+        "Illustrative reduction assumption for general suggestions",
         min_value=0,
         max_value=50,
         value=10,
         step=5,
         format="%d%%",
     )
-    goals = list_user_goals(user["id"])
+    st.caption(
+        "This slider changes only hypothetical general suggestions. Goal affordability "
+        "uses your saved financial inputs and the planner's separate conservative category limits."
+    )
+
+    try:
+        profile = get_user_financial_profile(user["id"])
+        goals = list_user_goals(user["id"])
+    except (OSError, RuntimeError, sqlite3.Error) as error:
+        st.error(f"Could not load this account's savings-planning data: {error}")
+        return
+
+    st.subheader("Financial profile")
+    st.caption(
+        "Enter values you have confirmed. Blank fields remain unavailable; use 0 only "
+        "when you explicitly confirm there is no amount. Income is never inferred from credits."
+    )
+    with st.form(f"goalpilot_profile_{user['id']}"):
+        income_column, balance_column, target_column = st.columns(3)
+        income_text = income_column.text_input(
+            "Monthly take-home income (INR)",
+            value=_profile_amount_input_value(profile["monthly_income_minor"]),
+            help="Confirmed net income provided by you, not inferred from transaction credits.",
+        )
+        emergency_balance_text = balance_column.text_input(
+            "Emergency-fund balance (INR)",
+            value=_profile_amount_input_value(profile["emergency_balance_minor"]),
+            help="Current reserve balance; it is not counted as new monthly savings.",
+        )
+        emergency_target_text = target_column.text_input(
+            "Emergency-fund target (INR)",
+            value=_profile_amount_input_value(profile["emergency_target_minor"]),
+        )
+        contribution_column, commitments_column, buffer_column = st.columns(3)
+        emergency_contribution_text = contribution_column.text_input(
+            "Planned monthly emergency contribution (INR)",
+            value=_profile_amount_input_value(profile["emergency_contribution_minor"]),
+            help="This flow is protected and deducted from the monthly surplus.",
+        )
+        commitments_text = commitments_column.text_input(
+            "Additional monthly commitments (INR)",
+            value=_profile_amount_input_value(
+                profile["additional_commitments_minor"]
+            ),
+            help="Include only commitments not already represented in imported expenses.",
+        )
+        buffer_text = buffer_column.text_input(
+            "Protected monthly cash-buffer contribution (INR)",
+            value=_profile_amount_input_value(
+                profile["protected_buffer_contribution_minor"]
+            ),
+            help="A monthly set-aside flow, not a minimum account balance.",
+        )
+        protected_categories = st.multiselect(
+            "Categories to protect from proposed reductions",
+            BASE_CATEGORIES,
+            default=profile["protected_categories"],
+            help="Essential proxy categories are protected automatically as well.",
+        )
+        coverage_confirmed = st.checkbox(
+            "I have checked that every calendar month between this account's earliest "
+            "and latest transaction is fully covered",
+            value=profile["statement_coverage_confirmed"],
+            help=(
+                "Observed transaction dates alone do not prove statement coverage. "
+                "Only confirm this after checking your statements; unverified coverage "
+                "prevents an affordability conclusion."
+            ),
+        )
+        profile_submitted = st.form_submit_button(
+            "Save financial profile", type="primary"
+        )
+    if profile_submitted:
+        try:
+            save_user_financial_profile(
+                user["id"],
+                {
+                    "monthly_income_minor": _parse_optional_profile_amount(income_text),
+                    "emergency_balance_minor": _parse_optional_profile_amount(
+                        emergency_balance_text
+                    ),
+                    "emergency_target_minor": _parse_optional_profile_amount(
+                        emergency_target_text
+                    ),
+                    "emergency_contribution_minor": _parse_optional_profile_amount(
+                        emergency_contribution_text
+                    ),
+                    "additional_commitments_minor": _parse_optional_profile_amount(
+                        commitments_text
+                    ),
+                    "protected_buffer_contribution_minor": _parse_optional_profile_amount(
+                        buffer_text
+                    ),
+                    "protected_categories": protected_categories,
+                    "statement_coverage_confirmed": coverage_confirmed,
+                },
+            )
+            st.success("Financial profile saved to this account.")
+            st.rerun()
+        except ValueError as error:
+            st.error(str(error))
+
+    st.divider()
+    st.subheader("GoalPilot affordability and plan")
+    try:
+        planning_frame = user_transactions(user)
+        if not planning_frame.empty:
+            planning_frame = planning_frame.copy()
+            planning_frame["coverage_validated"] = bool(
+                profile["statement_coverage_confirmed"]
+            )
+        spending = estimate_monthly_spending(planning_frame)
+        import_history = get_import_history(user["id"])
+    except (OSError, ValueError, RuntimeError, sqlite3.Error) as error:
+        st.error(f"Could not estimate this account's spending: {error}")
+        return
+    if spending["coverage_verified"]:
+        st.success(spending["coverage_status"])
+    else:
+        st.warning(spending["coverage_status"])
+    if not import_history.empty and import_history["rejected_rows"].fillna(0).gt(0).any():
+        st.warning(
+            "One or more imported statements contained rejected rows. Review import "
+            "history and verify that those rows do not leave transaction coverage incomplete."
+        )
+    if spending["low_confidence_count"]:
+        st.warning(
+            f"{spending['low_confidence_count']} consumption transaction(s) have "
+            "uncertain classifications. They are not eligible for reduction proposals."
+        )
+    if spending["unclassified_debit_count"]:
+        st.warning(
+            "Unclassified debits are present. Correct or review those transactions "
+            "before the planner assesses affordability."
+        )
+
+    active_goals = (
+        goals.loc[goals["status"].eq("active")].copy()
+        if not goals.empty
+        else goals
+    )
+    if active_goals.empty:
+        st.info("Create an active goal in Financial goals to build a goal-specific plan.")
+    else:
+        selected_goal_id = st.selectbox(
+            "Select a saved goal",
+            active_goals["id"].tolist(),
+            format_func=lambda goal_id: active_goals.loc[
+                active_goals["id"].eq(goal_id), "title"
+            ].iloc[0],
+            key="goalpilot_selected_goal",
+        )
+        goal = active_goals.loc[active_goals["id"].eq(selected_goal_id)].iloc[0]
+        goal_record = goal.to_dict()
+        all_goal_suggestions: list[dict[str, object]] = []
+        try:
+            all_goal_suggestions = build_personalized_suggestions(
+                planning_frame,
+                goals,
+                assumed_reduction_rate=reduction / 100,
+            )
+            preferences = get_goal_plan_preferences(user["id"], selected_goal_id)
+            plan = build_goal_savings_plan(
+                goal_record,
+                profile,
+                spending,
+                all_goal_suggestions,
+                preferences,
+            )
+            previous_snapshot = get_latest_goal_plan_snapshot(
+                user["id"], selected_goal_id
+            )
+            reconciliation = reconcile_savings_plan(
+                previous_snapshot["plan"] if previous_snapshot else None, plan
+            )
+            snapshot_plan = dict(plan)
+            input_snapshot = {
+                "goal": {
+                    "id": str(goal_record["id"]),
+                    "target_amount_minor": int(goal_record["target_amount_minor"]),
+                    "current_saved_minor": int(goal_record["current_saved_minor"]),
+                    "target_date": str(goal_record["target_date"]),
+                },
+                "profile": {
+                    key: profile.get(key)
+                    for key in (
+                        "monthly_income_minor",
+                        "emergency_balance_minor",
+                        "emergency_target_minor",
+                        "emergency_contribution_minor",
+                        "additional_commitments_minor",
+                        "protected_buffer_contribution_minor",
+                        "protected_categories",
+                        "statement_coverage_confirmed",
+                    )
+                },
+                "spending": {
+                    key: spending.get(key)
+                    for key in (
+                        "estimated_monthly_expenses_minor",
+                        "observed_month_count",
+                        "months_with_transactions",
+                        "observed_period_start",
+                        "observed_period_end",
+                        "coverage_verified",
+                    )
+                },
+                "preferences": preferences,
+            }
+            plan_version = save_goal_plan_snapshot(
+                user["id"], selected_goal_id, input_snapshot, snapshot_plan
+            )
+            plan["reconciliation"] = reconciliation
+        except (ValueError, RuntimeError, sqlite3.Error) as error:
+            st.error(f"Could not build or save this goal plan: {error}")
+            plan = None
+            plan_version = None
+
+        if plan is not None:
+            st.caption(
+                f"Plan version {plan_version}. Required contribution counts the "
+                "current calendar month through the goal month, inclusive."
+            )
+            target_minor = plan["target_amount_minor"]
+            saved_minor = plan["current_saved_minor"]
+            st.write(
+                f"Target **{money(target_minor / 100)}** · "
+                f"Saved **{money(saved_minor / 100)}** · "
+                f"Remaining **{money(plan['remaining_goal_amount_minor'] / 100)}** · "
+                f"Deadline **{plan['target_date']}**"
+            )
+            metric_one, metric_two, metric_three, metric_four = st.columns(4)
+            expense_minor = plan["estimated_monthly_expenses_minor"]
+            required_minor = plan["required_monthly_contribution_minor"]
+            gap_minor = plan["funding_gap_minor"]
+            safe_minor = plan["safe_surplus_minor"]
+            reserve_shortfall = plan["emergency_reserve_shortfall_minor"]
+            metric_one.metric(
+                "Estimated monthly expenses",
+                money(expense_minor / 100) if expense_minor is not None else "Unavailable",
+            )
+            metric_two.metric(
+                "Safe monthly surplus",
+                money(safe_minor / 100) if safe_minor is not None else "Unavailable",
+            )
+            metric_three.metric(
+                "Required goal contribution",
+                money(required_minor / 100)
+                if required_minor is not None
+                else "Deadline passed",
+            )
+            metric_four.metric(
+                "Funding gap before approval",
+                money(gap_minor / 100) if gap_minor is not None else "Unavailable",
+            )
+            with st.expander("Monthly cash-flow assumptions", expanded=True):
+                assumptions = [
+                    ("Confirmed take-home income", plan["monthly_income_minor"]),
+                    ("Estimated transaction expenses", expense_minor),
+                    ("Additional commitments", plan["additional_commitments_minor"]),
+                    ("Emergency contribution", plan["emergency_contribution_minor"]),
+                    (
+                        "Protected cash-buffer contribution",
+                        plan["protected_buffer_contribution_minor"],
+                    ),
+                    ("Safe surplus", safe_minor),
+                    ("Emergency reserve shortfall", reserve_shortfall),
+                ]
+                for label, amount in assumptions:
+                    value = "Unavailable" if amount is None else money(amount / 100)
+                    st.write(f"**{label}:** {value}")
+                st.caption(
+                    "Transaction expenses include categorized consumption debits. "
+                    "Additional commitments must not repeat expenses already included "
+                    "in that estimate. Emergency balances are not counted as income."
+                )
+            st.info(f"Plan status: **{plan['status']}**")
+            if plan["assessment_missing_inputs"]:
+                st.warning(
+                    "Affordability is not assessed until these values are available: "
+                    + ", ".join(plan["assessment_missing_inputs"])
+                    + "."
+                )
+            if reserve_shortfall is not None and reserve_shortfall > 0:
+                st.warning(
+                    f"Your emergency reserve is {money(reserve_shortfall / 100)} "
+                    "below its target. The planner preserves your stated emergency "
+                    "contribution; it does not divert that reserve to this goal. "
+                    "Increasing the monthly emergency contribution would reduce "
+                    "the surplus available to the goal by the same monthly amount."
+                )
+            if required_minor is not None:
+                st.caption(
+                    f"Required monthly contribution: {money(required_minor / 100)} "
+                    f"for {plan['months_remaining']} month(s), counting the current "
+                    "month through the goal month inclusively."
+                )
+
+            if plan["candidates"]:
+                st.markdown("#### Spending adjustments and evidence")
+                st.caption(
+                    "Candidates are hypothetical. Only approved reductions count in "
+                    "the after-approval total; approval does not mean savings occurred."
+                )
+                display_candidates = []
+                for candidate in plan["candidates"]:
+                    confidence = candidate["classification_confidence"]
+                    display_candidates.append(
+                        {
+                            "Category": candidate["category"],
+                            "Monthly baseline": money(
+                                candidate["baseline_monthly_spend_minor"] / 100
+                            ),
+                            "Proposed reduction": money(
+                                candidate["recommended_reduction_minor"] / 100
+                            ),
+                            "Maximum permitted": money(
+                                candidate["max_reduction_minor"] / 100
+                            ),
+                            "Reduction": f"{candidate['reduction_rate'] * 100:.1f}%",
+                            "Disruption weight": candidate["disruption_weight"],
+                            "Eligibility": candidate["eligibility_reason"],
+                            "Evidence": (
+                                f"{candidate['evidence']} "
+                                f"Period: {candidate['period_start']} to "
+                                f"{candidate['period_end']}."
+                            ),
+                            "Confidence": (
+                                (
+                                    "Limited; statement coverage is unverified"
+                                    if not spending["coverage_verified"]
+                                    else "Classification confidence unavailable"
+                                )
+                                if confidence is None
+                                else f"Category confidence {confidence:.0%}; "
+                                + (
+                                    "coverage was user-confirmed"
+                                    if spending["coverage_verified"]
+                                    else "coverage is unverified"
+                                )
+                            ),
+                            "Uncertainty": candidate["uncertainty"],
+                            "Related general observations": (
+                                ", ".join(candidate["related_suggestions"])
+                                or "No matching suggestion"
+                            ),
+                            "Status": candidate["status"].title(),
+                        }
+                    )
+                st.dataframe(
+                    pd.DataFrame(display_candidates),
+                    hide_index=True,
+                    width="stretch",
+                )
+                st.caption(plan["optimisation_method"])
+                with st.form(
+                    f"goalpilot_decisions_{user['id']}_{selected_goal_id}"
+                ):
+                    selected_statuses: dict[str, str] = {}
+                    for candidate in plan["candidates"]:
+                        category = candidate["category"]
+                        options = ["Not decided", "Approved", "Rejected"]
+                        stored = candidate["status"]
+                        index = (
+                            1 if stored == "approved"
+                            else 2 if stored == "rejected"
+                            else 0
+                        )
+                        selected_statuses[category] = st.selectbox(
+                            f"{category} proposed adjustment",
+                            options,
+                            index=index,
+                            key=f"goalpilot_status_{selected_goal_id}_{category}",
+                        )
+                    decisions_submitted = st.form_submit_button(
+                        "Save adjustment decisions"
+                    )
+                if decisions_submitted:
+                    try:
+                        for category, selected_status in selected_statuses.items():
+                            status_value = {
+                                "Not decided": "undecided",
+                                "Approved": "approved",
+                                "Rejected": "rejected",
+                            }[selected_status]
+                            set_goal_plan_adjustment_status(
+                                user["id"],
+                                selected_goal_id,
+                                category,
+                                status_value,
+                            )
+                        st.success("Adjustment decisions saved for this goal.")
+                        st.rerun()
+                    except (ValueError, sqlite3.Error) as error:
+                        st.error(f"Could not save adjustment decisions: {error}")
+                st.write(
+                    f"Potential adjustments: **"
+                    f"{money(plan['proposed_adjustments_minor'] / 100)}** · "
+                    f"Approved adjustments: **"
+                    f"{money(plan['approved_adjustments_minor'] / 100)}** · "
+                    f"Goal contribution after approval: **"
+                    f"{money(plan['planned_goal_contribution_minor'] / 100)}** · "
+                    f"Remaining shortfall after approval: **"
+                    f"{money(plan['remaining_shortfall_after_approval_minor'] / 100)}**"
+                    if plan["remaining_shortfall_after_approval_minor"] is not None
+                    else "Potential and approved adjustments are estimates; the goal contribution is unavailable until affordability inputs are complete."
+                )
+            else:
+                st.info(
+                    "No eligible, sufficiently supported flexible-category reductions "
+                    "are available under the current evidence and protection rules."
+                )
+                planned = (
+                    money(safe_minor / 100) if safe_minor is not None else "Unavailable"
+                )
+                shortfall = (
+                    money(plan["remaining_shortfall_after_approval_minor"] / 100)
+                    if plan["remaining_shortfall_after_approval_minor"] is not None
+                    else "Unavailable"
+                )
+                st.write(
+                    f"Safe surplus: **{planned}** · Potential adjustments: **"
+                    f"{money(0)}** · Approved adjustments: **{money(0)}** · "
+                    f"Planned goal contribution: **{planned}** · Remaining shortfall: "
+                    f"**{shortfall}**"
+                )
+            feedback_categories = sorted(
+                {candidate["category"] for candidate in plan["candidates"]}
+            )
+            if feedback_categories:
+                st.markdown("#### User-reported outcome")
+                st.caption(
+                    "An outcome is recorded only from your explicit feedback and note. "
+                    "It is not inferred from an Addressed recommendation or from a "
+                    "change in transaction totals."
+                )
+                with st.form(
+                    f"goalpilot_feedback_{user['id']}_{selected_goal_id}"
+                ):
+                    feedback_category = st.selectbox(
+                        "Category",
+                        feedback_categories,
+                        key=f"goalpilot_feedback_category_{selected_goal_id}",
+                    )
+                    feedback_status = st.selectbox(
+                        "Outcome",
+                        ["Not applicable", "Achieved (user confirmed)"],
+                        key=f"goalpilot_feedback_status_{selected_goal_id}",
+                    )
+                    reported_reduction_text = st.text_input(
+                        "Reported monthly reduction (INR; required if achieved)",
+                        key=f"goalpilot_feedback_amount_{selected_goal_id}",
+                    )
+                    evidence_note = st.text_input(
+                        "Supporting note",
+                        key=f"goalpilot_feedback_note_{selected_goal_id}",
+                    )
+                    feedback_submitted = st.form_submit_button(
+                        "Save outcome feedback"
+                    )
+                if feedback_submitted:
+                    try:
+                        feedback_amount = (
+                            _parse_optional_profile_amount(reported_reduction_text)
+                            if feedback_status == "Achieved (user confirmed)"
+                            else None
+                        )
+                        record_goal_plan_feedback(
+                            user["id"],
+                            selected_goal_id,
+                            feedback_category,
+                            (
+                                "achieved_confirmed"
+                                if feedback_status == "Achieved (user confirmed)"
+                                else "not_applicable"
+                            ),
+                            evidence_note,
+                            feedback_amount,
+                        )
+                        st.success("User-reported outcome saved to this goal.")
+                        st.rerun()
+                    except (ValueError, sqlite3.Error) as error:
+                        st.error(f"Could not save outcome feedback: {error}")
+            feedback_history = list_goal_plan_feedback(
+                user["id"], selected_goal_id
+            )
+            if feedback_history:
+                display_feedback = pd.DataFrame(feedback_history)
+                display_feedback["status"] = display_feedback["status"].map(
+                    {
+                        "not_applicable": "Not applicable",
+                        "achieved_confirmed": "Achieved (user confirmed)",
+                    }
+                )
+                display_feedback["reported_monthly_reduction_minor"] = (
+                    display_feedback["reported_monthly_reduction_minor"].map(
+                        lambda value: (
+                            "—" if pd.isna(value) else money(int(value) / 100)
+                        )
+                    )
+                )
+                st.dataframe(
+                    display_feedback.rename(
+                        columns={
+                            "category": "Category",
+                            "status": "Feedback",
+                            "reported_monthly_reduction_minor":
+                                "Reported monthly reduction",
+                            "evidence_note": "Supporting note",
+                            "created_at": "Recorded",
+                        }
+                    ),
+                    hide_index=True,
+                    width="stretch",
+                )
+            if reconciliation["comparison_available"]:
+                st.caption(reconciliation["message"])
+                if reconciliation["category_changes"]:
+                    st.dataframe(
+                        pd.DataFrame(reconciliation["category_changes"]),
+                        hide_index=True,
+                        width="stretch",
+                    )
+
+    st.divider()
+    st.subheader("General savings suggestions")
     try:
         suggestions = build_personalized_suggestions(
             frame, goals, assumed_reduction_rate=reduction / 100
@@ -1795,92 +2344,92 @@ def anomaly_page(frame: pd.DataFrame, user: dict[str, str]) -> None:
             st.error(str(error))
 
 
-def report_page(frame: pd.DataFrame, user: dict[str, str]) -> None:
-    page_header(
-        "Reports and settings",
-        "Export this account's calculations and inspect local data-handling settings.",
-    )
-    summary = monthly_summary(frame)
-    forecast = forecast_monthly_expenses(frame)
-    recommendations = list_user_recommendations(user["id"])
-    report = {
-        "project": "FinTwin AI — Adaptive Personal Finance Intelligence",
-        "data_source": "Transactions imported by the authenticated account",
-        "statement_coverage": (
-            {
-                "first_date": str(pd.to_datetime(frame["transaction_date"]).min().date()),
-                "last_date": str(pd.to_datetime(frame["transaction_date"]).max().date()),
-                "transactions": int(len(frame)),
-            }
-            if not frame.empty else None
-        ),
-        "monthly_summary": summary.to_dict(orient="records"),
-        "expense_forecast": forecast,
-        "illustrative_recommendations": (
-            recommendations.drop(columns=["evidence_json"], errors="ignore")
-            .to_dict(orient="records")
-            if not recommendations.empty else []
-        ),
-        "limitations": [
-            "PhonePe categories are not verified ground truth.",
-            "The statement does not provide account balances or complete income.",
-            "Forecasts are simple baselines on limited, potentially partial months.",
-            "Category flexibility is a heuristic and needs user confirmation.",
-            "Anomaly flags are exploratory and are not fraud labels.",
-        ],
-    }
-    report_json = json.dumps(report, indent=2, ensure_ascii=False, default=str)
-    st.download_button(
-        "Download calculated report (JSON)",
-        report_json,
-        file_name="fintwin_report.json",
-        mime="application/json",
-    )
-    st.subheader("Local data and privacy")
-    st.write(
-        "- Processing and persistence run locally; no external financial API or cloud AI service is used.\n"
-        "- Uploaded transactions, corrections, goals, and review statuses are scoped to this account in SQLite.\n"
-        "- Shared model training data and model artifacts are not changed by uploads or corrections.\n"
-        "- Transaction identifiers and UTRs are omitted from the default transaction export."
-    )
-    include_descriptions = st.checkbox(
-        "Include merchant names and transaction descriptions in the CSV export",
-        value=False,
-        help="These fields may reveal personal financial activity.",
-    )
-    if include_descriptions:
-        export_columns = [
-            col for col in frame.columns
-            if col not in {
-                "transaction_id", "utr", "text", "payment_method",
-                "record_id", "import_id",
-            }
-        ]
-    else:
-        export_columns = [
-            col for col in frame.columns
-            if col not in {
-                "transaction_id", "utr", "text", "transaction_details",
-                "merchant", "payment_method", "record_id", "import_id",
-            }
-        ]
-    csv_bytes = frame[export_columns].to_csv(index=False).encode("utf-8")
-    st.download_button(
-        "Download transactions (privacy-conscious)",
-        csv_bytes,
-        file_name="fintwin_transactions.csv",
-        mime="text/csv",
-    )
-    st.subheader("Refresh account suggestions")
-    if st.button("Recalculate suggestions for this account", type="primary"):
-        try:
-            goals = list_user_goals(user["id"])
-            suggestions = build_personalized_suggestions(frame, goals)
-            save_recommendations(user["id"], suggestions)
-            st.success(f"Updated {len(suggestions)} account-specific suggestions.")
-            st.rerun()
-        except (ValueError, RuntimeError) as error:
-            st.error(f"Could not refresh suggestions: {error}")
+# def report_page(frame: pd.DataFrame, user: dict[str, str]) -> None:
+#     page_header(
+#         "Reports and settings",
+#         "Export this account's calculations and inspect local data-handling settings.",
+#     )
+#     summary = monthly_summary(frame)
+#     forecast = forecast_monthly_expenses(frame)
+#     recommendations = list_user_recommendations(user["id"])
+#     report = {
+#         "project": "FinTwin AI — Adaptive Personal Finance Intelligence",
+#         "data_source": "Transactions imported by the authenticated account",
+#         "statement_coverage": (
+#             {
+#                 "first_date": str(pd.to_datetime(frame["transaction_date"]).min().date()),
+#                 "last_date": str(pd.to_datetime(frame["transaction_date"]).max().date()),
+#                 "transactions": int(len(frame)),
+#             }
+#             if not frame.empty else None
+#         ),
+#         "monthly_summary": summary.to_dict(orient="records"),
+#         "expense_forecast": forecast,
+#         "illustrative_recommendations": (
+#             recommendations.drop(columns=["evidence_json"], errors="ignore")
+#             .to_dict(orient="records")
+#             if not recommendations.empty else []
+#         ),
+#         "limitations": [
+#             "PhonePe categories are not verified ground truth.",
+#             "The statement does not provide account balances or complete income.",
+#             "Forecasts are simple baselines on limited, potentially partial months.",
+#             "Category flexibility is a heuristic and needs user confirmation.",
+#             "Anomaly flags are exploratory and are not fraud labels.",
+#         ],
+#     }
+#     report_json = json.dumps(report, indent=2, ensure_ascii=False, default=str)
+#     st.download_button(
+#         "Download calculated report (JSON)",
+#         report_json,
+#         file_name="fintwin_report.json",
+#         mime="application/json",
+#     )
+#     st.subheader("Local data and privacy")
+#     st.write(
+#         "- Processing and persistence run locally; no external financial API or cloud AI service is used.\n"
+#         "- Uploaded transactions, corrections, goals, and review statuses are scoped to this account in SQLite.\n"
+#         "- Shared model training data and model artifacts are not changed by uploads or corrections.\n"
+#         "- Transaction identifiers and UTRs are omitted from the default transaction export."
+#     )
+#     include_descriptions = st.checkbox(
+#         "Include merchant names and transaction descriptions in the CSV export",
+#         value=False,
+#         help="These fields may reveal personal financial activity.",
+#     )
+#     if include_descriptions:
+#         export_columns = [
+#             col for col in frame.columns
+#             if col not in {
+#                 "transaction_id", "utr", "text", "payment_method",
+#                 "record_id", "import_id",
+#             }
+#         ]
+#     else:
+#         export_columns = [
+#             col for col in frame.columns
+#             if col not in {
+#                 "transaction_id", "utr", "text", "transaction_details",
+#                 "merchant", "payment_method", "record_id", "import_id",
+#             }
+#         ]
+#     csv_bytes = frame[export_columns].to_csv(index=False).encode("utf-8")
+#     st.download_button(
+#         "Download transactions (privacy-conscious)",
+#         csv_bytes,
+#         file_name="fintwin_transactions.csv",
+#         mime="text/csv",
+#     )
+#     st.subheader("Refresh account suggestions")
+#     if st.button("Recalculate suggestions for this account", type="primary"):
+#         try:
+#             goals = list_user_goals(user["id"])
+#             suggestions = build_personalized_suggestions(frame, goals)
+#             save_recommendations(user["id"], suggestions)
+#             st.success(f"Updated {len(suggestions)} account-specific suggestions.")
+#             st.rerun()
+#         except (ValueError, RuntimeError) as error:
+#             st.error(f"Could not refresh suggestions: {error}")
 
 
 def main() -> None:
@@ -1900,12 +2449,12 @@ def main() -> None:
         "Financial overview",
         "Transaction intelligence",
         "Spending analytics",
-        "Financial twin",
-        "Cash-flow forecasting",
+        # "Financial twin",
+        # "Cash-flow forecasting",
         "Scenario lab",
         "Financial goals",
         "Anomaly review",
-        "Reports and settings",
+        # "Reports and settings",
         "Savings Suggestions",
     ]
     selected_page = st.sidebar.selectbox("Workspace", pages)
@@ -1937,8 +2486,8 @@ def main() -> None:
         goals_page(user)
     elif selected_page == "Anomaly review":
         anomaly_page(filtered, user)
-    elif selected_page == "Reports and settings":
-        report_page(filtered, user)
+    # elif selected_page == "Reports and settings":
+    #     report_page(filtered, user)
     elif selected_page == "Savings Suggestions":
         savings_page(filtered, user)
 

@@ -224,6 +224,15 @@ def save_import(
                         user_id,
                     ),
                 )
+                if inserted:
+                    connection.execute(
+                        """
+                        UPDATE financial_profiles
+                        SET statement_coverage_confirmed = 0, updated_at = ?
+                        WHERE user_id = ?
+                        """,
+                        (now, user_id),
+                    )
     except sqlite3.IntegrityError as error:
         raise RuntimeError(
             "The import could not be committed; no partial transactions were saved."
@@ -533,6 +542,332 @@ def list_user_goals(user_id: str) -> pd.DataFrame:
             (user_id,),
         ).fetchall()
     return pd.DataFrame([dict(row) for row in rows])
+
+
+def get_user_financial_profile(user_id: str) -> dict[str, Any]:
+    fields = (
+        "monthly_income_minor",
+        "emergency_balance_minor",
+        "emergency_target_minor",
+        "emergency_contribution_minor",
+        "additional_commitments_minor",
+        "protected_buffer_contribution_minor",
+        "protected_categories_json",
+        "statement_coverage_confirmed",
+        "updated_at",
+    )
+    with connect() as connection:
+        row = connection.execute(
+            "SELECT " + ", ".join(fields) + " FROM financial_profiles WHERE user_id = ?",
+            (user_id,),
+        ).fetchone()
+    if row is None:
+        return {
+            "user_id": user_id,
+            "monthly_income_minor": None,
+            "emergency_balance_minor": None,
+            "emergency_target_minor": None,
+            "emergency_contribution_minor": None,
+            "additional_commitments_minor": None,
+            "protected_buffer_contribution_minor": None,
+            "protected_categories": [],
+            "statement_coverage_confirmed": False,
+            "updated_at": None,
+        }
+    try:
+        protected_categories = json.loads(row["protected_categories_json"])
+    except (TypeError, json.JSONDecodeError) as error:
+        raise RuntimeError("The saved protected-category preferences are invalid.") from error
+    if not isinstance(protected_categories, list) or not all(
+        isinstance(category, str) for category in protected_categories
+    ):
+        raise RuntimeError("The saved protected-category preferences are invalid.")
+    return {
+        "user_id": user_id,
+        **{
+            field: row[field]
+            for field in fields
+            if field
+            not in {
+                "protected_categories_json",
+                "statement_coverage_confirmed",
+                "updated_at",
+            }
+        },
+        "protected_categories": protected_categories,
+        "statement_coverage_confirmed": bool(
+            row["statement_coverage_confirmed"]
+        ),
+        "updated_at": row["updated_at"],
+    }
+
+
+def save_user_financial_profile(user_id: str, profile: dict[str, Any]) -> None:
+    amount_fields = (
+        "monthly_income_minor",
+        "emergency_balance_minor",
+        "emergency_target_minor",
+        "emergency_contribution_minor",
+        "additional_commitments_minor",
+        "protected_buffer_contribution_minor",
+    )
+    values: list[int | None] = []
+    for field in amount_fields:
+        value = profile.get(field)
+        if value is not None and (
+            isinstance(value, bool) or not isinstance(value, int) or value < 0
+        ):
+            raise ValueError(f"{field} must be a non-negative whole number of paise or blank.")
+        values.append(value)
+    categories = profile.get("protected_categories", [])
+    if (
+        not isinstance(categories, list)
+        or not all(isinstance(category, str) for category in categories)
+        or not set(categories).issubset(BASE_CATEGORIES)
+    ):
+        raise ValueError("Choose supported categories to protect.")
+    protected_json = json.dumps(sorted(set(categories)), ensure_ascii=False)
+    coverage_confirmed = profile.get("statement_coverage_confirmed", False)
+    if not isinstance(coverage_confirmed, bool):
+        raise ValueError("Statement coverage confirmation must be true or false.")
+    now = utc_now()
+    with connect() as connection:
+        with connection:
+            owner = connection.execute(
+                "SELECT 1 FROM users WHERE id = ? AND is_active = 1", (user_id,)
+            ).fetchone()
+            if owner is None:
+                raise ValueError("The signed-in account is not available.")
+            connection.execute(
+                """
+                INSERT INTO financial_profiles (
+                    user_id, monthly_income_minor, emergency_balance_minor,
+                    emergency_target_minor, emergency_contribution_minor,
+                    additional_commitments_minor, protected_buffer_contribution_minor,
+                    protected_categories_json, statement_coverage_confirmed, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(user_id) DO UPDATE SET
+                    monthly_income_minor=excluded.monthly_income_minor,
+                    emergency_balance_minor=excluded.emergency_balance_minor,
+                    emergency_target_minor=excluded.emergency_target_minor,
+                    emergency_contribution_minor=excluded.emergency_contribution_minor,
+                    additional_commitments_minor=excluded.additional_commitments_minor,
+                    protected_buffer_contribution_minor=
+                        excluded.protected_buffer_contribution_minor,
+                    protected_categories_json=excluded.protected_categories_json,
+                    statement_coverage_confirmed=
+                        excluded.statement_coverage_confirmed,
+                    updated_at=excluded.updated_at
+                """,
+                (user_id, *values, protected_json, int(coverage_confirmed), now),
+            )
+
+
+def get_goal_plan_preferences(user_id: str, goal_id: str) -> dict[str, str]:
+    with connect() as connection:
+        rows = connection.execute(
+            """
+            SELECT category, status FROM goal_plan_preferences
+            WHERE user_id = ? AND goal_id = ?
+              AND EXISTS (
+                  SELECT 1 FROM financial_goals
+                  WHERE id = ? AND user_id = ?
+              )
+            """,
+            (user_id, goal_id, goal_id, user_id),
+        ).fetchall()
+    return {str(row["category"]): str(row["status"]) for row in rows}
+
+
+def set_goal_plan_adjustment_status(
+    user_id: str, goal_id: str, category: str, status: str
+) -> None:
+    if status not in {"approved", "rejected", "undecided"}:
+        raise ValueError("Choose approved, rejected, or undecided.")
+    if category not in BASE_CATEGORIES:
+        raise ValueError("Choose a supported spending category.")
+    now = utc_now()
+    with connect() as connection:
+        with connection:
+            goal = connection.execute(
+                "SELECT 1 FROM financial_goals WHERE id = ? AND user_id = ?",
+                (goal_id, user_id),
+            ).fetchone()
+            if goal is None:
+                raise ValueError("That goal is not available to this account.")
+            if status == "undecided":
+                connection.execute(
+                    """
+                    DELETE FROM goal_plan_preferences
+                    WHERE user_id = ? AND goal_id = ? AND category = ?
+                    """,
+                    (user_id, goal_id, category),
+                )
+            else:
+                connection.execute(
+                    """
+                    INSERT INTO goal_plan_preferences (
+                        user_id, goal_id, category, status, updated_at
+                    ) VALUES (?, ?, ?, ?, ?)
+                    ON CONFLICT(user_id, goal_id, category) DO UPDATE SET
+                        status=excluded.status, updated_at=excluded.updated_at
+                    """,
+                    (user_id, goal_id, category, status, now),
+                )
+
+
+def record_goal_plan_feedback(
+    user_id: str,
+    goal_id: str,
+    category: str,
+    status: str,
+    evidence_note: str,
+    reported_monthly_reduction_minor: int | None = None,
+) -> None:
+    if category not in BASE_CATEGORIES:
+        raise ValueError("Choose a supported spending category.")
+    if status not in {"not_applicable", "achieved_confirmed"}:
+        raise ValueError("Choose a supported goal-plan feedback status.")
+    note = " ".join(evidence_note.split())
+    if not note:
+        raise ValueError("Add a brief note supporting this feedback.")
+    if status == "achieved_confirmed":
+        if (
+            reported_monthly_reduction_minor is None
+            or isinstance(reported_monthly_reduction_minor, bool)
+            or not isinstance(reported_monthly_reduction_minor, int)
+            or reported_monthly_reduction_minor <= 0
+        ):
+            raise ValueError(
+                "Enter a positive reported monthly reduction for an achieved outcome."
+            )
+    elif reported_monthly_reduction_minor is not None:
+        raise ValueError("A not-applicable response cannot include an achieved amount.")
+    now = utc_now()
+    with connect() as connection:
+        with connection:
+            goal = connection.execute(
+                "SELECT 1 FROM financial_goals WHERE id = ? AND user_id = ?",
+                (goal_id, user_id),
+            ).fetchone()
+            if goal is None:
+                raise ValueError("That goal is not available to this account.")
+            connection.execute(
+                """
+                INSERT INTO goal_plan_feedback (
+                    id, user_id, goal_id, category, status,
+                    reported_monthly_reduction_minor, evidence_note, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    str(uuid.uuid4()),
+                    user_id,
+                    goal_id,
+                    category,
+                    status,
+                    reported_monthly_reduction_minor,
+                    note[:1000],
+                    now,
+                ),
+            )
+
+
+def list_goal_plan_feedback(user_id: str, goal_id: str) -> list[dict[str, Any]]:
+    with connect() as connection:
+        rows = connection.execute(
+            """
+            SELECT category, status, reported_monthly_reduction_minor,
+                   evidence_note, created_at
+            FROM goal_plan_feedback
+            WHERE user_id = ? AND goal_id = ?
+            ORDER BY created_at DESC, id DESC
+            """,
+            (user_id, goal_id),
+        ).fetchall()
+    return [dict(row) for row in rows]
+
+
+def get_latest_goal_plan_snapshot(
+    user_id: str, goal_id: str
+) -> dict[str, Any] | None:
+    with connect() as connection:
+        row = connection.execute(
+            """
+            SELECT version, signature, input_json, plan_json, status, created_at
+            FROM goal_plans
+            WHERE user_id = ? AND goal_id = ?
+            ORDER BY version DESC LIMIT 1
+            """,
+            (user_id, goal_id),
+        ).fetchone()
+    if row is None:
+        return None
+    try:
+        inputs = json.loads(row["input_json"])
+        plan = json.loads(row["plan_json"])
+    except (TypeError, json.JSONDecodeError) as error:
+        raise RuntimeError("The saved goal-plan snapshot is invalid.") from error
+    return {
+        "version": int(row["version"]),
+        "signature": str(row["signature"]),
+        "inputs": inputs,
+        "plan": plan,
+        "status": str(row["status"]),
+        "created_at": str(row["created_at"]),
+    }
+
+
+def save_goal_plan_snapshot(
+    user_id: str, goal_id: str, inputs: dict[str, Any], plan: dict[str, Any]
+) -> int:
+    serialized_inputs = json.dumps(
+        inputs, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    )
+    serialized_plan = json.dumps(
+        plan, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    )
+    signature = hashlib.sha256(
+        f"{serialized_inputs}\n{serialized_plan}".encode("utf-8")
+    ).hexdigest()
+    now = utc_now()
+    with connect() as connection:
+        with connection:
+            goal = connection.execute(
+                "SELECT 1 FROM financial_goals WHERE id = ? AND user_id = ?",
+                (goal_id, user_id),
+            ).fetchone()
+            if goal is None:
+                raise ValueError("That goal is not available to this account.")
+            existing = connection.execute(
+                """
+                SELECT version FROM goal_plans
+                WHERE user_id = ? AND goal_id = ? AND signature = ?
+                """,
+                (user_id, goal_id, signature),
+            ).fetchone()
+            if existing is not None:
+                return int(existing["version"])
+            version = int(
+                connection.execute(
+                    "SELECT COALESCE(MAX(version), 0) + 1 FROM goal_plans "
+                    "WHERE user_id = ? AND goal_id = ?",
+                    (user_id, goal_id),
+                ).fetchone()[0]
+            )
+            connection.execute(
+                """
+                INSERT INTO goal_plans (
+                    id, user_id, goal_id, version, signature, input_json,
+                    plan_json, status, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    str(uuid.uuid4()), user_id, goal_id, version, signature,
+                    serialized_inputs, serialized_plan, str(plan.get("status", "unknown")),
+                    now,
+                ),
+            )
+    return version
 
 
 def save_user_goal(

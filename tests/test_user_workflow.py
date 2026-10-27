@@ -21,14 +21,16 @@ from src.auth import (
     revoke_session,
     verify_password,
 )
-from src.database import connect, initialize_database
+from src.database import SCHEMA_VERSION, connect, initialize_database
 from src.common import BASE_CATEGORIES, DATA_DIR, MODEL_PATH
 from src.finance_store import (
     get_import_history,
+    get_user_financial_profile,
     get_user_transactions,
     list_user_goals,
     list_user_recommendations,
     save_import,
+    save_user_financial_profile,
     save_user_correction,
     save_user_goal,
     save_recommendations,
@@ -329,6 +331,27 @@ class UserWorkflowTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "not available"):
             set_recommendation_status(user_b["id"], a_recs.iloc[0]["id"], "Dismissed")
 
+    def test_new_import_requires_statement_coverage_to_be_reconfirmed(self):
+        user = self.register("Coverage User", "coverage@example.com")
+        save_user_financial_profile(
+            user["id"],
+            {
+                "monthly_income_minor": 100_000,
+                "emergency_balance_minor": 0,
+                "emergency_target_minor": 0,
+                "emergency_contribution_minor": 0,
+                "additional_commitments_minor": 0,
+                "protected_buffer_contribution_minor": 0,
+                "protected_categories": [],
+                "statement_coverage_confirmed": True,
+            },
+        )
+        parsed = self.statement(0)
+        save_import(user["id"], parsed, self.predictions_for(parsed))
+        self.assertFalse(
+            get_user_financial_profile(user["id"])["statement_coverage_confirmed"]
+        )
+
     def test_legacy_database_migration_preserves_records_and_creates_backup(self):
         legacy = Path(self.directory.name) / "legacy.sqlite3"
         connection = sqlite3.connect(legacy)
@@ -353,7 +376,9 @@ class UserWorkflowTests(unittest.TestCase):
         connection.close()
         initialize_database(legacy)
         migrated = sqlite3.connect(legacy)
-        self.assertEqual(migrated.execute("PRAGMA user_version").fetchone()[0], 3)
+        self.assertEqual(
+            migrated.execute("PRAGMA user_version").fetchone()[0], SCHEMA_VERSION
+        )
         self.assertEqual(migrated.execute("SELECT count(*) FROM goals").fetchone()[0], 1)
         self.assertEqual(
             migrated.execute("SELECT count(*) FROM anomaly_reviews").fetchone()[0], 1
@@ -394,7 +419,9 @@ class UserWorkflowTests(unittest.TestCase):
         initialize_database(legacy)
 
         migrated = sqlite3.connect(legacy)
-        self.assertEqual(migrated.execute("PRAGMA user_version").fetchone()[0], 3)
+        self.assertEqual(
+            migrated.execute("PRAGMA user_version").fetchone()[0], SCHEMA_VERSION
+        )
         self.assertEqual(
             migrated.execute(
                 "SELECT total_rows, possible_duplicate_rows FROM imports "

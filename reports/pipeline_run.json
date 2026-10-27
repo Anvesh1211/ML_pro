@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-25T11:44:52.002499+00:00",
+  "generated_at_utc": "2026-10-27T19:07:49.518271+00:00",
   "pipeline_version": "1.0",
   "model_version": "1.0",
   "source": "D:\\FinTwin\\data\\testing.csv",
@@ -7,7 +7,7 @@
   "training_source": "D:\\FinTwin\\data\\training.csv",
   "training_sha256": "a45c74d5e2cf785a81944f8a238b3397d4957e840afd64be1a9296a42e5817da",
   "feedback_source": "D:\\FinTwin\\data\\user_feedback.csv",
-  "model_sha256": "b4f8c704c7c86a4f86c8c5c826d2a8dc3902161dc3a1a2cbce5b7d55274210c0",
+  "model_sha256": "1592f207f01bbae0a928329a31f6267d88bf6666b01f90696684cfd420ef9125",
   "processed_rows": 1587,
   "prediction_rows": 1587,
   "anomaly_rows": 1487,

@@ -10,7 +10,7 @@ from typing import Iterator
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DATABASE_PATH = PROJECT_ROOT / "data" / "fintwin_state.sqlite3"
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 
 _SCHEMA = """
 CREATE TABLE IF NOT EXISTS users (
@@ -124,6 +124,20 @@ CREATE TABLE IF NOT EXISTS financial_goals (
     created_at TEXT NOT NULL,
     updated_at TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS financial_profiles (
+    user_id TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+    monthly_income_minor INTEGER CHECK (monthly_income_minor >= 0),
+    emergency_balance_minor INTEGER CHECK (emergency_balance_minor >= 0),
+    emergency_target_minor INTEGER CHECK (emergency_target_minor >= 0),
+    emergency_contribution_minor INTEGER CHECK (emergency_contribution_minor >= 0),
+    additional_commitments_minor INTEGER CHECK (additional_commitments_minor >= 0),
+    protected_buffer_contribution_minor INTEGER
+        CHECK (protected_buffer_contribution_minor >= 0),
+    protected_categories_json TEXT NOT NULL DEFAULT '[]',
+    statement_coverage_confirmed INTEGER NOT NULL DEFAULT 0
+        CHECK (statement_coverage_confirmed IN (0, 1)),
+    updated_at TEXT NOT NULL
+);
 CREATE TABLE IF NOT EXISTS recommendations (
     id TEXT PRIMARY KEY,
     user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -137,6 +151,38 @@ CREATE TABLE IF NOT EXISTS recommendations (
     status TEXT NOT NULL DEFAULT 'active',
     created_at TEXT NOT NULL,
     UNIQUE(user_id, category, period_start, period_end, title)
+);
+CREATE TABLE IF NOT EXISTS goal_plan_preferences (
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    goal_id TEXT NOT NULL REFERENCES financial_goals(id) ON DELETE CASCADE,
+    category TEXT NOT NULL,
+    status TEXT NOT NULL CHECK (status IN ('approved', 'rejected')),
+    updated_at TEXT NOT NULL,
+    PRIMARY KEY(user_id, goal_id, category)
+);
+CREATE TABLE IF NOT EXISTS goal_plan_feedback (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    goal_id TEXT NOT NULL REFERENCES financial_goals(id) ON DELETE CASCADE,
+    category TEXT NOT NULL,
+    status TEXT NOT NULL CHECK (status IN ('not_applicable', 'achieved_confirmed')),
+    reported_monthly_reduction_minor INTEGER
+        CHECK (reported_monthly_reduction_minor >= 0),
+    evidence_note TEXT NOT NULL,
+    created_at TEXT NOT NULL
+);
+CREATE TABLE IF NOT EXISTS goal_plans (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    goal_id TEXT NOT NULL REFERENCES financial_goals(id) ON DELETE CASCADE,
+    version INTEGER NOT NULL CHECK (version > 0),
+    signature TEXT NOT NULL,
+    input_json TEXT NOT NULL,
+    plan_json TEXT NOT NULL,
+    status TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    UNIQUE(user_id, goal_id, version),
+    UNIQUE(user_id, goal_id, signature)
 );
 CREATE TABLE IF NOT EXISTS user_settings (
     user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -177,6 +223,10 @@ CREATE INDEX IF NOT EXISTS idx_goals_user_status
     ON financial_goals(user_id, status);
 CREATE INDEX IF NOT EXISTS idx_recommendations_user_period
     ON recommendations(user_id, period_start, period_end);
+CREATE INDEX IF NOT EXISTS idx_goal_plans_user_goal_version
+    ON goal_plans(user_id, goal_id, version DESC);
+CREATE INDEX IF NOT EXISTS idx_goal_plan_feedback_user_goal
+    ON goal_plan_feedback(user_id, goal_id, created_at DESC);
 """
 _INITIALIZED_DATABASES: set[str] = set()
 

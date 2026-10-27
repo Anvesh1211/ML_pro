@@ -133,6 +133,8 @@ The Streamlit app includes:
   validation where possible.
 - Explicit what-if income, expense, EMI, and emergency scenarios.
 - Persisted goals and contribution-feasibility arithmetic.
+- GoalPilot: account-scoped financial profiles, coverage-gated affordability,
+  goal-specific conservative spending adjustments, and versioned plan feedback.
 - Exploratory anomaly review with saved review status.
 - JSON report and identifier-redacted transaction export.
 
@@ -174,8 +176,60 @@ Database initialization is additive. It preserves legacy goals and anomaly
 reviews and does not assign those unscoped records to a newly registered
 account. Before upgrading an existing database, the app creates a
 timestamped `.pre-migration-*.bak` backup next to it, then applies schema
-version 3 and checks foreign-key integrity. Backups are local and ignored by
+version 4 and checks foreign-key integrity. Backups are local and ignored by
 Git. Keep a separate protected backup for important financial data.
+
+## GoalPilot savings planner
+
+The existing **Savings Suggestions** page keeps its general illustrative
+reduction slider, saved recommendation evidence, and feedback controls. Its
+separate GoalPilot section lets the signed-in user enter confirmed take-home
+income, emergency-reserve values, planned monthly reserve contribution,
+additional commitments, a protected monthly cash-buffer contribution, and
+categories not to reduce. Blank values remain unavailable; income is never
+inferred from transaction credits. Additional commitments must exclude costs
+already included in the transaction-derived expense estimate.
+
+Goal and profile amounts are stored as integer paise. The planner counts the
+current calendar month through the goal month inclusively, matching the
+existing saved-goal page. It calculates:
+
+```text
+safe surplus = max(0, confirmed income - estimated consumption expenses
+                     - additional commitments - emergency contribution
+                     - protected monthly buffer contribution)
+funding gap = max(0, required monthly goal contribution - safe surplus)
+```
+
+Expense baselines require a date range spanning at least two calendar months
+and a user-confirmed check that every calendar month in that range is fully
+covered. Transaction dates alone are not proof that a statement covers a full
+month. The confirmation is account-scoped and is reset when a new import adds
+transactions. Unclassified debits prevent an
+affordability verdict; uncertain classifications are excluded from reduction
+candidates. Credits, transfers, refunds, and non-consumption rows are excluded
+from reduction calculations.
+
+Only the configured flexible categories (Food & Dining, Shopping,
+Entertainment, and Personal Care) can be candidates. Essential proxy
+categories are always protected. Maximum reductions are deterministic
+heuristics (10%, 8%, 10%, and 5%, respectively), with explicit disruption
+weights and a greedy allocation in ascending weight order. This is not a
+learned optimizer or a claim that spending is wasteful. Candidates remain
+hypothetical until approved; approval and recommendation status do not prove
+that money was saved. User-reported outcomes require a supporting note and are
+stored separately. Changed transaction baselines trigger a new plan version
+and a comparison, not an automatic claim of achieved savings.
+
+To try the planner, run the Streamlit command above, sign in, create or select
+an active goal under **Financial goals**, then open **Savings Suggestions**.
+Enter the profile values you know and save them. Review statement coverage
+before checking the confirmation box; import another statement and that
+confirmation will need to be reviewed again. Select the goal, inspect the
+estimated expenses, funding gap, candidate evidence, and uncertainty, then
+approve or reject candidates. The page displays the remaining shortfall after
+approval. No transaction data, classifier training labels, or real savings
+outcomes are created by this workflow.
 
 ## Tests and evaluation
 
@@ -184,8 +238,9 @@ python -m unittest discover -s tests -v
 ```
 
 The unit tests use the project statement/training data for data/model checks
-and hand-calculated **scenario parameters** for deterministic arithmetic
-checks. They do not create synthetic training or financial transaction data.
+and isolated, documented test fixtures for deterministic planner arithmetic
+and constraint checks. Those fixtures are not imported, persisted as real
+account data, used as training labels, or treated as savings outcomes.
 The current statement covers October 2025–October 2026 with partial boundary
 months. This supports a next-month expense baseline but not a verified income
 forecast or reliable seasonal claim. Anomaly outputs have no verified fraud

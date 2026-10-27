@@ -32,7 +32,7 @@
   "accuracy": 0.943502824858757,
   "macro_f1": 0.9196969696969696,
   "weighted_f1": 0.9417137476459511,
-  "mean_inference_ms_per_transaction": 0.22604180790785183,
+  "mean_inference_ms_per_transaction": 0.18054858773504778,
   "per_category": {
     "Bills & Utilities": {
       "precision": 0.6,
